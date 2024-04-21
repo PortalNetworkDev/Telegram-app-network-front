@@ -1,13 +1,13 @@
-# Getting Started with Create React App
+### Getting Started with Create React App
 
-Install React app
+## Install React app
 
-### `npm install`
+# `npm install`
 
-Start React app
+## Start React app
 
-### `npm start`
+# `npm start`
 
-Build React app
+## Build React app
 
-### `npm run build`
+# `npm run build`
