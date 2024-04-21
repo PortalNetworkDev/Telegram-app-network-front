@@ -67,7 +67,7 @@ export const Home = () => {
           </Link>
         </li>
         <li>
-          <Link to="/books">
+          <Link to="/about">
             <span>
               <GiOpenBook />
               <span>О проекте (Light Paper)</span>

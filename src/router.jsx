@@ -5,6 +5,7 @@ import { Home } from "./pages/home/home";
 import { Task } from "./pages/task/task";
 import { NotFound } from "./pages/notfound/notfound";
 import { Charging } from "./pages/charging/charging";
+import { About } from "./pages/about/about";
 
 export const Router = memo(() => {
   return (
@@ -13,6 +14,7 @@ export const Router = memo(() => {
         <Route index element={<Home />} />
         <Route path="task" element={<Task />} />
         <Route path="charging" element={<Charging />} />
+        <Route path="about" element={<About />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
