@@ -1,82 +1,88 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./home.css";
-import { IoClose } from "react-icons/io5";
 import { MdAccountBalanceWallet } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { RiFileList3Fill } from "react-icons/ri";
 import { MdOutlineArrowForwardIos } from "react-icons/md";
 import { GiOpenBook } from "react-icons/gi";
 import { ImLocation2 } from "react-icons/im";
-import axios from "axios";
+import { useMeQuery, useStaticQuery } from "../../context/service/me.service";
+import { useSelector } from "react-redux";
+import { TonConnectButton } from "@tonconnect/ui-react";
+// import { useSendReferalMutation } from "../../context/service/task.service";
 
 export const Home = () => {
-  const [balance, setBalance] = useState(0);
+  const { data: me = null } = useMeQuery();
+  const lang = me?.language_code || "ru";
+  const { data: staticData = null } = useStaticQuery(lang);
+  const loading = useSelector((state) => state.loading);
+  // const followId = window?.Telegram?.WebApp?.initDataUnsafe?.start_param;
+  // const user_id = followId?.split("-").pop() || null;
+  // const [sendReferal] = useSendReferalMutation();
 
-  useEffect(() => {
-    const url = `https://tonapi.io/v2/accounts/UQA2weH-PG_zo85e02cSHORKHtKjJPg3NsJjn3BcznnVQfmE/jettons?currencies=ton,usd,rub`;
-    axios
-      .get(url)
-      .then((response) => {
-        console.log(response.data.balances);
-        setBalance(response.data.balances[0].balance);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   if (user_id) (async () => await sendReferal(user_id))();
+  // }, [user_id, sendReferal]);
 
-  const closeWebApp = () => window.Telegram.WebApp.close();
+  if (loading)
+    return (
+      <div className="loading-home">
+        <p>{lang === "ru" ? "Загрузка..." : "Loading..."}</p>
+      </div>
+    );
 
   return (
-    <div className="page animate__animated animate__fadeIn">
-      <div className="page__header">
-        <h1>Инфраструктура - Portal Network</h1>
-        <button onClick={closeWebApp}>
-          <IoClose />
-        </button>
+    <>
+      <div className="page home animate__animated animate__fadeIn">
+        <div className="page__header">
+          <h1>{staticData?.main_title}</h1>
+          <TonConnectButton />
+        </div>
+
+        <div className="wallet_info">
+          <h1>
+            <MdAccountBalanceWallet />
+            <span>{staticData?.your_balance}</span>
+          </h1>
+
+          <h2>
+            {me?.balance || 0} {staticData?.token_symbol}
+          </h2>
+        </div>
+
+        <ol className="home__list">
+          <li>
+            <Link to="/task">
+              <span>
+                <RiFileList3Fill />
+                <span>{staticData?.tasks}</span>
+              </span>
+
+              <MdOutlineArrowForwardIos />
+            </Link>
+          </li>
+          <li>
+            <Link to="/charging">
+              <span>
+                <ImLocation2 />
+                <span>{staticData?.to_chargers}</span>
+              </span>
+
+              <MdOutlineArrowForwardIos />
+            </Link>
+          </li>
+          <li>
+            <Link to="/about">
+              <span>
+                <GiOpenBook />
+                <span>{staticData?.about_project}</span>
+              </span>
+
+              <MdOutlineArrowForwardIos />
+            </Link>
+          </li>
+        </ol>
       </div>
-
-      <div className="wallet_info">
-        <h1>
-          <MdAccountBalanceWallet />
-          <span>Ваш баланс</span>
-        </h1>
-
-        <h2>{balance} TON</h2>
-      </div>
-
-      <ol className="home__list">
-        <li>
-          <Link to="/task">
-            <span>
-              <RiFileList3Fill />
-              <span>Задания</span>
-            </span>
-
-            <MdOutlineArrowForwardIos />
-          </Link>
-        </li>
-        <li>
-          <Link to="/charging">
-            <span>
-              <ImLocation2 />
-              <span>К зарядкам</span>
-            </span>
-
-            <MdOutlineArrowForwardIos />
-          </Link>
-        </li>
-        <li>
-          <Link to="/about">
-            <span>
-              <GiOpenBook />
-              <span>О проекте (Light Paper)</span>
-            </span>
-
-            <MdOutlineArrowForwardIos />
-          </Link>
-        </li>
-      </ol>
-    </div>
+    </>
   );
 };

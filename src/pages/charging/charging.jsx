@@ -1,7 +1,7 @@
 import React from "react";
 import "./charging.css";
-import { IoClose } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import { IoArrowBack } from "react-icons/io5";
 
 export const Charging = () => {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ export const Charging = () => {
       <div className="page__header">
         <h1>Раздел в разработке</h1>
         <button onClick={back}>
-          <IoClose />
+          <IoArrowBack />
         </button>
       </div>
 
