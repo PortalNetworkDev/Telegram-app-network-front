@@ -44,10 +44,6 @@
   font-weight: 500;
 }
 
-.home__list > li > a span svg {
-  font-size: 17px;
-}
-
 /* ========= ton_accsess ========= */
 .ton_accsess {
   position: fixed;

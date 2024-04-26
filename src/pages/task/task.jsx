@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./task.css";
-import { MdAccountBalanceWallet } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useGetMyStateQuery } from "../../context/service/task.service";
 import { usePostTaskSelfConfirmMutation } from "../../context/service/task.service";
@@ -107,7 +106,7 @@ export const Task = () => {
 
         <div className="wallet_info">
           <h1>
-            <MdAccountBalanceWallet />
+            <img src="/icon/wallet-icon.svg" alt="" />
             <span>{staticData?.your_balance}</span>
           </h1>
           <h2>

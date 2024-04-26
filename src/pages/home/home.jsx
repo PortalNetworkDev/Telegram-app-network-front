@@ -1,29 +1,16 @@
 import React from "react";
 import "./home.css";
-import { MdAccountBalanceWallet } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { RiFileList3Fill } from "react-icons/ri";
 import { MdOutlineArrowForwardIos } from "react-icons/md";
-import { GiOpenBook } from "react-icons/gi";
-import { ImLocation2 } from "react-icons/im";
 import { useMeQuery, useStaticQuery } from "../../context/service/me.service";
 import { useSelector } from "react-redux";
 import { TonConnectButton } from "@tonconnect/ui-react";
-// import { useSendReferalMutation } from "../../context/service/task.service";
 
 export const Home = () => {
   const { data: me = null } = useMeQuery();
   const lang = me?.language_code || "ru";
   const { data: staticData = null } = useStaticQuery(lang);
   const loading = useSelector((state) => state.loading);
-  // const followId = window?.Telegram?.WebApp?.initDataUnsafe?.start_param;
-  // const user_id = followId?.split("-").pop() || null;
-  // const [sendReferal] = useSendReferalMutation();
-
-  // useEffect(() => {
-  //   if (user_id) (async () => await sendReferal(user_id))();
-  // }, [user_id, sendReferal]);
-
   if (loading)
     return (
       <div className="loading-home">
@@ -41,7 +28,7 @@ export const Home = () => {
 
         <div className="wallet_info">
           <h1>
-            <MdAccountBalanceWallet />
+            <img src="/icon/wallet-icon.svg" alt="" />
             <span>{staticData?.your_balance}</span>
           </h1>
 
@@ -54,7 +41,7 @@ export const Home = () => {
           <li>
             <Link to="/task">
               <span>
-                <RiFileList3Fill />
+                <img src="/icon/task-icon.svg" alt="" />
                 <span>{staticData?.tasks}</span>
               </span>
 
@@ -64,7 +51,7 @@ export const Home = () => {
           <li>
             <Link to="/charging">
               <span>
-                <ImLocation2 />
+                <img src="/icon/location-icon.svg" alt="" />
                 <span>{staticData?.to_chargers}</span>
               </span>
 
@@ -74,7 +61,7 @@ export const Home = () => {
           <li>
             <Link to="/about">
               <span>
-                <GiOpenBook />
+                <img src="/icon/openbook-icon.svg" alt="" />
                 <span>{staticData?.about_project}</span>
               </span>
 
