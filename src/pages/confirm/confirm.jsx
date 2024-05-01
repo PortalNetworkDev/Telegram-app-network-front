@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import "./confirm.css";
 import { useParams } from "react-router-dom";
 import { useGetHtmlQuery } from "../../context/service/task.service";
-import { useGetUserTaskQuery } from "../../context/service/task.service";
+import { useGetUserTaskByTaskIdQuery } from "../../context/service/task.service";
 import { useNavigate } from "react-router-dom";
 import { usePostTaskSelfConfirmMutation } from "../../context/service/task.service";
 import { useTonAddress } from "@tonconnect/ui-react";
@@ -20,7 +20,7 @@ export const Confirm = () => {
   const lang = "ru"//me?.language_code || "ru";
   const { data: staticData = null } = useStaticQuery(lang);
   const { id } = useParams();
-  const { data: task = null } = useGetUserTaskQuery(id);
+  const { data: task = null } = useGetUserTaskByTaskIdQuery(id);
 
   const back = () => navigate(-1);
 

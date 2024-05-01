@@ -11,6 +11,11 @@ import { IoMdClose } from "react-icons/io";
 import { enqueueSnackbar as EnSn } from "notistack";
 import { IoArrowBack } from "react-icons/io5";
 import { useSelector } from "react-redux";
+import { sanitize } from "dompurify";
+
+function createMarkup(dirty) {
+  return { __html: sanitize(dirty) };
+}
 
 export const Task = () => {
   const navigate = useNavigate();
@@ -72,12 +77,12 @@ export const Task = () => {
       return window.open(link, "_blank");
     }
 
-    if(task?.type == "checkJetton") {
+    if(task?.type === "checkJetton") {
       const link = "https://app.ston.fi/swap?chartVisible=false&ft=TON&tt=POE&ta=5"
       return window.open(link, "_blank");
     }
 
-    if(task?.type == "checkLiquidity"){
+    if(task?.type === "checkLiquidity"){
       const link = "https://app.ston.fi/liquidity/provide?ft=TON&tt=POE&ta=5";
       return window.open(link, "_blank");
     }
@@ -133,18 +138,12 @@ export const Task = () => {
               </div>
 
               {item?.tasks?.map((task) => {
-                const parser = new DOMParser();
-                const htmlDoc = parser.parseFromString(task.title, "text/html");
-                const htmlElement = htmlDoc.body;
-                const img = `${process.env.REACT_APP_MINIAPPAPI}/static/icon/${task?.icon_url}`;
 
+                const img = `${process.env.REACT_APP_MINIAPPAPI}/static/icon/${task?.icon_url}`;
                 return (
                   <div key={task?.id} className="task__item">
-                    <p
-                      dangerouslySetInnerHTML={{
-                        __html: htmlElement.innerHTML,
-                      }}
-                    />
+
+                    <p dangerouslySetInnerHTML={createMarkup(task?.title)}></p>
                     <div className="task__info" onClick={() => clickType(task)}>
                       <div
                         className={
@@ -166,10 +165,10 @@ export const Task = () => {
                         </div>
                         <h1>{task?.label}</h1>
                         <span className={task?.is_complite ? " lock" : ""}>
-                          {task?.reward} {staticData?.token_symbol}
+                          {task?.reward} {staticData?.token_symbol} {(task?.type === "referal") ? "/ чел." : ""}
                         </span>
                       </div>
-                      <p>{task?.description}</p>
+                      <p dangerouslySetInnerHTML={createMarkup(task?.description)}></p>
                     </div>
                   </div>
                 );
