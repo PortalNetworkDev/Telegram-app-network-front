@@ -18,7 +18,7 @@ export const Task = () => {
   const back = () => navigate(-1);
   const { data = null } = useGetMyStateQuery();
   const { data: me = null } = useMeQuery();
-  const lang = me?.language_code || "ru";
+  const lang = "ru"//me?.language_code || "ru";
   const { data: staticData = null } = useStaticQuery(lang);
   const [postTaskSelfConfirm] = usePostTaskSelfConfirmMutation();
   const userFriendlyAddress = useTonAddress();
@@ -27,7 +27,7 @@ export const Task = () => {
   const modalRef = useRef(null);
   Mousedown({ modalRef: modalRef, onClose: () => setWallet(false) });
   const loading = useSelector((state) => state.loading);
-  const img = `https://miniapp.portalnetwork.tech/dev/api/static/images/${lang}-info.svg`;
+  const img = `${process.env.REACT_APP_MINIAPPAPI}/static/images/${lang}-info.svg`;
 
   useEffect(() => {
     if (connect_wallet && access) {
@@ -68,7 +68,7 @@ export const Task = () => {
     }
 
     if (task?.type === "referal") {
-      const link = `https://telegram.me/share/url?url=https://t.me/LightPaper_Bot/lightpaper?startapp=r-${me?.id} ${task?.other}`;
+      const link = `https://telegram.me/share/url?url=${process.env.REACT_APP_MINIAPPURL}?startapp=r-${me?.id} ${task?.other}`;
       return window.open(link, "_blank");
     }
 
@@ -126,7 +126,7 @@ export const Task = () => {
                 const parser = new DOMParser();
                 const htmlDoc = parser.parseFromString(task.title, "text/html");
                 const htmlElement = htmlDoc.body;
-                const img = `https://miniapp.portalnetwork.tech/dev/api/static/icon/${task?.icon_url}`;
+                const img = `${process.env.REACT_APP_MINIAPPAPI}/static/icon/${task?.icon_url}`;
 
                 return (
                   <div key={task?.id} className="task__item">

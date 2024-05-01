@@ -17,7 +17,7 @@ export const About = () => {
   const back = () => navigate(-1);
 
   const { data: me = null } = useMeQuery();
-  const lang = me?.language_code || "ru";
+  const lang = "ru"//me?.language_code || "ru";
   const { data: staticData = null } = useStaticQuery(lang);
   const { data: task = null } = useGetUserTaskByTaskIdQuery("6");
 

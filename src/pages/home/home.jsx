@@ -8,7 +8,7 @@ import { TonConnectButton } from "@tonconnect/ui-react";
 
 export const Home = () => {
   const { data: me = null } = useMeQuery();
-  const lang = me?.language_code || "ru";
+  const lang = "ru"//me?.language_code || "ru";
   const { data: staticData = null } = useStaticQuery(lang);
   const loading = useSelector((state) => state.loading);
   if (loading)

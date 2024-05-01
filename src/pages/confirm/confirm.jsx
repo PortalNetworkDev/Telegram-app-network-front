@@ -17,7 +17,7 @@ import { useSelector } from "react-redux";
 export const Confirm = () => {
   const navigate = useNavigate();
   const { data: me = null } = useMeQuery();
-  const lang = me?.language_code || "ru";
+  const lang = "ru"//me?.language_code || "ru";
   const { data: staticData = null } = useStaticQuery(lang);
   const { id } = useParams();
   const { data: task = null } = useGetUserTaskQuery(id);
