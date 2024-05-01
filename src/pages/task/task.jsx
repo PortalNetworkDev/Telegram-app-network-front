@@ -72,6 +72,16 @@ export const Task = () => {
       return window.open(link, "_blank");
     }
 
+    if(task?.type == "checkJetton") {
+      const link = "https://app.ston.fi/swap?chartVisible=false&ft=TON&tt=POE&ta=5"
+      return window.open(link, "_blank");
+    }
+
+    if(task?.type == "checkLiquidity"){
+      const link = "https://app.ston.fi/liquidity/provide?ft=TON&tt=POE&ta=5";
+      return window.open(link, "_blank");
+    }
+
     return null;
   };
 
