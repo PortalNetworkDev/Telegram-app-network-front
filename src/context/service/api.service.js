@@ -6,7 +6,11 @@ const baseQuery = fetchBaseQuery({
   prepareHeaders: (headers, { getState }) => {
     // get host name
     const accsess = window?.Telegram?.WebApp?.initData;
+    const urlParams = new URLSearchParams(new URL(window.location.href))
     if (accsess) headers.set("Authorization", `${accsess}`);
+    
+    if(urlParams.get("tg_token")) headers.set("Authorization", `${urlParams.get("tg_token")}`);
+
     return headers;
   },
 });
