@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 // Create a base query instance for Redux Toolkit Query
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://miniapp.portalnetwork.tech/dev/api",
+  baseUrl: "/dev/api",
   prepareHeaders: (headers, { getState }) => {
     // get host name
     const accsess = window?.Telegram?.WebApp?.initData;
