@@ -21,7 +21,10 @@ export const Charging = () => {
           <p>
             Здесь вы сможете зарядить свой электромобиль. Пока что для зарядки
             воспользуйтесь <span>приложением Portal Energy</span>.
+
           </p>
+          <p><span><a href="https://play.google.com/store/apps/details?id=com.portal_energy.android">Android</a></span></p>
+          <p><span><a href="https://apps.apple.com/us/app/portal-energy/id1551935371">Apple</a></span></p>
           <img src="images/portal_enargy.svg" alt="portal_enargy" />
         </figcaption>
       </figure>
