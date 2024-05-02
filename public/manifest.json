@@ -12,9 +12,9 @@
       "type": "image/x-icon"
     },
     {
-      "src": "token-symbol-light.png",
+      "src": "poe_650.png",
       "type": "image/png",
-      "sizes": "64x64"
+      "sizes": "650x650"
     }
   ]
 }
