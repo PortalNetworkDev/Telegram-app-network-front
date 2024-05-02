@@ -10,7 +10,7 @@ import { store } from "./context/store";
 import { TonConnectUIProvider } from "@tonconnect/ui-react";
 import { SnackbarProvider } from "notistack";
 
-const ton_url = "https://light-paper.vercel.app/tonconnect-manifest.json";
+const ton_url = process.env.PUBLIC_URL+"/tonconnect-manifest.json";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 document.documentElement.style.setProperty("--animate-duration", ".45s");
 root.render(
