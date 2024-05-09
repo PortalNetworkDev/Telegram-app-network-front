@@ -7,6 +7,7 @@ import { NotFound } from "./pages/notfound/notfound";
 import { Charging } from "./pages/charging/charging";
 import { About } from "./pages/about/about";
 import { Confirm } from "./pages/confirm/confirm";
+import { Unauthorized } from "./pages/unauthorized/unauthorized";
 
 export const Router = memo(() => {
   return (
@@ -18,6 +19,7 @@ export const Router = memo(() => {
         <Route path="about" element={<About />} />
         <Route path="confirm/:id" element={<Confirm />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
       </Route>
     </Routes>
   );

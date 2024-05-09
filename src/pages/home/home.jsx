@@ -6,17 +6,19 @@ import { useMeQuery, useStaticQuery } from "../../context/service/me.service";
 import { useSelector } from "react-redux";
 import { TonConnectButton, useTonAddress } from "@tonconnect/ui-react";
 import { usePostTaskSelfConfirmMutation } from "../../context/service/task.service";
-
+import { useNavigate } from "react-router-dom";
 
 export const Home = () => {
+  
   const { data: me = null } = useMeQuery();
-  const lang = "ru"//me?.language_code || "ru";
+  const lang = (me?.language_code == "en") ? "en" : "ru";
   const { data: staticData = null } = useStaticQuery(lang);
   const loading = useSelector((state) => state.loading);
   const [connect_wallet, setConnectWallet] = useState(true);
   const [postTaskSelfConfirm] = usePostTaskSelfConfirmMutation();
   const userFriendlyAddress = useTonAddress();
   const access = userFriendlyAddress || null;
+  
 
   useEffect(() => {
     if (access && connect_wallet) {

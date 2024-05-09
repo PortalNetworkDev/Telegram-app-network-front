@@ -17,7 +17,7 @@ import { useSelector } from "react-redux";
 export const Confirm = () => {
   const navigate = useNavigate();
   const { data: me = null } = useMeQuery();
-  const lang = "ru"//me?.language_code || "ru";
+  const lang = (me?.language_code == "en") ? "en" : "ru";
   const { data: staticData = null } = useStaticQuery(lang);
   const { id } = useParams();
   const { data: task = null } = useGetUserTaskByTaskIdQuery(id);
@@ -53,8 +53,8 @@ export const Confirm = () => {
 
     const setData = { task_id: id, result: access || "1" };
     const { error } = await postTaskSelfConfirm(setData);
-    if (error) return EnSn("Ошибка", { variant: "error" });
-    EnSn("Успешно", { variant: "success" });
+    if (error) return EnSn((lang === "ru") ? "Ошибка": "Error", { variant: "error" });
+    EnSn((lang === "ru") ? "Успешно": "Success", { variant: "success" });
     return navigate(-1);
   };
 

@@ -17,7 +17,7 @@ export const About = () => {
   const back = () => navigate(-1);
 
   const { data: me = null } = useMeQuery();
-  const lang = "ru"//me?.language_code || "ru";
+  const lang = (me?.language_code == "en") ? "en" : "ru";
   const { data: staticData = null } = useStaticQuery(lang);
   const { data: task = null } = useGetUserTaskByTaskIdQuery("6");
 
@@ -44,8 +44,8 @@ export const About = () => {
 
     const setData = { task_id: 1, result: access };
     const { error } = await postTaskSelfConfirm(setData);
-    if (error) return EnSn("Ошибка", { variant: "error" });
-    EnSn("Успешно", { variant: "success" });
+    if (error) return EnSn((lang === "ru") ? "Ошибка": "Error", { variant: "error" });
+    EnSn((lang === "ru") ? "Успешно": "Success", { variant: "success" });
     return navigate(-1);
   };
 
@@ -59,7 +59,7 @@ export const About = () => {
           </button>
         </div>
         <div className="confirm__content">
-          <p>{me?.language_code === "ru" ? "Загрузка..." : "Loading..."}</p>
+          <p>{lang === "ru" ? "Загрузка..." : "Loading..."}</p>
         </div>
       </div>
     );

@@ -23,7 +23,7 @@ export const Task = () => {
   const back = () => navigate(-1);
   const { data = null } = useGetMyStateQuery();
   const { data: me = null } = useMeQuery();
-  const lang = "ru"//me?.language_code || "ru";
+  const lang = (me?.language_code == "en") ? "en" : "ru";
   const { data: staticData = null } = useStaticQuery(lang);
   const [postTaskSelfConfirm] = usePostTaskSelfConfirmMutation();
   const userFriendlyAddress = useTonAddress();
@@ -32,7 +32,8 @@ export const Task = () => {
   const modalRef = useRef(null);
   Mousedown({ modalRef: modalRef, onClose: () => setWallet(false) });
   const loading = useSelector((state) => state.loading);
-  const img = `${process.env.REACT_APP_MINIAPPAPI}/static/images/${lang}-info.svg`;
+  const img = `${process.env.REACT_APP_MINIAPPAPI}/static/images/${lang}-info.png`;
+  const peopleText = (lang === "ru") ? "/чел." : "/people"
 
   useEffect(() => {
     if (connect_wallet && access) {
@@ -63,8 +64,8 @@ export const Task = () => {
       if (access) {
         const setData = { task_id: task?.id, result: access };
         const { error } = await postTaskSelfConfirm(setData);
-        if (error) return EnSn("Ошибка", { variant: "error" });
-        return EnSn("Успешно", { variant: "success" });
+        if (error) return EnSn((lang === "ru") ? "Ошибка": "Error", { variant: "error" });
+        EnSn((lang === "ru") ? "Успешно": "Success", { variant: "success" });
       }
     }
 
@@ -100,7 +101,7 @@ export const Task = () => {
           </button>
         </div>
         <div className="task__content">
-          <p>{me?.language_code === "ru" ? "Загрузка..." : "Loading..."}</p>
+          <p>{lang === "ru" ? "Загрузка..." : "Loading..."}</p>
         </div>
       </div>
     );
@@ -165,7 +166,7 @@ export const Task = () => {
                         </div>
                         <h1>{task?.label}</h1>
                         <span className={task?.is_complite ? " lock" : ""}>
-                          {task?.reward} {staticData?.token_symbol} {(task?.type === "referal") ? "/ чел." : ""}
+                          {task?.reward} {staticData?.token_symbol} {(task?.type === "referal") ? peopleText : ""}
                         </span>
                       </div>
                       <p dangerouslySetInnerHTML={createMarkup(task?.description)}></p>
