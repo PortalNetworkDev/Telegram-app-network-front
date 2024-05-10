@@ -6,7 +6,7 @@ import { useMeQuery } from "../../context/service/me.service";
 
 export const Charging = () => {
   const { data: me = null } = useMeQuery();
-  const lang = (me?.language_code == "en") ? "en" : "ru";
+  const lang = (me?.language_code === "ru") ? "ru" : "en";
 
   const navigate = useNavigate();
   const back = () => navigate(-1);
