@@ -12,6 +12,7 @@ import { enqueueSnackbar as EnSn } from "notistack";
 import { IoArrowBack } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { sanitize } from "dompurify";
+import { fetchBalance } from "../../utils/balance";
 
 function createMarkup(dirty) {
   return { __html: sanitize(dirty) };
@@ -20,6 +21,7 @@ function createMarkup(dirty) {
 export const Task = () => {
   const navigate = useNavigate();
   const [connect_wallet, setConnectWallet] = useState(null);
+  const [mybalance, setMyBalance] = useState([]);
   const back = () => navigate(-1);
   const { data = null } = useGetMyStateQuery();
   const { data: me = null } = useMeQuery();
@@ -34,6 +36,19 @@ export const Task = () => {
   const loading = useSelector((state) => state.loading);
   const img = `${process.env.REACT_APP_MINIAPPAPI}/static/images/${lang}-info.png`;
   const peopleText = (lang === "ru") ? "/чел." : "/people"
+
+
+  useEffect(() => {
+    if(typeof me?.wallet !== "undefined" && me?.wallet !== ""){
+      const fetchData = async() =>{
+        let _balance = await fetchBalance(me?.wallet);
+        setMyBalance(_balance)
+      }
+
+      fetchData()
+    }
+  }, [me?.wallet]);
+
 
   useEffect(() => {
     if (connect_wallet && access) {
@@ -126,7 +141,7 @@ export const Task = () => {
             <span>{staticData?.your_balance}</span>
           </h1>
           <h2>
-            {me?.balance || 0} {staticData?.token_symbol}
+            {mybalance || 0} {staticData?.token_symbol}
           </h2>
         </div>
 

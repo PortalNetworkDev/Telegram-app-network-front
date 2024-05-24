@@ -6,10 +6,12 @@ import { useMeQuery, useStaticQuery } from "../../context/service/me.service";
 import { useSelector } from "react-redux";
 import { TonConnectButton, useTonAddress } from "@tonconnect/ui-react";
 import { usePostTaskSelfConfirmMutation } from "../../context/service/task.service";
+import { fetchBalance } from "../../utils/balance";
 
 export const Home = () => {
   
   const { data: me = null } = useMeQuery();
+  const [mybalance, setMyBalance] = useState([]);
   const lang = (me?.language_code === "ru") ? "ru" : "en";
   const { data: staticData = null } = useStaticQuery(lang);
   const loading = useSelector((state) => state.loading);
@@ -17,7 +19,20 @@ export const Home = () => {
   const [postTaskSelfConfirm] = usePostTaskSelfConfirmMutation();
   const userFriendlyAddress = useTonAddress();
   const access = userFriendlyAddress || null;
-  
+
+
+  useEffect(() => {
+    if(typeof me?.wallet !== "undefined" && me?.wallet !== ""){
+      const fetchData = async() =>{
+        let _balance = await fetchBalance(me?.wallet);
+        setMyBalance(_balance)
+      }
+
+      fetchData()
+    }
+  }, [me?.wallet]);
+
+
 
   useEffect(() => {
     if (access && connect_wallet) {
@@ -28,14 +43,14 @@ export const Home = () => {
       setConnectWallet(false);
     }
   }, [connect_wallet, access, postTaskSelfConfirm]);
-
+  
   if (loading)
     return (
       <div className="loading-home">
         <p>{lang === "ru" ? "Загрузка..." : "Loading..."}</p>
       </div>
     );
-
+    
   return (
     <>
       <div className="page home animate__animated animate__fadeIn">
@@ -51,7 +66,7 @@ export const Home = () => {
           </h1>
 
           <h2>
-            {me?.balance || 0} {staticData?.token_symbol}
+            {mybalance || "..."} {staticData?.token_symbol}
           </h2>
         </div>
 

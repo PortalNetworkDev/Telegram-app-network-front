@@ -1,6 +1,5 @@
 import React from "react";
 import "./unauthorized.css";
-import { Link } from "react-router-dom";
 
 export const Unauthorized = () => {
   return (
