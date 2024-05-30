@@ -9,10 +9,9 @@ import { usePostTaskSelfConfirmMutation } from "../../context/service/task.servi
 import { fetchBalance } from "../../utils/balance";
 
 export const Home = () => {
-  
-  const { data: me = null } = useMeQuery();
+  let { data: me = null } = useMeQuery();
   const [mybalance, setMyBalance] = useState([]);
-  const lang = (me?.language_code === "ru") ? "ru" : "en";
+  const lang = me?.language_code;
   const { data: staticData = null } = useStaticQuery(lang);
   const loading = useSelector((state) => state.loading);
   const [connect_wallet, setConnectWallet] = useState(true);
@@ -20,37 +19,35 @@ export const Home = () => {
   const userFriendlyAddress = useTonAddress();
   const access = userFriendlyAddress || null;
 
-
   useEffect(() => {
-    if(typeof me?.wallet !== "undefined" && me?.wallet !== ""){
-      const fetchData = async() =>{
+    if (typeof me?.wallet !== "undefined" && me?.wallet !== "") {
+      const fetchData = async () => {
         let _balance = await fetchBalance(me?.wallet);
-        setMyBalance(_balance)
-      }
+        setMyBalance(_balance);
+      };
 
-      fetchData()
+      fetchData();
     }
   }, [me?.wallet]);
 
-
-
   useEffect(() => {
     if (access && connect_wallet) {
-
       const setData = { task_id: 4, result: access };
       postTaskSelfConfirm(setData);
 
       setConnectWallet(false);
     }
   }, [connect_wallet, access, postTaskSelfConfirm]);
-  
+
   if (loading)
     return (
       <div className="loading-home">
-        <p>{lang === "ru" ? "Загрузка..." : "Loading..."}</p>
+        <p>
+          {(lang === "ru" && "Загрузка...") || (lang === "en" && "Loading...")}
+        </p>
       </div>
     );
-    
+
   return (
     <>
       <div className="page home animate__animated animate__fadeIn">
@@ -61,12 +58,12 @@ export const Home = () => {
 
         <div className="wallet_info">
           <h1>
-            <img src="/icon/wallet-icon.svg" alt="" />
+            <img src="/icon/wallet-icon.svg" alt="wallet-icon" />
             <span>{staticData?.your_balance}</span>
           </h1>
 
           <h2>
-            {mybalance || "..."} {staticData?.token_symbol}
+            {mybalance || 0} {staticData?.token_symbol}
           </h2>
         </div>
 
@@ -74,7 +71,7 @@ export const Home = () => {
           <li>
             <Link to="/task">
               <span>
-                <img src="/icon/task-icon.svg" alt="" />
+                <img src="/icon/task-icon.svg" alt="task-icon" />
                 <span>{staticData?.tasks}</span>
               </span>
 
@@ -84,7 +81,7 @@ export const Home = () => {
           <li>
             <Link to="/charging">
               <span>
-                <img src="/icon/location-icon.svg" alt="" />
+                <img src="/icon/location-icon.svg" alt="location-icon" />
                 <span>{staticData?.to_chargers}</span>
               </span>
 
@@ -94,7 +91,7 @@ export const Home = () => {
           <li>
             <Link to="/about">
               <span>
-                <img src="/icon/openbook-icon.svg" alt="" />
+                <img src="/icon/openbook-icon.svg" alt="openbook-icon" />
                 <span>{staticData?.about_project}</span>
               </span>
 

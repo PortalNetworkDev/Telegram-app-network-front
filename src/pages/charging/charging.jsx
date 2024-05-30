@@ -6,7 +6,7 @@ import { useMeQuery } from "../../context/service/me.service";
 
 export const Charging = () => {
   const { data: me = null } = useMeQuery();
-  const lang = (me?.language_code === "ru") ? "ru" : "en";
+  const lang = me?.language_code;
 
   const navigate = useNavigate();
   const back = () => navigate(-1);
@@ -26,7 +26,9 @@ export const Charging = () => {
   return (
     <div className="page animate__animated animate__fadeIn">
       <div className="page__header">
-        <h1>{lang === "ru" ? "Раздел в разработке" : "Section under development"}</h1>
+      <h1>
+          {(lang === "ru" && "Раздел в разработке") || (lang === "en" && "Section under development")}
+        </h1>
         <button onClick={back}>
           <IoArrowBack />
         </button>
