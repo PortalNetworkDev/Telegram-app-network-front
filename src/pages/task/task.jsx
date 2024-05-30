@@ -35,8 +35,18 @@ export const Task = () => {
   Mousedown({ modalRef: modalRef, onClose: () => setWallet(false) });
   const loading = useSelector((state) => state.loading);
   const img = `${process.env.REACT_APP_MINIAPPAPI}/static/images/${lang}-info.png`;
-  const peopleText = lang === "ru" ? "/чел." : "/people";
-  
+  const peopleText = lang === "en" ? "/people" : "/чел.";
+
+  const [isImgLoading, setIsImgLoading] = useState(true);
+
+  useEffect(() => {
+    const image = new Image();
+    image.src = img;
+    image.onload = () => {
+      setIsImgLoading(false);
+    };
+  }, [img]);
+
   useEffect(() => {
     if (typeof me?.wallet !== "undefined" && me?.wallet !== "") {
       const fetchData = async () => {
@@ -78,8 +88,8 @@ export const Task = () => {
         const setData = { task_id: task?.id, result: access };
         const { error } = await postTaskSelfConfirm(setData);
         if (error)
-          return EnSn(lang === "ru" ? "Ошибка" : "Error", { variant: "error" });
-        EnSn(lang === "ru" ? "Успешно" : "Success", { variant: "success" });
+          return EnSn(lang === "en" ? "Error" : "Ошибка", { variant: "error" });
+        EnSn(lang === "en" ? "Success" : "Успешно", { variant: "success" });
       }
     }
 
@@ -116,10 +126,7 @@ export const Task = () => {
           </button>
         </div>
         <div className="task__content">
-          <p>
-            {(lang === "ru" && "Загрузка...") ||
-              (lang === "en" && "Loading...")}
-          </p>
+          <p>{lang === "en" ? "Loading..." : "Загрузка..."}</p>
         </div>
       </div>
     );
@@ -133,10 +140,13 @@ export const Task = () => {
             <IoArrowBack />
           </button>
         </div>
-
-        <figure className="task__image">
-          <img src={img} alt="task__image" loading="lazy" />
-        </figure>
+        {!isImgLoading ? (
+          <figure className="task__image">
+            <img src={img} alt="task__image" loading="lazy" />
+          </figure>
+        ) : (
+          <div className="loading-div"></div>
+        )}
 
         <div className="wallet_info">
           <h1>
@@ -202,10 +212,7 @@ export const Task = () => {
       <div className={"connect_to_ton" + (wallet ? " open" : "")}>
         <div ref={modalRef} className="connect_to_ton__content">
           <div>
-            <h1>
-              {(lang === "ru" && "Подключение к TON") ||
-                (lang === "en" && "Connect to TON")}
-            </h1>
+            <h1>{lang === "en" ? "Connect to TON" : "Подключение к TON"}</h1>
 
             <button onClick={() => setWallet(false)}>
               <IoMdClose />

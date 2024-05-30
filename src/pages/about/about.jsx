@@ -45,8 +45,8 @@ export const About = () => {
     const setData = { task_id: 1, result: access };
     const { error } = await postTaskSelfConfirm(setData);
     if (error)
-      return EnSn(lang === "ru" ? "Ошибка" : "Error", { variant: "error" });
-    EnSn(lang === "ru" ? "Успешно" : "Success", { variant: "success" });
+      return EnSn(lang === "en" ? "Error" : "Ошибка", { variant: "error" });
+    EnSn(lang === "en" ? "Success" : "Успешно", { variant: "success" });
     return navigate(-1);
   };
 
@@ -60,10 +60,7 @@ export const About = () => {
           </button>
         </div>
         <div className="confirm__content">
-          <p>
-            {(lang === "ru" && "Загрузка...") ||
-              (lang === "en" && "Loading...")}
-          </p>
+          <p>{lang === "en" ? "Loading..." : "Загрузка..."}</p>
         </div>
       </div>
     );
@@ -77,20 +74,28 @@ export const About = () => {
             <IoArrowBack />
           </button>
         </div>
-        <div
-          className="confirm__content"
-          dangerouslySetInnerHTML={{ __html: htmlElement.innerHTML }}
-        />
 
-        <button onClick={selfConfirm}>{staticData?.thanks_understand}</button>
+        {htmlElement.innerHTML !== "[object Object]" ? (
+          <div
+            className="confirm__content"
+            dangerouslySetInnerHTML={{ __html: htmlElement.innerHTML }}
+          />
+        ) : (
+          <div className="confirm__content">
+            <p>{lang === "en" ? "Loading..." : "Загрузка..."}</p>
+          </div>
+        )}
+
+        {htmlElement.innerHTML !== "[object Object]" ? (
+          <button onClick={selfConfirm}>{staticData?.thanks_understand}</button>
+        ) : (
+          ""
+        )}
       </div>
       <div className={"connect_to_ton" + (wallet ? " open" : "")}>
         <div ref={modalRef} className="connect_to_ton__content">
           <div>
-            <h1>
-              {(lang === "ru" && "Подключить кошелек") ||
-                (lang === "en" && "Connect wallet")}
-            </h1>
+            <h1>{lang === "en" ? "Connect wallet" : "Подключить кошелек"}</h1>
 
             <button onClick={() => setWallet(false)}>
               <IoMdClose />

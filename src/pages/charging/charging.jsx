@@ -11,38 +11,46 @@ export const Charging = () => {
   const navigate = useNavigate();
   const back = () => navigate(-1);
 
-
   const text = {
-    "ru": `
+    ru: `
     Здесь вы сможете зарядить свой электромобиль. Пока что для зарядки
     воспользуйтесь приложением Portal Energy.
     `,
-    "en": `
+    en: `
     Here you can charge your electric car. For now for charging
     use the Portal Energy application.
-    `
-  }
+    `,
+  };
 
   return (
     <div className="page animate__animated animate__fadeIn">
       <div className="page__header">
-      <h1>
-          {(lang === "ru" && "Раздел в разработке") || (lang === "en" && "Section under development")}
+        <h1>
+          {lang === "en" ? "Section under development" : "Раздел в разработке"}
         </h1>
         <button onClick={back}>
           <IoArrowBack />
         </button>
       </div>
 
-      <figure className="charging__image">
+      <figure style={{ minHeight: 658 }} className="charging__image">
         <img src="images/charging.svg" alt="charging" loading="lazy" />
         <figcaption>
-          
+          <p>{text[lang]}</p>
           <p>
-            {text[lang]}
+            <span>
+              <a href="https://play.google.com/store/apps/details?id=com.portal_energy.android">
+                Android
+              </a>
+            </span>
           </p>
-          <p><span><a href="https://play.google.com/store/apps/details?id=com.portal_energy.android">Android</a></span></p>
-          <p><span><a href="https://apps.apple.com/us/app/portal-energy/id1551935371">Apple</a></span></p>
+          <p>
+            <span>
+              <a href="https://apps.apple.com/us/app/portal-energy/id1551935371">
+                Apple
+              </a>
+            </span>
+          </p>
           <img src="images/portal_enargy.svg" alt="portal_enargy" />
         </figcaption>
       </figure>
