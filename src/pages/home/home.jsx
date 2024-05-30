@@ -11,17 +11,13 @@ import { fetchBalance } from "../../utils/balance";
 export const Home = () => {
   let { data: me = null } = useMeQuery();
   const [mybalance, setMyBalance] = useState([]);
-  const lang = me?.language_code;
+  const lang = me?.language_code === "en" ? "en" : "ru";
   const { data: staticData = null } = useStaticQuery(lang);
   const loading = useSelector((state) => state.loading);
   const [connect_wallet, setConnectWallet] = useState(true);
   const [postTaskSelfConfirm] = usePostTaskSelfConfirmMutation();
   const userFriendlyAddress = useTonAddress();
   const access = userFriendlyAddress || null;
-
-  const themeParams = window?.Telegram?.WebApp?.themeParams;
-  const isDarkTheme =
-    themeParams.bg_color && parseInt(themeParams.bg_color, 16) < 0x808080;
 
   useEffect(() => {
     if (typeof me?.wallet !== "undefined" && me?.wallet !== "") {
