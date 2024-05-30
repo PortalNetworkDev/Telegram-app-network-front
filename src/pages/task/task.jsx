@@ -25,7 +25,7 @@ export const Task = () => {
   const back = () => navigate(-1);
   const { data = null } = useGetMyStateQuery();
   const { data: me = null } = useMeQuery();
-  const lang = (me?.language_code === "ru") ? "ru" : "en";
+  const lang = me?.language_code;
   const { data: staticData = null } = useStaticQuery(lang);
   const [postTaskSelfConfirm] = usePostTaskSelfConfirmMutation();
   const userFriendlyAddress = useTonAddress();
@@ -35,20 +35,18 @@ export const Task = () => {
   Mousedown({ modalRef: modalRef, onClose: () => setWallet(false) });
   const loading = useSelector((state) => state.loading);
   const img = `${process.env.REACT_APP_MINIAPPAPI}/static/images/${lang}-info.png`;
-  const peopleText = (lang === "ru") ? "/чел." : "/people"
-
-
+  const peopleText = lang === "ru" ? "/чел." : "/people";
+  
   useEffect(() => {
-    if(typeof me?.wallet !== "undefined" && me?.wallet !== ""){
-      const fetchData = async() =>{
+    if (typeof me?.wallet !== "undefined" && me?.wallet !== "") {
+      const fetchData = async () => {
         let _balance = await fetchBalance(me?.wallet);
-        setMyBalance(_balance)
-      }
+        setMyBalance(_balance);
+      };
 
-      fetchData()
+      fetchData();
     }
   }, [me?.wallet]);
-
 
   useEffect(() => {
     if (connect_wallet && access) {
@@ -79,8 +77,9 @@ export const Task = () => {
       if (access) {
         const setData = { task_id: task?.id, result: access };
         const { error } = await postTaskSelfConfirm(setData);
-        if (error) return EnSn((lang === "ru") ? "Ошибка": "Error", { variant: "error" });
-        EnSn((lang === "ru") ? "Успешно": "Success", { variant: "success" });
+        if (error)
+          return EnSn(lang === "ru" ? "Ошибка" : "Error", { variant: "error" });
+        EnSn(lang === "ru" ? "Успешно" : "Success", { variant: "success" });
       }
     }
 
@@ -93,12 +92,13 @@ export const Task = () => {
       return window.open(link, "_blank");
     }
 
-    if(task?.type === "checkJetton") {
-      const link = "https://app.ston.fi/swap?chartVisible=false&ft=TON&tt=POE&ta=5"
+    if (task?.type === "checkJetton") {
+      const link =
+        "https://app.ston.fi/swap?chartVisible=false&ft=TON&tt=POE&ta=5";
       return window.open(link, "_blank");
     }
 
-    if(task?.type === "checkLiquidity"){
+    if (task?.type === "checkLiquidity") {
       const link = "https://app.ston.fi/liquidity/provide?ft=TON&tt=POE&ta=5";
       return window.open(link, "_blank");
     }
@@ -116,7 +116,10 @@ export const Task = () => {
           </button>
         </div>
         <div className="task__content">
-          <p>{lang === "ru" ? "Загрузка..." : "Loading..."}</p>
+          <p>
+            {(lang === "ru" && "Загрузка...") ||
+              (lang === "en" && "Loading...")}
+          </p>
         </div>
       </div>
     );
@@ -132,7 +135,7 @@ export const Task = () => {
         </div>
 
         <figure className="task__image">
-          <img src={img} alt="" loading="lazy" />
+          <img src={img} alt="task__image" loading="lazy" />
         </figure>
 
         <div className="wallet_info">
@@ -154,11 +157,9 @@ export const Task = () => {
               </div>
 
               {item?.tasks?.map((task) => {
-
                 const img = `${process.env.REACT_APP_MINIAPPAPI}/static/icon/${task?.icon_url}`;
                 return (
                   <div key={task?.id} className="task__item">
-
                     <p dangerouslySetInnerHTML={createMarkup(task?.title)}></p>
                     <div className="task__info" onClick={() => clickType(task)}>
                       <div
@@ -181,10 +182,15 @@ export const Task = () => {
                         </div>
                         <h1>{task?.label}</h1>
                         <span className={task?.is_complite ? " lock" : ""}>
-                          {task?.reward} {staticData?.token_symbol} {(task?.type === "referal") ? peopleText : ""}
+                          {task?.reward} {staticData?.token_symbol}{" "}
+                          {task?.type === "referal" ? peopleText : ""}
                         </span>
                       </div>
-                      <p dangerouslySetInnerHTML={createMarkup(task?.description)}></p>
+                      <p
+                        dangerouslySetInnerHTML={createMarkup(
+                          task?.description
+                        )}
+                      ></p>
                     </div>
                   </div>
                 );
@@ -197,9 +203,8 @@ export const Task = () => {
         <div ref={modalRef} className="connect_to_ton__content">
           <div>
             <h1>
-              {me?.language_code === "ru"
-                ? "Подключение к TON"
-                : "Connect to TON"}
+              {(lang === "ru" && "Подключение к TON") ||
+                (lang === "en" && "Connect to TON")}
             </h1>
 
             <button onClick={() => setWallet(false)}>

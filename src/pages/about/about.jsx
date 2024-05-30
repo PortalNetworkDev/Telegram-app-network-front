@@ -17,7 +17,7 @@ export const About = () => {
   const back = () => navigate(-1);
 
   const { data: me = null } = useMeQuery();
-  const lang = (me?.language_code === "ru") ? "ru" : "en";
+  const lang = me?.language_code;
   const { data: staticData = null } = useStaticQuery(lang);
   const { data: task = null } = useGetUserTaskByTaskIdQuery("6");
 
@@ -44,8 +44,9 @@ export const About = () => {
 
     const setData = { task_id: 1, result: access };
     const { error } = await postTaskSelfConfirm(setData);
-    if (error) return EnSn((lang === "ru") ? "Ошибка": "Error", { variant: "error" });
-    EnSn((lang === "ru") ? "Успешно": "Success", { variant: "success" });
+    if (error)
+      return EnSn(lang === "ru" ? "Ошибка" : "Error", { variant: "error" });
+    EnSn(lang === "ru" ? "Успешно" : "Success", { variant: "success" });
     return navigate(-1);
   };
 
@@ -59,7 +60,10 @@ export const About = () => {
           </button>
         </div>
         <div className="confirm__content">
-          <p>{lang === "ru" ? "Загрузка..." : "Loading..."}</p>
+          <p>
+            {(lang === "ru" && "Загрузка...") ||
+              (lang === "en" && "Loading...")}
+          </p>
         </div>
       </div>
     );
@@ -83,7 +87,10 @@ export const About = () => {
       <div className={"connect_to_ton" + (wallet ? " open" : "")}>
         <div ref={modalRef} className="connect_to_ton__content">
           <div>
-            <h1>{lang === "ru" ? "Подключить кошелек" : "Connect wallet"}</h1>
+            <h1>
+              {(lang === "ru" && "Подключить кошелек") ||
+                (lang === "en" && "Connect wallet")}
+            </h1>
 
             <button onClick={() => setWallet(false)}>
               <IoMdClose />

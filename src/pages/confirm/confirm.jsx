@@ -17,7 +17,7 @@ import { useSelector } from "react-redux";
 export const Confirm = () => {
   const navigate = useNavigate();
   const { data: me = null } = useMeQuery();
-  const lang = (me?.language_code === "ru") ? "ru" : "en";
+  const lang = me?.language_code;
   const { data: staticData = null } = useStaticQuery(lang);
   const { id } = useParams();
   const { data: task = null } = useGetUserTaskByTaskIdQuery(id);
@@ -50,11 +50,11 @@ export const Confirm = () => {
         return setWallet(true);
       }
     }
-
     const setData = { task_id: id, result: access || "1" };
     const { error } = await postTaskSelfConfirm(setData);
-    if (error) return EnSn((lang === "ru") ? "Ошибка": "Error", { variant: "error" });
-    EnSn((lang === "ru") ? "Успешно": "Success", { variant: "success" });
+    if (error)
+      return EnSn(lang === "ru" ? "Ошибка" : "Error", { variant: "error" });
+    EnSn(lang === "ru" ? "Успешно" : "Success", { variant: "success" });
     return navigate(-1);
   };
 
@@ -62,7 +62,10 @@ export const Confirm = () => {
     return (
       <div className="page confirm animate__animated animate__fadeIn">
         <div className="confirm__content">
-          <p>{me?.language_code === "ru" ? "Загрузка..." : "Loading..."}</p>
+          <p>
+            {(lang === "ru" && "Загрузка...") ||
+              (lang === "en" && "Loading...")}
+          </p>
         </div>
       </div>
     );
@@ -83,18 +86,21 @@ export const Confirm = () => {
           dangerouslySetInnerHTML={{ __html: htmlElement.innerHTML }}
         />
 
-        <button
-          style={{ display: !loading ? "block" : "none" }}
-          onClick={selfConfirm}
-        >
-          {staticData?.thanks_understand}
-        </button>
+        {htmlDoc && (
+          <button
+            style={{ display: !loading ? "block" : "none" }}
+            onClick={selfConfirm}
+          >
+            {staticData?.thanks_understand}
+          </button>
+        )}
       </div>
       <div className={"connect_to_ton" + (wallet ? " open" : "")}>
         <div ref={modalRef} className="connect_to_ton__content">
           <div>
             <h1>
-              {lang === "ru" ? "Подключение к TON" : "Connect wallet to TON"}
+              {(lang === "ru" && "Подключение к TON") ||
+                (lang === "en" && "Connect wallet to TON")}
             </h1>
 
             <button onClick={() => setWallet(false)}>
