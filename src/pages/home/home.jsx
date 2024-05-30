@@ -19,6 +19,10 @@ export const Home = () => {
   const userFriendlyAddress = useTonAddress();
   const access = userFriendlyAddress || null;
 
+  const themeParams = window?.Telegram?.WebApp?.themeParams;
+  const isDarkTheme =
+    themeParams.bg_color && parseInt(themeParams.bg_color, 16) < 0x808080;
+
   useEffect(() => {
     if (typeof me?.wallet !== "undefined" && me?.wallet !== "") {
       const fetchData = async () => {
@@ -39,14 +43,16 @@ export const Home = () => {
     }
   }, [connect_wallet, access, postTaskSelfConfirm]);
 
-  if (loading)
+  if (loading) {
+    if (!me) {
+      return "";
+    }
     return (
       <div className="loading-home">
-        <p>
-          {(lang === "ru" && "Загрузка...") || (lang === "en" && "Loading...")}
-        </p>
+        <p>{lang === "en" ? "Loading..." : "Загрузка..."}</p>
       </div>
     );
+  }
 
   return (
     <>

@@ -17,7 +17,7 @@ import { useSelector } from "react-redux";
 export const Confirm = () => {
   const navigate = useNavigate();
   const { data: me = null } = useMeQuery();
-  const lang = me?.language_code;
+  const lang = me?.language_code === "en" ? "en" : "ru";
   const { data: staticData = null } = useStaticQuery(lang);
   const { id } = useParams();
   const { data: task = null } = useGetUserTaskByTaskIdQuery(id);
@@ -44,7 +44,6 @@ export const Confirm = () => {
 
   const selfConfirm = async () => {
     if (task.is_complite) return navigate(-1);
-
     if (task.type === "connectToTon") {
       if (!access) {
         return setWallet(true);
@@ -53,19 +52,22 @@ export const Confirm = () => {
     const setData = { task_id: id, result: access || "1" };
     const { error } = await postTaskSelfConfirm(setData);
     if (error)
-      return EnSn(lang === "ru" ? "Ошибка" : "Error", { variant: "error" });
-    EnSn(lang === "ru" ? "Успешно" : "Success", { variant: "success" });
+      return EnSn(lang === "en" ? "Error" : "Ошибка", { variant: "error" });
+    EnSn(lang === "en" ? "Success" : "Успешно", { variant: "success" });
     return navigate(-1);
   };
 
   if (und)
     return (
       <div className="page confirm animate__animated animate__fadeIn">
+        <div className="page__header">
+          <h1>{staticData?.main_title}</h1>
+          <button onClick={back}>
+            <IoArrowBack />
+          </button>
+        </div>
         <div className="confirm__content">
-          <p>
-            {(lang === "ru" && "Загрузка...") ||
-              (lang === "en" && "Loading...")}
-          </p>
+          <p>{lang === "en" ? "Loading..." : "Загрузка..."}</p>
         </div>
       </div>
     );
@@ -80,27 +82,34 @@ export const Confirm = () => {
           </button>
         </div>
 
-        <div
-          style={{ display: !loading ? "flex" : "none" }}
-          className="confirm__content"
-          dangerouslySetInnerHTML={{ __html: htmlElement.innerHTML }}
-        />
+        {htmlElement.innerHTML !== "[object Object]" ? (
+          <div
+            style={{ display: !loading ? "flex" : "none" }}
+            className="confirm__content"
+            dangerouslySetInnerHTML={{ __html: htmlElement.innerHTML }}
+          />
+        ) : (
+          <div className="confirm__content">
+            <p>{lang === "en" ? "Loading..." : "Загрузка..."}</p>
+          </div>
+        )}
 
-        {htmlDoc && (
+        {htmlElement.innerHTML !== "[object Object]" ? (
           <button
             style={{ display: !loading ? "block" : "none" }}
             onClick={selfConfirm}
           >
             {staticData?.thanks_understand}
           </button>
+        ) : (
+          ""
         )}
       </div>
       <div className={"connect_to_ton" + (wallet ? " open" : "")}>
         <div ref={modalRef} className="connect_to_ton__content">
           <div>
             <h1>
-              {(lang === "ru" && "Подключение к TON") ||
-                (lang === "en" && "Connect wallet to TON")}
+              {lang === "en" ? "Connect wallet to TON" : "Подключение к TON"}
             </h1>
 
             <button onClick={() => setWallet(false)}>
