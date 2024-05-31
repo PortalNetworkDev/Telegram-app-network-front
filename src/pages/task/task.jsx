@@ -143,7 +143,7 @@ export const Task = () => {
             <span>{staticData?.your_balance}</span>
           </h1>
           <h2>
-            {me?.balance || "-"} {staticData?.token_symbol}
+            {me?.balance || 0} {staticData?.token_symbol}
           </h2>
         </div>
 
