@@ -9,7 +9,7 @@ import { usePostTaskSelfConfirmMutation } from "../../context/service/task.servi
 
 export const Home = () => {
   let { data: me = null } = useMeQuery();
-  
+
   const lang = me?.language_code === "en" ? "en" : "ru";
   const { data: staticData = null } = useStaticQuery(lang);
   const loading = useSelector((state) => state.loading);
@@ -54,7 +54,7 @@ export const Home = () => {
           </h1>
 
           <h2>
-            {me?.balance || "-"} {staticData?.token_symbol}
+            {me?.balance || 0} {staticData?.token_symbol}
           </h2>
         </div>
 
