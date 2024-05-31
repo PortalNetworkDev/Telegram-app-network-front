@@ -6,10 +6,10 @@ import { useMeQuery, useStaticQuery } from "../../context/service/me.service";
 import { useSelector } from "react-redux";
 import { TonConnectButton, useTonAddress } from "@tonconnect/ui-react";
 import { usePostTaskSelfConfirmMutation } from "../../context/service/task.service";
-import { fetchBalance } from "../../utils/balance";
 
 export const Home = () => {
   let { data: me = null } = useMeQuery();
+
   const [mybalance, setMyBalance] = useState();
   const lang = me?.language_code === "en" ? "en" : "ru";
   const { data: staticData = null } = useStaticQuery(lang);
@@ -19,16 +19,6 @@ export const Home = () => {
   const userFriendlyAddress = useTonAddress();
   const access = userFriendlyAddress || null;
 
-  useEffect(() => {
-    if (typeof me?.wallet !== "undefined" && me?.wallet !== "") {
-      const fetchData = async () => {
-        let _balance = await fetchBalance(me?.wallet);
-        setMyBalance(_balance);
-      };
-
-      fetchData();
-    }
-  }, [me?.wallet]);
 
   useEffect(() => {
     if (access && connect_wallet) {
@@ -54,6 +44,7 @@ export const Home = () => {
           </h1>
 
           <h2>
+
             {mybalance ? (
               `${mybalance || 0} ${staticData?.token_symbol}`
             ) : (

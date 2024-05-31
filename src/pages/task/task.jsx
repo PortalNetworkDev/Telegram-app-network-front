@@ -12,7 +12,6 @@ import { enqueueSnackbar as EnSn } from "notistack";
 import { IoArrowBack } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { sanitize } from "dompurify";
-import { fetchBalance } from "../../utils/balance";
 
 function createMarkup(dirty) {
   return { __html: sanitize(dirty) };
@@ -21,6 +20,7 @@ function createMarkup(dirty) {
 export const Task = () => {
   const navigate = useNavigate();
   const [connect_wallet, setConnectWallet] = useState(null);
+
   const [mybalance, setMyBalance] = useState();
   const back = () => navigate(-1);
   const { data = null } = useGetMyStateQuery();
@@ -47,16 +47,7 @@ export const Task = () => {
     };
   }, [img]);
 
-  useEffect(() => {
-    if (typeof me?.wallet !== "undefined" && me?.wallet !== "") {
-      const fetchData = async () => {
-        let _balance = await fetchBalance(me?.wallet);
-        setMyBalance(_balance);
-      };
 
-      fetchData();
-    }
-  }, [me?.wallet]);
 
   useEffect(() => {
     if (connect_wallet && access) {
