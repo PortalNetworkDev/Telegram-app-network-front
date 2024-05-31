@@ -10,7 +10,7 @@ import { fetchBalance } from "../../utils/balance";
 
 export const Home = () => {
   let { data: me = null } = useMeQuery();
-  const [mybalance, setMyBalance] = useState([]);
+  const [mybalance, setMyBalance] = useState();
   const lang = me?.language_code === "en" ? "en" : "ru";
   const { data: staticData = null } = useStaticQuery(lang);
   const loading = useSelector((state) => state.loading);
@@ -39,17 +39,6 @@ export const Home = () => {
     }
   }, [connect_wallet, access, postTaskSelfConfirm]);
 
-  if (loading) {
-    if (!me) {
-      return "";
-    }
-    return (
-      <div className="loading-home">
-        <p>{lang === "en" ? "Loading..." : "Загрузка..."}</p>
-      </div>
-    );
-  }
-
   return (
     <>
       <div className="page home animate__animated animate__fadeIn">
@@ -65,7 +54,14 @@ export const Home = () => {
           </h1>
 
           <h2>
-            {mybalance || 0} {staticData?.token_symbol}
+            {mybalance ? (
+              `${mybalance || 0} ${staticData?.token_symbol}`
+            ) : (
+              <div
+                style={{ width: 100, height: 19, borderRadius: 5 }}
+                className="loading-div"
+              ></div>
+            )}
           </h2>
         </div>
 

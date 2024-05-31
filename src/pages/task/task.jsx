@@ -21,7 +21,7 @@ function createMarkup(dirty) {
 export const Task = () => {
   const navigate = useNavigate();
   const [connect_wallet, setConnectWallet] = useState(null);
-  const [mybalance, setMyBalance] = useState([]);
+  const [mybalance, setMyBalance] = useState();
   const back = () => navigate(-1);
   const { data = null } = useGetMyStateQuery();
   const { data: me = null } = useMeQuery();
@@ -145,7 +145,7 @@ export const Task = () => {
             <img src={img} alt="task__image" loading="lazy" />
           </figure>
         ) : (
-          <div className="loading-div"></div>
+          <div style={{ height: 223 }} className="loading-div"></div>
         )}
 
         <div className="wallet_info">
@@ -154,7 +154,14 @@ export const Task = () => {
             <span>{staticData?.your_balance}</span>
           </h1>
           <h2>
-            {mybalance || 0} {staticData?.token_symbol}
+            {mybalance ? (
+              `${mybalance || 0} ${staticData?.token_symbol}`
+            ) : (
+              <div
+                style={{ width: 100, height: 19, borderRadius: 5 }}
+                className="loading-div"
+              ></div>
+            )}
           </h2>
         </div>
 
