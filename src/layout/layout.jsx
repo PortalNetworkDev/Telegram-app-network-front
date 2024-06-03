@@ -9,13 +9,24 @@ export const Layout = memo(() => {
   const dispatch = useDispatch();
   const colorScheme = useSelector((store) => store.colorScheme);
 
-  const tg = window.Telegram?.WebApp?.colorScheme;
-
   useEffect(() => {
-    if (tg) {
-      dispatch(setColorSchemeAction(tg));
-    }
-  }, [dispatch, tg]);
+    const tg = window.Telegram?.WebApp;
+
+    const handleThemeChange = () => {
+      const newColorScheme = tg?.colorScheme;
+      if (newColorScheme) {
+        dispatch(setColorSchemeAction(newColorScheme));
+      }
+    };
+
+    handleThemeChange();
+
+    tg?.onEvent("themeChanged", handleThemeChange);
+
+    return () => {
+      tg?.offEvent("themeChanged", handleThemeChange);
+    };
+  }, [dispatch]);
 
   return (
     <main className="layout">
