@@ -6,10 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { setColorSchemeAction } from "../context/colorScheme";
 
 export const Layout = memo(() => {
+  let tg = window.Telegram?.WebApp?.colorScheme;
   const dispatch = useDispatch();
   const colorScheme = useSelector((store) => store.colorScheme);
 
-  const tg = window.Telegram?.WebApp?.colorScheme;
+  window.Telegram?.WebApp.onEvent("themeChanged", () => {
+    tg = window.Telegram?.WebApp?.colorScheme;
+  });
 
   useEffect(() => {
     if (tg) {
