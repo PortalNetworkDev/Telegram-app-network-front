@@ -3,16 +3,13 @@ import "./home.css";
 import { Link } from "react-router-dom";
 import { MdOutlineArrowForwardIos } from "react-icons/md";
 import { useMeQuery, useStaticQuery } from "../../context/service/me.service";
-import { useSelector } from "react-redux";
 import { TonConnectButton, useTonAddress } from "@tonconnect/ui-react";
 import { usePostTaskSelfConfirmMutation } from "../../context/service/task.service";
 
 export const Home = () => {
   let { data: me = null } = useMeQuery();
-
   const lang = me?.language_code === "en" ? "en" : "ru";
   const { data: staticData = null } = useStaticQuery(lang);
-  const loading = useSelector((state) => state.loading);
   const [connect_wallet, setConnectWallet] = useState(true);
   const [postTaskSelfConfirm] = usePostTaskSelfConfirmMutation();
   const userFriendlyAddress = useTonAddress();
@@ -27,17 +24,6 @@ export const Home = () => {
       setConnectWallet(false);
     }
   }, [connect_wallet, access, postTaskSelfConfirm]);
-
-  if (loading) {
-    if (!me) {
-      return "";
-    }
-    return (
-      <div className="loading-home">
-        <p>{lang === "en" ? "Loading..." : "Загрузка..."}</p>
-      </div>
-    );
-  }
 
   return (
     <>
@@ -54,7 +40,14 @@ export const Home = () => {
           </h1>
 
           <h2>
-            {me?.balance || 0} {staticData?.token_symbol}
+            {me ? (
+              `${me?.balance || 0} ${staticData?.token_symbol}`
+            ) : (
+              <div
+                style={{ width: 100, height: 19, borderRadius: 5 }}
+                className="loading-div"
+              ></div>
+            )}
           </h2>
         </div>
 
