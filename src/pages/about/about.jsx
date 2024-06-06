@@ -10,8 +10,11 @@ import { useTonAddress, TonConnectButton } from "@tonconnect/ui-react";
 import { Mousedown } from "../../utils/close";
 import { IoMdClose } from "react-icons/io";
 import { enqueueSnackbar as EnSn } from "notistack";
+import { useSelector } from "react-redux";
 
 export const About = () => {
+  const colorScheme = useSelector((store) => store.colorScheme);
+
   const [postTaskSelfConfirm] = usePostTaskSelfConfirmMutation();
   const navigate = useNavigate();
   const back = () => navigate(-1);
@@ -52,14 +55,26 @@ export const About = () => {
 
   if (und)
     return (
-      <div className="page confirm animate__animated animate__fadeIn">
-        <div className="page__header">
+      <div
+        className={`page confirm animate__animated animate__fadeIn ${
+          colorScheme === "light" ? "" : "confirm_dark"
+        }`}
+      >
+        <div
+          className={`page__header ${
+            colorScheme === "light" ? "" : "page__header_dark"
+          }`}
+        >
           <h1>{staticData?.main_title}</h1>
           <button onClick={back}>
             <IoArrowBack />
           </button>
         </div>
-        <div className="confirm__content">
+        <div
+          className={`confirm__content ${
+            colorScheme === "light" ? "" : "confirm__content_dark"
+          }`}
+        >
           <p>{lang === "en" ? "Loading..." : "Загрузка..."}</p>
         </div>
       </div>
@@ -67,8 +82,16 @@ export const About = () => {
 
   return (
     <>
-      <div className="page confirm animate__animated animate__fadeIn">
-        <div className="page__header">
+      <div
+        className={`page confirm animate__animated animate__fadeIn ${
+          colorScheme === "light" ? "" : "confirm_dark"
+        }`}
+      >
+        <div
+          className={`page__header ${
+            colorScheme === "light" ? "" : "page__header_dark"
+          }`}
+        >
           <h1>{staticData?.main_title}</h1>
           <button onClick={back}>
             <IoArrowBack />
@@ -77,11 +100,17 @@ export const About = () => {
 
         {htmlElement.innerHTML !== "[object Object]" ? (
           <div
-            className="confirm__content"
+            className={`confirm__content ${
+              colorScheme === "light" ? "" : "confirm__content_dark"
+            }`}
             dangerouslySetInnerHTML={{ __html: htmlElement.innerHTML }}
           />
         ) : (
-          <div className="confirm__content">
+          <div
+            className={`confirm__content ${
+              colorScheme === "light" ? "" : "confirm__content_dark"
+            }`}
+          >
             <p>{lang === "en" ? "Loading..." : "Загрузка..."}</p>
           </div>
         )}
@@ -93,7 +122,12 @@ export const About = () => {
         )}
       </div>
       <div className={"connect_to_ton" + (wallet ? " open" : "")}>
-        <div ref={modalRef} className="connect_to_ton__content">
+        <div
+          ref={modalRef}
+          className={`connect_to_ton__content ${
+            colorScheme === "light" ? "" : "connect_to_ton__content_dark"
+          }`}
+        >
           <div>
             <h1>{lang === "en" ? "Connect wallet" : "Подключить кошелек"}</h1>
 

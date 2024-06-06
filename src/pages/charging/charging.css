@@ -4,6 +4,7 @@
 }
 
 .charging__image > img {
+  filter: blur(2px);
   width: 100%;
 }
 
@@ -14,13 +15,17 @@
   transform: translate(-50%, -50%);
   width: 90%;
   border-radius: 15px;
-  backdrop-filter: blur(50px);
+
   background: #fff;
   padding: 29px 28px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 32px;
+}
+
+.charging__image_dark > figcaption {
+  background: #042029;
 }
 
 .charging__image > figcaption > p {
@@ -31,9 +36,17 @@
   color: #7e7d85;
 }
 
+.charging__image_dark > figcaption > p {
+  color: #abb3b6;
+}
+
 .charging__image > figcaption > p span {
   inline-size: 100%;
-  color: rgb(43, 102, 255);
+  color: #2b66ff;
+}
+
+.charging__image_dark > figcaption > p span {
+  color: #2ea5ff;
 }
 
 .charging__image > figcaption > img {

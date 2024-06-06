@@ -11,16 +11,32 @@
   font-weight: 700;
 }
 
+.confirm__content_dark > h2 {
+  color: #abb3b6;
+}
+
 .confirm__content > h3 {
   color: #7e7d85;
   font-size: 14px;
   font-weight: 700;
 }
 
+.confirm__content_dark > h3 {
+  color: #abb3b6;
+}
+
+.confirm__content_dark > h3[style="color:blue"] {
+  color: #2ea5ff !important;
+}
+
 .confirm__content > h4 {
   color: #7e7d85;
   font-size: 14px;
   font-weight: 700;
+}
+
+.confirm__content_dark > h4 {
+  color: #abb3b6;
 }
 
 .confirm__content > p {
@@ -30,8 +46,16 @@
   color: #7e7d85;
 }
 
+.confirm__content_dark > p {
+  color: #abb3b6;
+}
+
 .confirm__content a {
   color: #2b66ff;
+}
+
+.confirm__content_dark a {
+  color: #2ea5ff;
 }
 
 .confirm__content > ul {
@@ -40,10 +64,14 @@
   padding-left: 13px;
 }
 
-.confirm__content > ul > li {
+.confirm__content > ul {
   color: #7e7d85;
   font-size: 14px;
   font-weight: 400;
+}
+
+.confirm__content_dark > ul {
+  color: #abb3b6;
 }
 
 .confirm__content > img {
@@ -56,8 +84,11 @@
   border-radius: 10px;
   background: #2b66ff;
   border: none;
-
   color: #ffffff;
   font-size: 16px;
   font-weight: 500;
+}
+
+.confirm_dark > button {
+  background: #2ea5ff;
 }
