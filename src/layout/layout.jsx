@@ -31,11 +31,9 @@ export const Layout = memo(() => {
   return (
     <main className="layout">
       <section
-        className={
-          colorScheme === "light"
-            ? "layout__content layout__content_light"
-            : "layout__content layout__content_dark"
-        }
+        className={`layout__content ${
+          colorScheme === "light" ? "" : "layout__content_dark"
+        }`}
       >
         <Outlet />
       </section>

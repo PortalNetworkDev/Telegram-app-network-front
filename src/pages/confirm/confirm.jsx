@@ -15,6 +15,8 @@ import { useMeQuery, useStaticQuery } from "../../context/service/me.service";
 import { useSelector } from "react-redux";
 
 export const Confirm = () => {
+  const colorScheme = useSelector((store) => store.colorScheme);
+
   const navigate = useNavigate();
   const { data: me = null } = useMeQuery();
   const lang = me?.language_code === "en" ? "en" : "ru";
@@ -59,14 +61,26 @@ export const Confirm = () => {
 
   if (und)
     return (
-      <div className="page confirm animate__animated animate__fadeIn">
-        <div className="page__header">
+      <div
+        className={`page confirm animate__animated animate__fadeIn ${
+          colorScheme === "light" ? "" : "confirm_dark"
+        }`}
+      >
+        <div
+          className={`page__header ${
+            colorScheme === "light" ? "" : "page__header_dark"
+          }`}
+        >
           <h1>{staticData?.main_title}</h1>
           <button onClick={back}>
             <IoArrowBack />
           </button>
         </div>
-        <div className="confirm__content">
+        <div
+          className={`confirm__content ${
+            colorScheme === "light" ? "" : "confirm__content_dark"
+          }`}
+        >
           <p>{lang === "en" ? "Loading..." : "Загрузка..."}</p>
         </div>
       </div>
@@ -74,8 +88,16 @@ export const Confirm = () => {
 
   return (
     <>
-      <div className="page confirm animate__animated animate__fadeIn">
-        <div className="page__header">
+      <div
+        className={`page confirm animate__animated animate__fadeIn ${
+          colorScheme === "light" ? "" : "confirm_dark"
+        }`}
+      >
+        <div
+          className={`page__header ${
+            colorScheme === "light" ? "" : "page__header_dark"
+          }`}
+        >
           <h1>{staticData?.main_title}</h1>
           <button onClick={back}>
             <IoArrowBack />
@@ -85,11 +107,17 @@ export const Confirm = () => {
         {htmlElement.innerHTML !== "[object Object]" ? (
           <div
             style={{ display: !loading ? "flex" : "none" }}
-            className="confirm__content"
+            className={`confirm__content ${
+              colorScheme === "light" ? "" : "confirm__content_dark"
+            }`}
             dangerouslySetInnerHTML={{ __html: htmlElement.innerHTML }}
           />
         ) : (
-          <div className="confirm__content">
+          <div
+            className={`confirm__content ${
+              colorScheme === "light" ? "" : "confirm__content_dark"
+            }`}
+          >
             <p>{lang === "en" ? "Loading..." : "Загрузка..."}</p>
           </div>
         )}
@@ -106,7 +134,12 @@ export const Confirm = () => {
         )}
       </div>
       <div className={"connect_to_ton" + (wallet ? " open" : "")}>
-        <div ref={modalRef} className="connect_to_ton__content">
+        <div
+          ref={modalRef}
+          className={`connect_to_ton__content ${
+            colorScheme === "light" ? "" : "connect_to_ton__content_dark"
+          }`}
+        >
           <div>
             <h1>
               {lang === "en" ? "Connect wallet to TON" : "Подключение к TON"}
