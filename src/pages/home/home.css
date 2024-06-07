@@ -22,8 +22,16 @@
   border-top: 1px solid #cecdd4;
 }
 
+.home__list_dark > li {
+  border-top: 1px solid #2c353e;
+}
+
 .home__list > :last-child {
   border-bottom: 1px solid #cecdd4;
+}
+
+.home__list_dark > :last-child {
+  border-bottom: 1px solid #2c353e;
 }
 
 .home__list > li > a {
@@ -42,6 +50,14 @@
   color: #090628;
   font-size: 16px;
   font-weight: 500;
+}
+
+.home__list_dark > li > a span {
+  color: white;
+}
+
+.home__list_dark svg {
+  color: white;
 }
 
 /* ========= ton_accsess ========= */

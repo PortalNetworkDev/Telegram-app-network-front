@@ -10,6 +10,10 @@
   max-width: 450px;
   width: 100%;
   min-height: 100vh;
-  background: #fff;
   padding: 10px;
+  background: #fff;
+}
+
+.layout__content_dark {
+  background: #042029;
 }

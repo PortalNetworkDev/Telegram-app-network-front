@@ -18,6 +18,8 @@ function createMarkup(dirty) {
 }
 
 export const Task = () => {
+  const colorScheme = useSelector((store) => store.colorScheme);
+
   const navigate = useNavigate();
   const [connect_wallet, setConnectWallet] = useState(null);
   const back = () => navigate(-1);
@@ -44,8 +46,6 @@ export const Task = () => {
       setIsImgLoading(false);
     };
   }, [img]);
-
-
 
   useEffect(() => {
     if (connect_wallet && access) {
@@ -108,13 +108,21 @@ export const Task = () => {
   if (loading)
     return (
       <div className="page task animate__animated animate__fadeIn">
-        <div className="page__header">
+        <div
+          className={`page__header ${
+            colorScheme === "light" ? "" : "page__header_dark"
+          }`}
+        >
           <h1>{staticData?.tasks}</h1>
           <button onClick={back}>
             <IoArrowBack />
           </button>
         </div>
-        <div className="task__content">
+        <div
+          className={`task__content ${
+            colorScheme === "light" ? "" : "task__content_dark"
+          }`}
+        >
           <p>{lang === "en" ? "Loading..." : "Загрузка..."}</p>
         </div>
       </div>
@@ -123,32 +131,59 @@ export const Task = () => {
   return (
     <>
       <div className="page task animate__animated animate__fadeIn">
-        <div className="page__header">
+        <div
+          className={`page__header ${
+            colorScheme === "light" ? "" : "page__header_dark"
+          }`}
+        >
           <h1>{staticData?.tasks}</h1>
           <button onClick={back}>
             <IoArrowBack />
           </button>
         </div>
+
         {!isImgLoading ? (
-          <figure className="task__image">
+          <figure
+            className={`task__image ${
+              colorScheme === "light" ? "" : "task__image_dark"
+            }`}
+          >
             <img src={img} alt="task__image" loading="lazy" />
           </figure>
         ) : (
-          <div style={{ height: 223 }} className="loading-div"></div>
+          <div
+            style={{ height: 223 }}
+            className={`loading-div ${
+              colorScheme === "light" ? "" : "loading-div_dark"
+            }`}
+          ></div>
         )}
 
-        <div className="wallet_info">
+        <div
+          className={`wallet_info ${
+            colorScheme === "light" ? "" : "wallet_info_dark"
+          }`}
+        >
           <h1>
-            <img src="/icon/wallet-icon.svg" alt="" />
+            <img
+              src={
+                colorScheme === "light"
+                  ? "/icon/wallet-icon.svg"
+                  : "/icon/wallet-icon_dark.svg"
+              }
+              alt="wallet-icon"
+            />
             <span>{staticData?.your_balance}</span>
           </h1>
           <h2>
-          {me ? (
+            {me ? (
               `${me?.balance || 0} ${staticData?.token_symbol}`
             ) : (
               <div
                 style={{ width: 100, height: 19, borderRadius: 5 }}
-                className="loading-div"
+                className={`loading-div ${
+                  colorScheme === "light" ? "" : "loading-div_dark"
+                }`}
               ></div>
             )}
           </h2>
@@ -156,8 +191,17 @@ export const Task = () => {
 
         {data?.map((item) => {
           return (
-            <div key={item.id} className="task__content">
-              <div className="task__text_info">
+            <div
+              key={item.id}
+              className={`task__content ${
+                colorScheme === "light" ? "" : "task__content_dark"
+              }`}
+            >
+              <div
+                className={`task__text_info ${
+                  colorScheme === "light" ? "" : "task__text_info_dark"
+                }`}
+              >
                 <h1>{item?.label}</h1>
                 <p>{item?.description}</p>
               </div>
@@ -165,9 +209,19 @@ export const Task = () => {
               {item?.tasks?.map((task) => {
                 const img = `${process.env.REACT_APP_MINIAPPAPI}/static/icon/${task?.icon_url}`;
                 return (
-                  <div key={task?.id} className="task__item">
+                  <div
+                    key={task?.id}
+                    className={`task__item ${
+                      colorScheme === "light" ? "" : "task__item_dark"
+                    }`}
+                  >
                     <p dangerouslySetInnerHTML={createMarkup(task?.title)}></p>
-                    <div className="task__info" onClick={() => clickType(task)}>
+                    <div
+                      className={`task__info ${
+                        colorScheme === "light" ? "" : "task__info_dark"
+                      }`}
+                      onClick={() => clickType(task)}
+                    >
                       <div
                         className={
                           "task__info__header" +
@@ -206,7 +260,12 @@ export const Task = () => {
         })}
       </div>
       <div className={"connect_to_ton" + (wallet ? " open" : "")}>
-        <div ref={modalRef} className="connect_to_ton__content">
+        <div
+          ref={modalRef}
+          className={`connect_to_ton__content ${
+            colorScheme === "light" ? "" : "connect_to_ton__content_dark"
+          }`}
+        >
           <div>
             <h1>{lang === "en" ? "Connect to TON" : "Подключение к TON"}</h1>
 

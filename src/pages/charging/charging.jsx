@@ -3,13 +3,16 @@ import "./charging.css";
 import { useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import { useMeQuery } from "../../context/service/me.service";
+import { useSelector } from "react-redux";
 
 export const Charging = () => {
+  const colorScheme = useSelector((store) => store.colorScheme);
+
   const { data: me = null } = useMeQuery();
   const lang = me?.language_code === "en" ? "en" : "ru";
   const backImgRef = useRef(null);
   const logoImgRef = useRef(null);
-
+  console.log(backImgRef);
   const navigate = useNavigate();
   const back = () => navigate(-1);
 
@@ -45,7 +48,11 @@ export const Charging = () => {
 
   return (
     <div className="page animate__animated animate__fadeIn">
-      <div className="page__header">
+      <div
+        className={`page__header ${
+          colorScheme === "light" ? "" : "page__header_dark"
+        }`}
+      >
         <h1>
           {lang === "en" ? "Section under development" : "Раздел в разработке"}
         </h1>
@@ -54,7 +61,12 @@ export const Charging = () => {
         </button>
       </div>
 
-      <figure style={{ minHeight: 658 }} className="charging__image">
+      <figure
+        style={{ minHeight: 658 }}
+        className={`charging__image ${
+          colorScheme === "light" ? "" : "charging__image_dark"
+        }`}
+      >
         <img
           style={{
             display: isBackImgLoading ? "none" : "block",
@@ -70,7 +82,9 @@ export const Charging = () => {
             display: !isBackImgLoading ? "none" : "block",
             borderRadius: 15,
           }}
-          className="loading-div"
+          className={`loading-div ${
+            colorScheme === "light" ? "" : "loading-div_dark"
+          }`}
         ></div>
         <figcaption>
           <p>{text[lang]}</p>
@@ -93,7 +107,11 @@ export const Charging = () => {
             style={{
               display: isLogoImgLoading ? "none" : "block",
             }}
-            src="images/portal_enargy.svg"
+            src={`${
+              colorScheme === "light"
+                ? "images/portal_enargy.svg"
+                : "images/portal_enargy_dark.svg"
+            }`}
             alt="portal_enargy"
           />
           <div
@@ -103,7 +121,9 @@ export const Charging = () => {
               display: !isLogoImgLoading ? "none" : "block",
               borderRadius: 5,
             }}
-            className="loading-div"
+            className={`loading-div ${
+              colorScheme === "light" ? "" : "loading-div_dark"
+            }`}
           ></div>
         </figcaption>
       </figure>

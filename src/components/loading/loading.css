@@ -26,6 +26,10 @@
   animation-delay: 0s;
 }
 
+.circle_dark {
+  background-color: #ffffff;
+}
+
 /* 15 itsm circle */
 .circle:nth-child(1) {
   animation-delay: 0s;

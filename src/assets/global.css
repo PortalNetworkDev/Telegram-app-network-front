@@ -58,6 +58,10 @@ a {
   font-weight: 500;
 }
 
+.page__header_dark > h1 {
+  color: #ffffff;
+}
+
 .page__header > button {
   color: #5c5c5c;
   display: flex;
@@ -66,17 +70,25 @@ a {
   font-size: 24px;
 }
 
+.page__header_dark > button {
+  color: #ffffff;
+}
+
 /* ========== WALLET INFO ========== */
 
 .wallet_info {
   width: 100%;
   height: 54px;
   border-radius: 15px;
-  background: rgb(234, 240, 255);
+  background: #eaf0ff;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 15px;
+}
+
+.wallet_info_dark {
+  background: #1b538b;
 }
 
 .wallet_info > h1 {
@@ -88,6 +100,10 @@ a {
   font-weight: 700;
 }
 
+.wallet_info_dark > h1 {
+  color: #ffffff;
+}
+
 .wallet_info > h1 svg {
   font-size: 17px;
 }
@@ -96,6 +112,10 @@ a {
   color: #0034bb;
   font-size: 16px;
   font-weight: 700;
+}
+
+.wallet_info_dark > h2 {
+  color: #63e3ff;
 }
 
 @keyframes gradient {
@@ -114,6 +134,19 @@ a {
   width: 100%;
   border-radius: 20px;
   background: linear-gradient(270deg, #a5a5a5, #ffffff, #b9b9b9);
+  background-size: 600% 600%;
+  animation: gradient 3s ease infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+}
+
+.loading-div_dark {
+  width: 100%;
+  border-radius: 20px;
+  background: linear-gradient(270deg, #6a6a6a, #ffffff, #727272);
   background-size: 600% 600%;
   animation: gradient 3s ease infinite;
   display: flex;
