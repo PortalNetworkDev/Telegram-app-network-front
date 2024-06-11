@@ -127,3 +127,31 @@
   font-weight: 500;
   color: #090628;
 }
+
+@keyframes buy-gradient {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 400%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+.buy-link {
+  background: linear-gradient(270deg, #0034bb, #090628);
+  background-size: 400% 400%;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: buy-gradient 3s ease infinite;
+}
+
+.buy-link_dark {
+  background: linear-gradient(270deg, #2280c4, #ffffff);
+  background-size: 400% 400%;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: buy-gradient 3s ease infinite;
+}

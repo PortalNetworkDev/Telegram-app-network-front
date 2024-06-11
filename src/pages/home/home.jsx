@@ -74,33 +74,18 @@ export const Home = () => {
           }`}
         >
           <li>
-            <Link to="/task">
-              <span>
-                <img
-                  src={
-                    colorScheme === "light"
-                      ? "/icon/task-icon.svg"
-                      : "/icon/task-icon_dark.svg"
-                  }
-                  alt="task-icon"
-                />
-                <span>{staticData?.tasks}</span>
-              </span>
-
-              <MdOutlineArrowForwardIos />
-            </Link>
-          </li>
-          <li>
             <Link to="/charging">
               <span>
-                <img
-                  src={
-                    colorScheme === "light"
-                      ? "/icon/location-icon.svg"
-                      : "/icon/location-icon_dark.svg"
-                  }
-                  alt="location-icon"
-                />
+                <div style={{ width: 20 }}>
+                  <img
+                    src={
+                      colorScheme === "light"
+                        ? "/icon/location-icon.svg"
+                        : "/icon/location-icon_dark.svg"
+                    }
+                    alt="location-icon"
+                  />
+                </div>
                 <span>{staticData?.to_chargers}</span>
               </span>
 
@@ -108,16 +93,65 @@ export const Home = () => {
             </Link>
           </li>
           <li>
-            <Link to="/about">
+            <a
+              href="https://app.ston.fi/swap?chartVisible=false&ft=TON&tt=POE"
+              target="blank"
+            >
               <span>
                 <img
+                  width={20}
+                  height={20}
                   src={
                     colorScheme === "light"
-                      ? "/icon/openbook-icon.svg"
-                      : "/icon/openbook-icon_dark.svg"
+                      ? "/icon/currency-icon.svg"
+                      : "/icon/currency-icon_dark.svg"
                   }
-                  alt="openbook-icon"
+                  alt="currency-icon"
                 />
+                <span
+                  className={`buy-link ${
+                    colorScheme === "light" ? "" : "buy-link_dark"
+                  } `}
+                >
+                  {staticData?.buy || "Купить POE"}
+                </span>
+              </span>
+              <MdOutlineArrowForwardIos />
+            </a>
+          </li>
+          <li>
+            <Link to="/task">
+              <span>
+                <div style={{ width: 20 }}>
+                  <img
+                    src={
+                      colorScheme === "light"
+                        ? "/icon/task-icon.svg"
+                        : "/icon/task-icon_dark.svg"
+                    }
+                    alt="task-icon"
+                  />
+                </div>
+                <span>{staticData?.tasks}</span>
+              </span>
+
+              <MdOutlineArrowForwardIos />
+            </Link>
+          </li>
+
+          <li>
+            <Link to="/about">
+              <span>
+                <div style={{ width: 20 }}>
+                  <img
+                    src={
+                      colorScheme === "light"
+                        ? "/icon/openbook-icon.svg"
+                        : "/icon/openbook-icon_dark.svg"
+                    }
+                    alt="openbook-icon"
+                  />
+                </div>
                 <span>{staticData?.about_project}</span>
               </span>
 
