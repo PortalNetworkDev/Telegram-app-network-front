@@ -74,7 +74,7 @@ export const Home = () => {
           }`}
         >
           <li>
-            <Link to="/charging">
+            <a href="https://t.me/poenetwork_bot/charging">
               <span>
                 <div style={{ width: 20 }}>
                   <img
@@ -88,9 +88,8 @@ export const Home = () => {
                 </div>
                 <span>{staticData?.to_chargers}</span>
               </span>
-
               <MdOutlineArrowForwardIos />
-            </Link>
+            </a>
           </li>
           <li>
             <a
