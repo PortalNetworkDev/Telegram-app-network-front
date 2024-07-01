@@ -12,7 +12,6 @@ export const Charging = () => {
   const lang = me?.language_code === "en" ? "en" : "ru";
   const backImgRef = useRef(null);
   const logoImgRef = useRef(null);
-  console.log(backImgRef);
   const navigate = useNavigate();
   const back = () => navigate(-1);
 
