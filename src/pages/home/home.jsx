@@ -46,16 +46,21 @@ export const Home = () => {
   }, [lang, postTaskSelfConfirm]);
 
   useEffect(() => {
-    if (tonConnectContext?.connector?.connected) {
+    if (tonConnectContext?.wallet) {
       const { onStatusChange } = tonConnectContext;
 
-      const unsubscribe = onStatusChange((walletAndWalletInfo) => {
+      // const unsubscribe = onStatusChange((walletAndWalletInfo) => {
+      //   if (!walletAndWalletInfo) {
+      //     handleDisconnect();
+      //   }
+
+      onStatusChange((walletAndWalletInfo) => {
         if (!walletAndWalletInfo) {
           handleDisconnect();
         }
       });
 
-      return () => unsubscribe();
+      // return () => unsubscribe();
     }
   }, [postTaskSelfConfirm, tonConnectContext, handleDisconnect]);
 
