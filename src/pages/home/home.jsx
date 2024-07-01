@@ -45,23 +45,22 @@ export const Home = () => {
     EnSn(lang === "en" ? "Success" : "Успешно", { variant: "success" });
   }, [lang, postTaskSelfConfirm]);
 
+  const [testMessage, setTestMessage] = useState(null);
+
   useEffect(() => {
-    // if (tonConnectContext?.wallet) {
-    const { onStatusChange } = tonConnectContext;
+    console.log(tonConnectContext);
+    if (tonConnectContext?.wallet) {
+      const { onStatusChange } = tonConnectContext;
 
-    const unsubscribe = onStatusChange((walletAndWalletInfo) => {
-      if (!walletAndWalletInfo) {
-        handleDisconnect();
-      }
-    });
-    // onStatusChange((walletAndWalletInfo) => {
-    //   if (!walletAndWalletInfo) {
-    //     handleDisconnect();
-    //   }
-    // });
+      const unsubscribe = onStatusChange((walletAndWalletInfo) => {
+        setTestMessage("оно работает");
+        if (!walletAndWalletInfo) {
+          handleDisconnect();
+        }
+      });
 
-    return () => unsubscribe();
-    // }
+      return () => unsubscribe();
+    }
   }, [postTaskSelfConfirm, tonConnectContext, handleDisconnect]);
 
   return (
@@ -73,6 +72,7 @@ export const Home = () => {
           }`}
         >
           <h1>{staticData?.main_title}</h1>
+          <p>{testMessage}</p>
           <TonConnectButton />
         </div>
         <div
