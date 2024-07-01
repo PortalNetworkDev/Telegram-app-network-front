@@ -57,7 +57,7 @@ export const Home = () => {
 
       return () => unsubscribe();
     }
-  }, [tonConnectContext, postTaskSelfConfirm, handleDisconnect]);
+  }, [postTaskSelfConfirm, tonConnectContext, handleDisconnect]);
 
   return (
     <>
