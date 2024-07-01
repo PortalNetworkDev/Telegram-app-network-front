@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import "./home.css";
 import { Link } from "react-router-dom";
 import { MdOutlineArrowForwardIos } from "react-icons/md";
 import { useMeQuery, useStaticQuery } from "../../context/service/me.service";
-import { TonConnectButton, useTonAddress } from "@tonconnect/ui-react";
+import { enqueueSnackbar as EnSn } from "notistack";
+import {
+  TonConnectButton,
+  TonConnectUIContext,
+  useTonAddress,
+} from "@tonconnect/ui-react";
 import { usePostTaskSelfConfirmMutation } from "../../context/service/task.service";
 import { useSelector } from "react-redux";
 
@@ -26,6 +31,33 @@ export const Home = () => {
       setConnectWallet(false);
     }
   }, [connect_wallet, access, postTaskSelfConfirm]);
+
+  const tonConnectContext = useContext(TonConnectUIContext);
+
+  const handleDisconnect = useCallback(async () => {
+    const { error } = await postTaskSelfConfirm({ task_id: 4, result: "" });
+
+    if (error) {
+      EnSn(lang === "en" ? "Error" : "Ошибка", { variant: "error" });
+      return;
+    }
+
+    EnSn(lang === "en" ? "Success" : "Успешно", { variant: "success" });
+  }, [lang, postTaskSelfConfirm]);
+
+  useEffect(() => {
+    if (tonConnectContext?.connector?.connected) {
+      const { onStatusChange } = tonConnectContext;
+
+      const unsubscribe = onStatusChange((walletAndWalletInfo) => {
+        if (!walletAndWalletInfo) {
+          handleDisconnect();
+        }
+      });
+
+      return () => unsubscribe();
+    }
+  }, [tonConnectContext, postTaskSelfConfirm, handleDisconnect]);
 
   return (
     <>
