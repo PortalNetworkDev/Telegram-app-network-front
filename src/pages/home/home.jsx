@@ -46,22 +46,22 @@ export const Home = () => {
   }, [lang, postTaskSelfConfirm]);
 
   useEffect(() => {
-    if (tonConnectContext?.wallet) {
-      const { onStatusChange } = tonConnectContext;
+    // if (tonConnectContext?.wallet) {
+    const { onStatusChange } = tonConnectContext;
 
-      // const unsubscribe = onStatusChange((walletAndWalletInfo) => {
-      //   if (!walletAndWalletInfo) {
-      //     handleDisconnect();
-      //   }
+    const unsubscribe = onStatusChange((walletAndWalletInfo) => {
+      if (!walletAndWalletInfo) {
+        handleDisconnect();
+      }
+    });
+    // onStatusChange((walletAndWalletInfo) => {
+    //   if (!walletAndWalletInfo) {
+    //     handleDisconnect();
+    //   }
+    // });
 
-      onStatusChange((walletAndWalletInfo) => {
-        if (!walletAndWalletInfo) {
-          handleDisconnect();
-        }
-      });
-
-      // return () => unsubscribe();
-    }
+    return () => unsubscribe();
+    // }
   }, [postTaskSelfConfirm, tonConnectContext, handleDisconnect]);
 
   return (
