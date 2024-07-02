@@ -18,7 +18,7 @@ export const taskService = apiSlice.injectEndpoints({
         method: "POST",
         body: {
           task_id: task_id || null,
-          result: result || null,
+          result: result === "" ? "" : result ? result : null,
         },
       }),
       invalidatesTags: ["update"],
