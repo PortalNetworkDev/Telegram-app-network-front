@@ -8,7 +8,6 @@ import {
   TonConnectButton,
   TonConnectUIContext,
   useTonAddress,
-  useTonConnectUI,
   useTonWallet,
 } from "@tonconnect/ui-react";
 import { usePostTaskSelfConfirmMutation } from "../../context/service/task.service";
@@ -37,7 +36,8 @@ export const Home = () => {
   const tonConnectContext = useContext(TonConnectUIContext);
 
   const handleDisconnect = useCallback(async () => {
-    const { error } = await postTaskSelfConfirm({ task_id: 4, result: "" });
+    const setData = { task_id: 4, result: "" };
+    const { error } = await postTaskSelfConfirm(setData);
 
     if (error) {
       EnSn(lang === "en" ? "Error" : "Ошибка", { variant: "error" });
@@ -52,7 +52,7 @@ export const Home = () => {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    if (tonConnectContext.connected) {
+    if (tonConnectContext?.connected) {
       setIsConnected(tonConnectContext.connected);
     }
   }, [tonConnectContext.connected]);
