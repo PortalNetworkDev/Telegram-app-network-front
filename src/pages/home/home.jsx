@@ -8,6 +8,8 @@ import {
   TonConnectButton,
   TonConnectUIContext,
   useTonAddress,
+  useTonConnectUI,
+  useTonWallet,
 } from "@tonconnect/ui-react";
 import { usePostTaskSelfConfirmMutation } from "../../context/service/task.service";
 import { useSelector } from "react-redux";
@@ -45,23 +47,21 @@ export const Home = () => {
     EnSn(lang === "en" ? "Success" : "Успешно", { variant: "success" });
   }, [lang, postTaskSelfConfirm]);
 
-  const [testMessage, setTestMessage] = useState(null);
+  const wallet = useTonWallet();
+
+  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    console.log(tonConnectContext);
-    if (tonConnectContext?.wallet) {
-      const { onStatusChange } = tonConnectContext;
-
-      const unsubscribe = onStatusChange((walletAndWalletInfo) => {
-        setTestMessage("оно работает");
-        if (!walletAndWalletInfo) {
-          handleDisconnect();
-        }
-      });
-
-      return () => unsubscribe();
+    if (tonConnectContext.connected) {
+      setIsConnected(tonConnectContext.connected);
     }
-  }, [postTaskSelfConfirm, tonConnectContext, handleDisconnect]);
+  }, [tonConnectContext.connected]);
+
+  useEffect(() => {
+    if (!wallet && isConnected) {
+      handleDisconnect();
+    }
+  }, [wallet, handleDisconnect, isConnected]);
 
   return (
     <>
@@ -72,7 +72,6 @@ export const Home = () => {
           }`}
         >
           <h1>{staticData?.main_title}</h1>
-          <p>{testMessage}</p>
           <TonConnectButton />
         </div>
         <div
