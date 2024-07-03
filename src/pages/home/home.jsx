@@ -40,7 +40,8 @@ export const Home = () => {
     const { error } = await postTaskSelfConfirm(setData);
 
     if (error) {
-      EnSn(lang === "en" ? "Error" : "Ошибка", { variant: "error" });
+      // EnSn(lang === "en" ? "Error" : "Ошибка", { variant: "error" });
+      EnSn(error.data?.message, { variant: "error" });
       return;
     }
 
