@@ -36,7 +36,7 @@ export const Home = () => {
   const tonConnectContext = useContext(TonConnectUIContext);
 
   const handleDisconnect = useCallback(async () => {
-    const setData = { task_id: 4, result: "" };
+    const setData = { task_id: 4, result: "disconnect" };
     const { error } = await postTaskSelfConfirm(setData);
 
     if (error) {
