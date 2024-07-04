@@ -23,34 +23,35 @@ export const Home = () => {
   const [postTaskSelfConfirm] = usePostTaskSelfConfirmMutation();
   const userFriendlyAddress = useTonAddress();
   const access = userFriendlyAddress || null;
+  const tonConnectContext = useContext(TonConnectUIContext);
+  const wallet = useTonWallet();
+  const [isConnected, setIsConnected] = useState(false);
+
+  const handleConnect = useCallback(
+    async (result) => {
+      const setData = { task_id: 4, result: result };
+      const { error } = await postTaskSelfConfirm(setData);
+
+      if (error) {
+        EnSn(error.data?.message, { variant: "error" });
+        if (error.data?.message === "address_already_used") {
+          await tonConnectContext.disconnect();
+        }
+        return;
+      }
+
+      EnSn(lang === "en" ? "Success" : "Успешно", { variant: "success" });
+    },
+    [lang, postTaskSelfConfirm, tonConnectContext]
+  );
 
   useEffect(() => {
     if (access && connect_wallet) {
-      const setData = { task_id: 4, result: access };
-      postTaskSelfConfirm(setData);
+      handleConnect(access);
 
       setConnectWallet(false);
     }
-  }, [connect_wallet, access, postTaskSelfConfirm]);
-
-  const tonConnectContext = useContext(TonConnectUIContext);
-
-  const handleDisconnect = useCallback(async () => {
-    const setData = { task_id: 4, result: "disconnect" };
-    const { error } = await postTaskSelfConfirm(setData);
-
-    if (error) {
-      // EnSn(lang === "en" ? "Error" : "Ошибка", { variant: "error" });
-      EnSn(error.data?.message, { variant: "error" });
-      return;
-    }
-
-    EnSn(lang === "en" ? "Success" : "Успешно", { variant: "success" });
-  }, [lang, postTaskSelfConfirm]);
-
-  const wallet = useTonWallet();
-
-  const [isConnected, setIsConnected] = useState(false);
+  }, [connect_wallet, access, postTaskSelfConfirm, handleConnect]);
 
   useEffect(() => {
     if (tonConnectContext?.connected) {
@@ -60,9 +61,9 @@ export const Home = () => {
 
   useEffect(() => {
     if (!wallet && isConnected) {
-      handleDisconnect();
+      handleConnect("disconnect");
     }
-  }, [wallet, handleDisconnect, isConnected]);
+  }, [wallet, handleConnect, isConnected]);
 
   return (
     <>
