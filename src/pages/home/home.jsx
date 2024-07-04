@@ -34,17 +34,13 @@ export const Home = () => {
 
       if (error) {
         EnSn(error.data?.message, { variant: "error" });
+
         if (error.data?.message === "address_already_used") {
           await tonConnectContext.disconnect();
-          
-          return;
         }
-        return;
       }
-
-      EnSn(lang === "en" ? "Success" : "Успешно", { variant: "success" });
     },
-    [lang, postTaskSelfConfirm, tonConnectContext]
+    [postTaskSelfConfirm, tonConnectContext]
   );
 
   useEffect(() => {
