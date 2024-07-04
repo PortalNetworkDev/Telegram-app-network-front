@@ -36,6 +36,8 @@ export const Home = () => {
         EnSn(error.data?.message, { variant: "error" });
         if (error.data?.message === "address_already_used") {
           await tonConnectContext.disconnect();
+          
+          return;
         }
         return;
       }
@@ -46,18 +48,18 @@ export const Home = () => {
   );
 
   useEffect(() => {
-    if (access && connect_wallet) {
-      handleConnect(access);
-
-      setConnectWallet(false);
-    }
-  }, [connect_wallet, access, postTaskSelfConfirm, handleConnect]);
-
-  useEffect(() => {
     if (tonConnectContext?.connected) {
       setIsConnected(tonConnectContext.connected);
     }
   }, [tonConnectContext.connected]);
+
+  useEffect(() => {
+    if (access && connect_wallet && wallet) {
+      handleConnect(access);
+
+      setConnectWallet(false);
+    }
+  }, [connect_wallet, access, postTaskSelfConfirm, handleConnect, wallet]);
 
   useEffect(() => {
     if (!wallet && isConnected) {
