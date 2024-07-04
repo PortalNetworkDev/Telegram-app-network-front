@@ -34,12 +34,10 @@ export const Home = () => {
 
       if (error) {
         EnSn(error.data?.message, { variant: "error" });
+
         if (error.data?.message === "address_already_used") {
           await tonConnectContext.disconnect();
-
-          return;
         }
-        return;
       }
     },
     [postTaskSelfConfirm, tonConnectContext]
