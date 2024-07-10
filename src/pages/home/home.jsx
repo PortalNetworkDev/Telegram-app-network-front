@@ -1,9 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import "./home.css";
 import { Link } from "react-router-dom";
 import { MdOutlineArrowForwardIos } from "react-icons/md";
 import { useMeQuery, useStaticQuery } from "../../context/service/me.service";
-import { TonConnectButton, useTonAddress } from "@tonconnect/ui-react";
+import { enqueueSnackbar as EnSn } from "notistack";
+import {
+  TonConnectButton,
+  TonConnectUIContext,
+  useTonAddress,
+  useTonWallet,
+} from "@tonconnect/ui-react";
 import { usePostTaskSelfConfirmMutation } from "../../context/service/task.service";
 import { useSelector } from "react-redux";
 
@@ -17,15 +23,45 @@ export const Home = () => {
   const [postTaskSelfConfirm] = usePostTaskSelfConfirmMutation();
   const userFriendlyAddress = useTonAddress();
   const access = userFriendlyAddress || null;
+  const tonConnectContext = useContext(TonConnectUIContext);
+  const wallet = useTonWallet();
+  const [isConnected, setIsConnected] = useState(false);
+
+  const handleConnect = useCallback(
+    async (result) => {
+      const setData = { task_id: 4, result: result };
+      const { error } = await postTaskSelfConfirm(setData);
+
+      if (error) {
+        EnSn(error.data?.message, { variant: "error" });
+
+        if (error.data?.message === "address_already_used") {
+          await tonConnectContext.disconnect();
+        }
+      }
+    },
+    [postTaskSelfConfirm, tonConnectContext]
+  );
 
   useEffect(() => {
-    if (access && connect_wallet) {
-      const setData = { task_id: 4, result: access };
-      postTaskSelfConfirm(setData);
+    if (tonConnectContext?.connected) {
+      setIsConnected(tonConnectContext.connected);
+    }
+  }, [tonConnectContext.connected]);
+
+  useEffect(() => {
+    if (access && connect_wallet && wallet) {
+      handleConnect(access);
 
       setConnectWallet(false);
     }
-  }, [connect_wallet, access, postTaskSelfConfirm]);
+  }, [connect_wallet, access, postTaskSelfConfirm, handleConnect, wallet]);
+
+  useEffect(() => {
+    if (!wallet && isConnected) {
+      handleConnect("disconnect");
+    }
+  }, [wallet, handleConnect, isConnected]);
 
   return (
     <>
