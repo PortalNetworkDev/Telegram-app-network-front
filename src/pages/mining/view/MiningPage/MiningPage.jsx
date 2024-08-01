@@ -4,6 +4,7 @@ import { Balance } from "../../widgets/Balance/Balance";
 import { TextString } from "../../ui/TextSrting/TextString";
 import { UpBtn } from "../../ui/UpBtn/UpBtn";
 import { Power } from "../../widgets/Power/Power";
+import { HelpBtn } from "../../ui/HelpBtn/HelpBtn";
 
 export const MiningPage = () => {
   return (
@@ -37,9 +38,7 @@ export const MiningPage = () => {
               bigFontSize={"17px"}
               bigTextMargin={"0px 0px 0px 3px"}
             />
-            <button className="power__help help">
-              <img className="help__icon" src="./icon/help.svg" alt="help" />
-            </button>
+            <HelpBtn />
           </div>
           <UpBtn />
         </div>

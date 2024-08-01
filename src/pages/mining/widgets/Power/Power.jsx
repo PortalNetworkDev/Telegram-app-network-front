@@ -1,6 +1,7 @@
 import React from "react";
 import { UpBtn } from "../../ui/UpBtn/UpBtn";
 import { TextString } from "../../ui/TextSrting/TextString";
+import { HelpBtn } from "../../ui/HelpBtn/HelpBtn";
 import "./Power.css";
 
 export const Power = () => {
@@ -12,9 +13,7 @@ export const Power = () => {
           secondSmall={"Вт (в час)"}
           big={7653000}
         />
-        <button className="power__help help">
-          <img className="help__icon" src="./icon/help.svg" alt="help" />
-        </button>
+        <HelpBtn />
       </div>
       <UpBtn />
     </div>
