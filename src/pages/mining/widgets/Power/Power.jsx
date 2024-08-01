@@ -1,6 +1,6 @@
 import React from "react";
-import { UpBtn } from "../../components/UpBtn/UpBtn";
-import { TextString } from "../../components/TextSrting/TextString";
+import { UpBtn } from "../../ui/UpBtn/UpBtn";
+import { TextString } from "../../ui/TextSrting/TextString";
 import "./Power.css";
 
 export const Power = () => {

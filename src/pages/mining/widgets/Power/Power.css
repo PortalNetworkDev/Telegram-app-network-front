@@ -11,7 +11,7 @@
   background: linear-gradient(#1f202f, #1f202f 0) padding-box,
     linear-gradient(to top, rgba(100, 252, 214, 0.33), rgb(23, 30, 36))
       border-box;
-  width: 100%;
+  width: calc(100% + 2px);
   height: 7vh;
 }
 

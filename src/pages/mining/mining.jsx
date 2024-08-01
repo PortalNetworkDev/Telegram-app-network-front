@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 
-import { PreviewPage } from "./pages/PreviewPage/PreviewPage";
-import { MiningPage } from "./pages/MiningPage/MiningPage";
+import { PreviewPage } from "./view/PreviewPage/PreviewPage";
+import { MiningPage } from "./view/MiningPage/MiningPage";
 
 export const Mining = () => {
   const navigate = useNavigate();

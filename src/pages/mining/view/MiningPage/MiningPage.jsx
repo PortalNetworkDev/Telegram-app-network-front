@@ -1,8 +1,8 @@
 import React from "react";
 import "./MiningPage.css";
 import { Balance } from "../../widgets/Balance/Balance";
-import { TextString } from "../../components/TextSrting/TextString";
-import { UpBtn } from "../../components/UpBtn/UpBtn";
+import { TextString } from "../../ui/TextSrting/TextString";
+import { UpBtn } from "../../ui/UpBtn/UpBtn";
 import { Power } from "../../widgets/Power/Power";
 
 export const MiningPage = () => {
