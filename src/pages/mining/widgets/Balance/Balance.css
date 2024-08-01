@@ -1,0 +1,39 @@
+.balance {
+  display: flex;
+  align-items: center;
+}
+
+.balance__wallet {
+  width: 22px;
+}
+
+.balance__text {
+  font-size: 16px;
+  font-weight: 300;
+  color: #00c1ff;
+  padding-left: 10px;
+}
+
+.amount {
+  display: flex;
+  align-items: center;
+}
+
+.amount__lightning {
+  padding-right: 10px;
+  width: 26px;
+}
+
+.amount__value {
+  font-size: 16px;
+  font-weight: 500;
+  color: #00c1ff;
+}
+
+.amount__currency {
+  position: absolute;
+  right: 21px;
+  bottom: 4px;
+  font-size: 10px;
+  color: #a1c5d0;
+}

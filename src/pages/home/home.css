@@ -26,11 +26,11 @@
   border-top: 1px solid #2c353e;
 }
 
-.home__list > :last-child {
+.home__list > :nth-last-child(2) {
   border-bottom: 1px solid #cecdd4;
 }
 
-.home__list_dark > :last-child {
+.home__list_dark > :nth-last-child(2) {
   border-bottom: 1px solid #2c353e;
 }
 
@@ -58,6 +58,70 @@
 
 .home__list_dark svg {
   color: white;
+}
+
+.mining {
+  overflow: hidden;
+  position: relative;
+  background-image: url(../../../public/images/preview-back.png);
+  background-size: cover;
+  width: 100% !important;
+  height: 107px !important;
+  margin-top: 20px;
+  background-color: rgb(11, 68, 62);
+  border-radius: 20px;
+}
+
+.preview-gen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.mining__link {
+  position: relative;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 3;
+}
+
+.mining__container {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-top: 13px;
+}
+
+.mining__title-container {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.mining__title {
+  color: white !important;
+  z-index: 2;
+}
+
+.home__list > :last-child > a > div > svg {
+  color: white;
+  z-index: 2;
+}
+
+.home__list > :last-child > a > div > div > img {
+  margin-right: 8px;
+  position: relative;
+  z-index: 2;
+}
+
+.mining__info {
+  position: relative;
+  display: inline-block;
+  color: #abb3b6 !important;
+  width: 70%;
+  margin: 6px 0 0 32px;
+  z-index: 2;
 }
 
 /* ========= ton_accsess ========= */

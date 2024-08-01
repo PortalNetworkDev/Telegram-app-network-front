@@ -74,6 +74,14 @@ a {
   color: #ffffff;
 }
 
+.back-btn {
+  color: #ffffff;
+  display: flex;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+}
+
 /* ========== WALLET INFO ========== */
 
 .wallet_info {

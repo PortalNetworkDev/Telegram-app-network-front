@@ -193,6 +193,26 @@ export const Home = () => {
               <MdOutlineArrowForwardIos />
             </Link>
           </li>
+          <li className="mining">
+            <img
+              src="./images/generator-preview.png"
+              alt="gen-preview"
+              className="preview-gen"
+            />
+            <Link className="mining__link" to="/mining">
+              <div className="mining__container">
+                <div className="mining__title-container">
+                  <img src={"/icon/miningMenu.svg"} alt="mining-icon" />
+                  {/* <span>{staticData?.about_project}</span> */}
+                  <span className="mining__title">Майнить энергию</span>
+                </div>
+                <MdOutlineArrowForwardIos />
+              </div>
+              <span className="mining__info">
+                Покупайте и храните POE — получайте Вт•Ч
+              </span>
+            </Link>
+          </li>
         </ol>
       </div>
     </>
