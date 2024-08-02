@@ -1,0 +1,7 @@
+.help {
+  display: block;
+  background: transparent;
+  border: none;
+  height: 19px;
+  align-self: flex-end;
+}

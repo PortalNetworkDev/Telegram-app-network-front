@@ -1,0 +1,30 @@
+.generator {
+  width: 100%;
+  margin-top: 10%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.generator__level {
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+}
+
+.geterator__rotateContainer {
+  z-index: 2;
+  margin-top: -7%;
+  border: 1px solid red;
+  border-radius: 50%;
+}
+
+.generator__power{
+  padding: 10px;
+  width: 100%;
+}
+
+.generator__lightning{
+  width: 3.5%;
+}

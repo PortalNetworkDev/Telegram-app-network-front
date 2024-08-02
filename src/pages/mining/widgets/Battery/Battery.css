@@ -1,0 +1,78 @@
+.battery {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.battery__level {
+  position: relative;
+  margin-top: 7%;
+  display: flex;
+  align-self: center;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.battery__level-info {
+  width: 50%;
+}
+
+.battery__img {
+  position: relative;
+  display: block;
+  width: 80%;
+  margin: 4% 0 4% 0;
+  align-self: center;
+}
+
+.battery__lightning {
+  width: 7%;
+}
+
+.battery__capacity {
+  justify-content: space-between;
+}
+
+.accumulation {
+  display: flex;
+  align-items: center;
+}
+
+.accumulation__text {
+  font-size: 12px;
+  font-weight: 300;
+  margin: 0 10px 0 0;
+}
+
+.accumulation__percent {
+  display: flex;
+  padding: 4px 9px 4px 9px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: linear-gradient(to top, #153467, #112320) padding-box,
+    linear-gradient(to top, #423e3e, #423e3eab) border-box;
+}
+
+.accumulation__progrecc-img {
+  width: 8px;
+}
+
+.accumulation__value {
+  color: #0aff6d;
+  margin-left: 5px;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.battyry__collect {
+  border: none;
+  border-radius: 30px;
+  margin: 5% 10px 0 10px;
+  color: #0f0c10;
+  font-size: 22px;
+  font-weight: 600;
+  background: linear-gradient(to top, #00c1ff, #64fcd7);
+  height: 50px;
+}

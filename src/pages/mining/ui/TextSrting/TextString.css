@@ -1,0 +1,15 @@
+.string {
+  margin: 0 5px 0 0;
+}
+
+.string__text {
+  color: white;
+  font-size: 12px;
+  font-weight: 300;
+}
+.string__text_big {
+  color: white;
+  font-size: 20px;
+  font-weight: 400;
+  margin: 0 5px 0 10px;
+}
