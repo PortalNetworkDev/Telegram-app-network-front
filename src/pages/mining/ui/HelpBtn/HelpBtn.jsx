@@ -1,10 +1,15 @@
 import React from "react";
 import "./HelpBtn.css";
+import LazyLoad from "react-lazyload";
 
-export const HelpBtn = ({ onClick }) => {
+const HelpBtn = ({ onClick }) => {
   return (
     <button onClick={onClick} className="power__help help">
-      <img className="help__icon" src="./icon/help.svg" alt="help" />
+      <LazyLoad>
+        <img className="help__icon" src="./icon/help.svg" alt="help" />
+      </LazyLoad>
     </button>
   );
 };
+
+export default React.memo(HelpBtn);

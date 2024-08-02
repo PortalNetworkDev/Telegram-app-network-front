@@ -7,6 +7,10 @@
   height: 100vh;
   background: rgb(9, 10, 15);
   overflow: hidden;
+  background-image: url(../../../../../public/images/backGen.png);
+  background-position-x: center;
+  background-position-y:center ;
+  background-size: cover;
 }
 
 .mining-info__header {
@@ -18,17 +22,18 @@
 
 .mining-info__background-img {
   position: absolute;
-  z-index: 1;
+  z-index: -1;
   top: -90px;
   left: 0;
   width: 100%;
 }
 
 .mining-info__lightning {
+  width: 3vh;
   z-index: 2;
   position: absolute;
-  top: 46.5%;
-  left: 47.1%;
+  top: 42.3%;
+  left: 46.8%;
   animation: puls 2s infinite;
   filter: drop-shadow(0 0 10px #00c1ff);
 }
@@ -56,7 +61,7 @@
 
 .info-text {
   position: absolute;
-  top: 64%;
+  top: 57%;
   left: 50%;
   transform: translate(-50%, 0);
   z-index: 2;
@@ -82,7 +87,7 @@
 }
 
 .mining-loader {
-  z-index: 3;
+  z-index: 1;
   position: absolute;
   top: 0;
   left: 0;
@@ -90,9 +95,9 @@
   height: 100%;
   background: linear-gradient(
     270deg,
-    rgb(3, 50, 56),
-    rgb(5, 23, 43),
-    rgb(8, 38, 49)
+    rgba(3, 50, 56, 0.7),
+    rgba(5, 23, 43, 0.7),
+    rgba(8, 38, 49, 0.7)
   );
   background-size: 600% 600%;
   animation: gradient 3s ease infinite;

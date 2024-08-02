@@ -1,7 +1,7 @@
 import React from "react";
 import "./TextString.css";
 
-export const TextString = ({
+const TextString = ({
   firstSmall,
   big,
   secondSmall,
@@ -18,7 +18,13 @@ export const TextString = ({
         style={{ fontSize: `${bigFontSize}`, margin: `${bigTextMargin}` }}
         className="string__text_big"
       >
-        {typeof big === "number" ? big.toLocaleString("ru") : big}
+        {Array.isArray(big) &&
+        typeof big[0] === "number" &&
+        typeof big[1] === "number"
+          ? `${big[0].toLocaleString("ru")} | ${big[1].toLocaleString("ru")}`
+          : typeof big === "number"
+          ? big.toLocaleString("ru")
+          : big}
       </span>
       <span style={{ fontSize: `${smallFontSize}` }} className="string__text">
         {secondSmall}
@@ -26,3 +32,5 @@ export const TextString = ({
     </p>
   );
 };
+
+export default React.memo(TextString);

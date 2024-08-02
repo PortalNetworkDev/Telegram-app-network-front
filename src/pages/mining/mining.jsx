@@ -14,12 +14,18 @@ export const Mining = () => {
   useEffect(() => {
     setTimeout(() => {
       setPreview(false);
-    }, 400);
+    }, 3000);
   }, []);
 
   return (
     <>
-      <section className="mining-info__body ">
+      <section
+        className={
+          preview
+            ? `${"mining-info__body"}`
+            : `${"mining-info__body_withScroll"}`
+        }
+      >
         <div className="page">
           <div className="mining-info__header">
             <button className="back-btn" onClick={back}>
