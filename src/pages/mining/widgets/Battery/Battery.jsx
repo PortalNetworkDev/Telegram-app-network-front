@@ -1,11 +1,46 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import TextString from "../../ui/TextSrting/TextString";
 import LazyLoad from "react-lazyload";
 import UpBtn from "../../ui/UpBtn/UpBtn";
 import HelpBtn from "../../ui/HelpBtn/HelpBtn";
 import "./Battery.css";
 
-const Battery = ({onClick}) => {
+const Battery = ({ onClick }) => {
+  const imgRef = useRef(null);
+  const [divisions, setDivisions] = useState([]);
+  const [isImgLoading, setIsImgLoading] = useState(true);
+
+  useEffect(() => {
+    const image = new Image();
+    image.src = "./images/battery.svg";
+    image.onload = () => {
+      setIsImgLoading(false);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isImgLoading) {
+      const rect = imgRef.current.getBoundingClientRect();
+
+      const newDivisions = [];
+
+      // Рассчитываем высоту и начальную точку для делений
+      const divisionHeight = rect.height / 3.5;
+      const divisionWidth = rect.width / 140;
+
+      for (let i = 0; i < 31; i++) {
+        newDivisions.push({
+          top: (rect.height * 12) / 30.5,
+          left: rect.width / 6.5 + i * 3.12 * divisionWidth,
+          width: divisionWidth,
+          height: divisionHeight,
+        });
+      }
+
+      setDivisions(newDivisions);
+    }
+  }, [isImgLoading]);
+
   return (
     <div className="battery">
       <div className=" battery__level level">
@@ -21,11 +56,26 @@ const Battery = ({onClick}) => {
         <UpBtn />
       </div>
       <LazyLoad>
-        <img
-          className="battery__img"
-          src="./images/battery.png"
-          alt="battery"
-        />
+        <div className="battery__img-container">
+          <img
+            ref={imgRef}
+            className="battery__img"
+            src="./images/battery.svg"
+            alt="battery"
+          />
+          {divisions.map((division, index) => (
+            <div
+              key={index}
+              className="battery-division"
+              style={{
+                top: division.top,
+                left: division.left,
+                width: division.width,
+                height: division.height,
+              }}
+            />
+          ))}
+        </div>
       </LazyLoad>
       <div className="battery__capacity level">
         <div className="battery__level-info level__info">
@@ -53,7 +103,9 @@ const Battery = ({onClick}) => {
           </div>
         </div>
       </div>
-      <button className="battyry__collect" onClick={onClick}>СОБРАТЬ</button>
+      <button className="battyry__collect" onClick={onClick}>
+        СОБРАТЬ
+      </button>
     </div>
   );
 };

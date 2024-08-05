@@ -8,6 +8,7 @@ import { setColorSchemeAction } from "../context/colorScheme";
 export const Layout = memo(() => {
   const dispatch = useDispatch();
   const colorScheme = useSelector((store) => store.colorScheme);
+  const mining = useSelector((store) => store.mining);
 
   useEffect(() => {
     const tg = window.Telegram?.WebApp;
@@ -32,7 +33,13 @@ export const Layout = memo(() => {
     <main className="layout">
       <section
         className={`layout__content ${
-          colorScheme === "light" ? "" : "layout__content_dark"
+          colorScheme === "light" && mining
+            ? "layout__content_mining"
+            : colorScheme !== "light" && mining
+            ? "layout__content_dark layout__content_mining"
+            : colorScheme !== "light"
+            ? "layout__content_dark"
+            : ""
         }`}
       >
         <Outlet />

@@ -9,7 +9,7 @@
   overflow: hidden;
   background-image: url(../../../../../public/images/backGen.png);
   background-position-x: center;
-  background-position-y:center ;
+  background-position-y: center;
   background-size: cover;
 }
 
@@ -32,8 +32,8 @@
   width: 3vh;
   z-index: 2;
   position: absolute;
-  top: 42.3%;
-  left: 46.8%;
+  top: 41%;
+  left: 47.5%;
   animation: puls 2s infinite;
   filter: drop-shadow(0 0 10px #00c1ff);
 }
@@ -77,6 +77,8 @@
   font-size: 27px;
   font-weight: 500;
   text-align: center;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
 }
 
 .info-text__desc {

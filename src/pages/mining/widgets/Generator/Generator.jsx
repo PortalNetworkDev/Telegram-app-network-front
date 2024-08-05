@@ -22,7 +22,7 @@ const Generator = () => {
       <div className="geterator__rotateContainer">
         <img
           className="geterator__img"
-          src="./images/generatorFromRotate.png"
+          src="./images/generatorFromRotate.svg"
           alt="generator"
         />
       </div>
