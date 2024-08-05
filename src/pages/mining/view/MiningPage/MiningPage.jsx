@@ -34,7 +34,7 @@ export const MiningPage = () => {
           />
         </div>
         <Battery />
-        <Generator/>
+        <Generator />
       </div>
     </>
   );
