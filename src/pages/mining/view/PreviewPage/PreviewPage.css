@@ -7,10 +7,6 @@
   height: 100vh;
   background: rgb(9, 10, 15);
   overflow: hidden;
-  /* background-image: url(../../../../../public/images/backGen.png);
-  background-position-x: center;
-  background-position-y: center;
-  background-size: cover; */
 }
 
 .mining-info__gen {

@@ -13,7 +13,7 @@ export const Layout = memo(() => {
   //Устанавливаем цвет фона Telegram
   useEffect(() => {
     if (colorScheme === "light") {
-      window.Telegram?.WebApp.setBackgroundColor("#ffffff");
+      window.Telegram?.WebApp.setHeaderColor("#ffffff");
       window.Telegram?.WebApp.setBackgroundColor("#ffffff");
     } else {
       window.Telegram?.WebApp.setHeaderColor("#212121");

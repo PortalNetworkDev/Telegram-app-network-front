@@ -16,7 +16,7 @@ export const Mining = () => {
 
   //Устанавливаем цвет фона Telegram
   useEffect(() => {
-    window.Telegram?.WebApp.setBackgroundColor("#212121");
+    window.Telegram?.WebApp.setHeaderColor("#212121");
     window.Telegram?.WebApp.setBackgroundColor("#0d0b0e");
   }, []);
 
@@ -28,7 +28,7 @@ export const Mining = () => {
   //Возвращаем цвет Telegram
   const returnTgColor = () => {
     if (colorScheme === "light") {
-      window.Telegram?.WebApp.setBackgroundColor("#ffffff");
+      window.Telegram?.WebApp.setHeaderColor("#ffffff");
       window.Telegram?.WebApp.setBackgroundColor("#ffffff");
     } else {
       window.Telegram?.WebApp.setHeaderColor("#212121");
