@@ -33,7 +33,8 @@
 
 .active {
   background: linear-gradient(to top, #8dfab4, #26ff3c) padding-box;
-  filter: drop-shadow(0px 62px 5px rgba(141, 250, 180, 1)) drop-shadow(0px 0px 10px rgba(141, 250, 180, 1));
+  filter: drop-shadow(0px 62px 5px rgba(141, 250, 180, 1))
+    drop-shadow(0px 0px 10px rgba(141, 250, 180, 1));
 }
 
 .last {
@@ -45,11 +46,13 @@
   0%,
   100% {
     /* transform: scale(1); */
-    filter: drop-shadow(0 62px 5px rgba(141, 250, 180, 1)) drop-shadow(0px 0px 10px rgba(141, 250, 180, 1)) brightness(1);
+    filter: drop-shadow(0 62px 5px rgba(141, 250, 180, 1))
+      drop-shadow(0px 0px 10px rgba(141, 250, 180, 1)) brightness(1);
   }
   50% {
     /* transform: scale(0.95); */
-    filter: drop-shadow(0 62px 5px rgba(141, 250, 180, 1)) drop-shadow(0px 0px 1px rgba(141, 250, 180, 1)) brightness(0.1);
+    filter: drop-shadow(0 62px 5px rgba(141, 250, 180, 1))
+      drop-shadow(0px 0px 1px rgba(141, 250, 180, 1)) brightness(0.1);
   }
 }
 
