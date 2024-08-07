@@ -24,15 +24,16 @@
 
 .mining-main__balance {
   position: absolute;
-  left: 0;
-  top: 74px;
+  right: 0;
+  top: 10px;
   height: 7vh;
-  background-color: black;
-  width: 100%;
+  background-color: #0d0b0e;
+  width: 88%;
   padding: 21px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-radius: 5px 0 0 5px;
 }
 
 .battery-power {
