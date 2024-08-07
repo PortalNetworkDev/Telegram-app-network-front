@@ -4,24 +4,42 @@ import { IoArrowBack } from "react-icons/io5";
 
 import { PreviewPage } from "./view/PreviewPage/PreviewPage";
 import { MiningPage } from "./view/MiningPage/MiningPage";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setMiningAction } from "../../context/mining";
 
 export const Mining = () => {
   const navigate = useNavigate();
   const back = () => navigate(-1);
   const dispatch = useDispatch();
-
+  const colorScheme = useSelector((store) => store.colorScheme);
   const [preview, setPreview] = useState(true);
 
+  //Устанавливаем цвет фона Telegram
+  useEffect(() => {
+    window.Telegram?.WebApp.setBackgroundColor("#212121");
+    window.Telegram?.WebApp.setBackgroundColor("#0d0b0e");
+  }, []);
+
+  //Говорим, что открыта страница майнинга
   useEffect(() => {
     dispatch(setMiningAction(true));
   }, [dispatch]);
 
+  //Возвращаем цвет Telegram
+  const returnTgColor = () => {
+    if (colorScheme === "light") {
+      window.Telegram?.WebApp.setBackgroundColor("#ffffff");
+      window.Telegram?.WebApp.setBackgroundColor("#ffffff");
+    } else {
+      window.Telegram?.WebApp.setHeaderColor("#212121");
+      window.Telegram?.WebApp.setBackgroundColor("#042129");
+    }
+  };
+
   useEffect(() => {
     setTimeout(() => {
       setPreview(false);
-    }, 300);
+    }, 3000);
   }, []);
 
   return (
@@ -33,18 +51,17 @@ export const Mining = () => {
             : `${"mining-info__body_withScroll"}`
         }
       >
-        <div className="page">
-          <div className="mining-info__header">
-            <button
-              className="back-btn"
-              onClick={() => {
-                back();
-                dispatch(setMiningAction(false));
-              }}
-            >
-              <IoArrowBack />
-            </button>
-          </div>
+        <div className="mining-info__header">
+          <button
+            className="back-btn"
+            onClick={() => {
+              back();
+              dispatch(setMiningAction(false));
+              returnTgColor();
+            }}
+          >
+            <IoArrowBack />
+          </button>
         </div>
         {preview ? <PreviewPage /> : <MiningPage />}
       </section>

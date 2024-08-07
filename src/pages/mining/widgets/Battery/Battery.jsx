@@ -9,6 +9,8 @@ const Battery = ({ onClick }) => {
   const imgRef = useRef(null);
   const [divisions, setDivisions] = useState([]);
   const [isImgLoading, setIsImgLoading] = useState(true);
+  const [percent, setPercent] = useState(1);
+  const [prev, setPrev] = useState(0);
 
   useEffect(() => {
     const image = new Image();
@@ -21,17 +23,14 @@ const Battery = ({ onClick }) => {
   useEffect(() => {
     if (!isImgLoading) {
       const rect = imgRef.current.getBoundingClientRect();
-
       const newDivisions = [];
-
-      // Рассчитываем высоту и начальную точку для делений
       const divisionHeight = rect.height / 3.5;
       const divisionWidth = rect.width / 140;
 
       for (let i = 0; i < 31; i++) {
         newDivisions.push({
           top: (rect.height * 12) / 30.5,
-          left: rect.width / 6.5 + i * 3.12 * divisionWidth,
+          left: rect.width / 6.4 + i * 3.12 * divisionWidth,
           width: divisionWidth,
           height: divisionHeight,
         });
@@ -41,9 +40,26 @@ const Battery = ({ onClick }) => {
     }
   }, [isImgLoading]);
 
+  useEffect(() => {
+    // Определяем последний активный индекс
+    const lastActiveIndex = divisions.reduce((lastIndex, _, index) => {
+      return percent > index * 10 ? index : lastIndex;
+    }, 0); // Начальное значение 0
+
+    setPrev(lastActiveIndex);
+  }, [percent, divisions]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPercent((prev) => Math.min(prev + 10, 100));
+    }, 5000);
+
+    return () => clearInterval(interval); // Очистка интервала при размонтировании
+  }, []);
+
   return (
     <div className="battery">
-      <div className=" battery__level level">
+      <div className="battery__level level">
         <div className="level__info">
           <TextString
             firstSmall={"Уровень"}
@@ -63,18 +79,25 @@ const Battery = ({ onClick }) => {
             src="./images/battery.svg"
             alt="battery"
           />
-          {divisions.map((division, index) => (
-            <div
-              key={index}
-              className="battery-division"
-              style={{
-                top: division.top,
-                left: division.left,
-                width: division.width,
-                height: division.height,
-              }}
-            />
-          ))}
+          {divisions.map((division, index) => {
+            const isActive = percent > index * 10;
+            const isLast = index === prev && isActive;
+
+            return (
+              <div
+                key={index}
+                className={`battery-division ${
+                  isActive ? (isLast ? "active last" : "active") : ""
+                }`}
+                style={{
+                  top: division.top,
+                  left: division.left,
+                  width: division.width,
+                  height: division.height,
+                }}
+              />
+            );
+          })}
         </div>
       </LazyLoad>
       <div className="battery__capacity level">

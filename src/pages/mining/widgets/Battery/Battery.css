@@ -22,12 +22,35 @@
 .battery__img-container {
   position: relative;
   width: fit-content;
+  margin-bottom: 5%;
 }
 
 .battery-division {
   position: absolute;
   background: linear-gradient(to top, #4d4d4d, #262626) padding-box;
   border-radius: 5px;
+}
+
+.active {
+  background: linear-gradient(to top, #8dfab4, #26ff3c) padding-box;
+  filter: drop-shadow(0px 62px 5px rgba(141, 250, 180, 1)) drop-shadow(0px 0px 10px rgba(141, 250, 180, 1));
+}
+
+.last {
+  animation: charge 3s infinite;
+  filter: brightness(0);
+}
+
+@keyframes charge {
+  0%,
+  100% {
+    /* transform: scale(1); */
+    filter: drop-shadow(0 62px 5px rgba(141, 250, 180, 1)) drop-shadow(0px 0px 10px rgba(141, 250, 180, 1)) brightness(1);
+  }
+  50% {
+    /* transform: scale(0.95); */
+    filter: drop-shadow(0 62px 5px rgba(141, 250, 180, 1)) drop-shadow(0px 0px 1px rgba(141, 250, 180, 1)) brightness(0.1);
+  }
 }
 
 .battery__img {
