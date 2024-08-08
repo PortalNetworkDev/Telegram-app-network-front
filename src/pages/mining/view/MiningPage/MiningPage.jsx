@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./MiningPage.css";
 import Balance from "../../widgets/Balance/Balance";
 import TextString from "../../ui/TextSrting/TextString";
@@ -6,11 +6,22 @@ import Power from "../../widgets/Power/Power";
 import LazyLoad from "react-lazyload";
 import Battery from "../../widgets/Battery/Battery";
 import Generator from "../../widgets/Generator/Generator";
+import Modal from "../../widgets/Modal/Modal";
 
-export const MiningPage = () => {
+export const MiningPage = ({ opacity }) => {
+  const [isModalVisible, setIsModalVivible] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalText, setModalText] = useState("");
+
+  const handleOpenModal = (title, text) => {
+    setIsModalVivible(true);
+    setModalTitle(title);
+    setModalText(text);
+  };
+
   return (
     <>
-      <div className="mining-main">
+      <div style={{ opacity: opacity }} className="mining-main">
         <LazyLoad>
           <img
             className="mining-main__background"
@@ -19,8 +30,14 @@ export const MiningPage = () => {
           />
         </LazyLoad>
         <Balance balance={100000000} currency={1000} />
-
-        <Power />
+        <Power
+          onClick={() =>
+            handleOpenModal(
+              "POE — ваш генератор с мощностью 1 POE = 5 000 Вт",
+              "Каждый час копите Вт•Ч, в дальнейшем их можно будет использовать"
+            )
+          }
+        />
         <div className="battery-power">
           <img
             className="battery-power__lightning lightning-with-back"
@@ -33,8 +50,23 @@ export const MiningPage = () => {
             bigFontSize={"32px"}
           />
         </div>
-        <Battery />
-        <Generator />
+        <Battery onClick={() =>
+            handleOpenModal(
+              "POE — ваш генератор с мощностью 1 POE = 5 000 Вт",
+              "Каждый час копите Вт•Ч, в дальнейшем их можно будет использовать"
+            )} />
+        <Generator onClick={() =>
+            handleOpenModal(
+              "POE — ваш генератор с мощностью 1 POE = 5 000 Вт",
+              "Каждый час копите Вт•Ч, в дальнейшем их можно будет использовать"
+            )} />
+        {isModalVisible && (
+          <Modal
+            title={modalTitle}
+            text={modalText}
+            setModalClose={() => setIsModalVivible(false)}
+          />
+        )}
       </div>
     </>
   );

@@ -39,7 +39,7 @@ export const Mining = () => {
   useEffect(() => {
     setTimeout(() => {
       setPreview(false);
-    }, 3000);
+    }, 300);
   }, []);
 
   return (
@@ -63,7 +63,8 @@ export const Mining = () => {
             <IoArrowBack />
           </button>
         </div>
-        {preview ? <PreviewPage /> : <MiningPage />}
+        <PreviewPage display={preview ? "block" : "none"} />
+        <MiningPage opacity={preview ? "0" : "1"} />
       </section>
     </>
   );

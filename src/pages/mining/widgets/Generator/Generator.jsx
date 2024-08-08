@@ -4,7 +4,7 @@ import TextString from "../../ui/TextSrting/TextString";
 import HelpBtn from "../../ui/HelpBtn/HelpBtn";
 import UpBtn from "../../ui/UpBtn/UpBtn";
 
-const Generator = () => {
+const Generator = ({onClick}) => {
   return (
     <div className="generator">
       <div className=" generator__level level">
@@ -15,7 +15,7 @@ const Generator = () => {
             bigFontSize={"15px"}
             bigTextMargin={"0px 0px 0px 5px"}
           />
-          <HelpBtn />
+          <HelpBtn onClick={onClick}/>
         </div>
         <UpBtn />
       </div>

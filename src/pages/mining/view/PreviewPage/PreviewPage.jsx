@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./PreviewPage.css";
 
-export const PreviewPage = () => {
+export const PreviewPage = ({display}) => {
   const imgRef = useRef(null);
   const [isImgLoading, setIsImgLoading] = useState(true);
   const [imgProperties, setImgProperties] = useState("0");
@@ -17,13 +17,13 @@ export const PreviewPage = () => {
 
   useEffect(() => {
     if (!isImgLoading) {
-      const rect = imgRef.current.getBoundingClientRect();
-      setImgProperties(rect.height);
+      const rect = imgRef.current?.getBoundingClientRect();
+      setImgProperties(rect?.height);
     }
   }, [isImgLoading, imgProperties]);
 
   return (
-    <>
+    <div style={{display:display}}>
       <img
         style={{ top: `${(clientHeight - imgProperties) / 2}px` }}
         ref={imgRef}
@@ -49,6 +49,6 @@ export const PreviewPage = () => {
           <p className="info-text__desc"> 1 POE = 5 000 Вт</p>
         </div>
       </div>
-    </>
+    </div>
   );
 };
