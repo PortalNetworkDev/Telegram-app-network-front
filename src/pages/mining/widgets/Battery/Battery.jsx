@@ -87,7 +87,7 @@ const Battery = ({ onClick }) => {
               <div
                 key={index}
                 className={`battery-division ${
-                  isActive ? (isLast ? "active last" : "active") : ""
+                  isActive ? (isLast ? "activeDivision last" : "activeDivision") : ""
                 }`}
                 style={{
                   top: division.top,
