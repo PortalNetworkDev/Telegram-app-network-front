@@ -39,7 +39,7 @@ export const Mining = () => {
   useEffect(() => {
     setTimeout(() => {
       setPreview(false);
-    }, 300);
+    }, 3000);
   }, []);
 
   return (

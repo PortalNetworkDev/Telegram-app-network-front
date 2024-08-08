@@ -31,7 +31,7 @@
   border-radius: 5px;
 }
 
-.active {
+.activeDivision {
   background: -webkit-linear-gradient(to top, #8dfab4, #26ff3c) padding-box;
   background: linear-gradient(to top, #8dfab4, #26ff3c) padding-box;
   -webkit-filter: drop-shadow(0px 62px 5px rgba(141, 250, 180, 1))
