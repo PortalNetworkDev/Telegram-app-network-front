@@ -130,9 +130,7 @@ const Battery = ({ onClick }) => {
           </div>
         </div>
       </div>
-      <button className="battyry__collect" onClick={onClick}>
-        СОБРАТЬ
-      </button>
+      <button className="battyry__collect">СОБРАТЬ</button>
     </div>
   );
 };
