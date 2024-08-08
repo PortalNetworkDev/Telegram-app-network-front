@@ -20,7 +20,7 @@
   width: 75%;
 }
 
-.geterator__img{
+.geterator__img {
   width: 100%;
 }
 
@@ -30,5 +30,7 @@
 }
 
 .generator__lightning {
-  width: 3.5%;
+  margin-bottom: 0.7%;
+  height: 14px;
+  align-self: flex-end;
 }
