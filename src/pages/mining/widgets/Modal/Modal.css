@@ -6,11 +6,11 @@
   width: 100%;
   height: 100%;
   background: #1f202f9d;
-  animation: showOverlay 0.3s;
+  animation: showOverlay 0.3s ease-in-out;
 }
 
 .overlayClose {
-  animation: hideOverlay 0.5s;
+  animation: hideOverlay 0.55s ease-in-out;
 }
 
 @keyframes showOverlay {
@@ -34,17 +34,17 @@
 .modal {
   position: absolute;
   z-index: 10;
-  top: 37vh;
+  top: 42vh;
   left: 10px;
-  height: 60vh;
+  height: 55vh;
   width: calc(100% - 20px);
   background: #1f202f;
   border-radius: 5%;
-  animation: popUp 0.3s;
+  animation: popUp 0.3s ease-in-out;
 }
 
 .modalClose {
-  animation: popDown 0.5s;
+  animation: popDown 0.5s ease-in-out;
 }
 
 @keyframes popUp {
@@ -52,13 +52,13 @@
     top: 200vh;
   }
   100% {
-    top: 50vh;
+    top: 42vh;
   }
 }
 
 @keyframes popDown {
   0% {
-    top: 50vh;
+    top: 42vh;
   }
   100% {
     top: 200vh;
