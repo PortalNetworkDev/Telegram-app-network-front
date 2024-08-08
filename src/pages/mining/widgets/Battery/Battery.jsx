@@ -22,15 +22,15 @@ const Battery = ({ onClick }) => {
 
   useEffect(() => {
     if (!isImgLoading) {
-      const rect = imgRef.current.getBoundingClientRect();
+      const rect = imgRef.current?.getBoundingClientRect();
       const newDivisions = [];
-      const divisionHeight = rect.height / 3.5;
-      const divisionWidth = rect.width / 140;
+      const divisionHeight = rect?.height / 3.5;
+      const divisionWidth = rect?.width / 140;
 
       for (let i = 0; i < 31; i++) {
         newDivisions.push({
-          top: (rect.height * 12) / 30.5,
-          left: rect.width / 6.4 + i * 3.12 * divisionWidth,
+          top: (rect?.height * 12) / 30.5,
+          left: rect?.width / 6.4 + i * 3.12 * divisionWidth,
           width: divisionWidth,
           height: divisionHeight,
         });
@@ -67,7 +67,7 @@ const Battery = ({ onClick }) => {
             bigFontSize={"15px"}
             bigTextMargin={"0px 0px 0px 5px"}
           />
-          <HelpBtn />
+          <HelpBtn onClick={onClick}/>
         </div>
         <UpBtn />
       </div>
