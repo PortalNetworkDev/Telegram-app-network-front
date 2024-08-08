@@ -14,7 +14,7 @@ const Battery = ({ onClick }) => {
 
   useEffect(() => {
     const image = new Image();
-    image.src = "./images/battery.svg";
+    image.src = "./images/battery.png";
     image.onload = () => {
       setIsImgLoading(false);
     };
@@ -67,7 +67,7 @@ const Battery = ({ onClick }) => {
             bigFontSize={"15px"}
             bigTextMargin={"0px 0px 0px 5px"}
           />
-          <HelpBtn onClick={onClick}/>
+          <HelpBtn onClick={onClick} />
         </div>
         <UpBtn />
       </div>
@@ -76,7 +76,7 @@ const Battery = ({ onClick }) => {
           <img
             ref={imgRef}
             className="battery__img"
-            src="./images/battery.svg"
+            src="./images/battery.png"
             alt="battery"
           />
           {divisions.map((division, index) => {
@@ -87,7 +87,11 @@ const Battery = ({ onClick }) => {
               <div
                 key={index}
                 className={`battery-division ${
-                  isActive ? (isLast ? "activeDivision last" : "activeDivision") : ""
+                  isActive
+                    ? isLast
+                      ? "activeDivision last"
+                      : "activeDivision"
+                    : ""
                 }`}
                 style={{
                   top: division.top,
@@ -104,7 +108,7 @@ const Battery = ({ onClick }) => {
         <div className="battery__level-info level__info">
           <img
             className="battery__lightning lightning-with-back"
-            src="./icon/lightningWithBackground.svg"
+            src="./images/lightningWithBackground.png"
             alt="lightning"
           />
           <TextString

@@ -4,7 +4,7 @@ import TextString from "../../ui/TextSrting/TextString";
 import HelpBtn from "../../ui/HelpBtn/HelpBtn";
 import UpBtn from "../../ui/UpBtn/UpBtn";
 
-const Generator = ({onClick}) => {
+const Generator = ({ onClick }) => {
   return (
     <div className="generator">
       <div className=" generator__level level">
@@ -15,21 +15,21 @@ const Generator = ({onClick}) => {
             bigFontSize={"15px"}
             bigTextMargin={"0px 0px 0px 5px"}
           />
-          <HelpBtn onClick={onClick}/>
+          <HelpBtn onClick={onClick} />
         </div>
         <UpBtn />
       </div>
       <div className="geterator__rotateContainer">
         <img
           className="geterator__img"
-          src="./images/generatorFromRotate.svg"
+          src="./images/generatorFromRotate.png"
           alt="generator"
         />
       </div>
       <div className="generator__power level__info">
         <img
           className="generator__lightning lightning-with-back"
-          src="./icon/lightningWithBackground.svg"
+          src="./images/lightningWithBackground.png"
           alt="lightning"
         />
         <TextString

@@ -41,7 +41,7 @@ export const MiningPage = ({ opacity }) => {
         <div className="battery-power">
           <img
             className="battery-power__lightning lightning-with-back"
-            src="./icon/lightningWithBackground.svg"
+            src="./images/lightningWithBackground.png"
             alt="lightning"
           />
           <TextString
@@ -50,16 +50,22 @@ export const MiningPage = ({ opacity }) => {
             bigFontSize={"32px"}
           />
         </div>
-        <Battery onClick={() =>
+        <Battery
+          onClick={() =>
             handleOpenModal(
               "POE — ваш генератор с мощностью 1 POE = 5 000 Вт",
               "Каждый час копите Вт•Ч, в дальнейшем их можно будет использовать"
-            )} />
-        <Generator onClick={() =>
+            )
+          }
+        />
+        <Generator
+          onClick={() =>
             handleOpenModal(
               "POE — ваш генератор с мощностью 1 POE = 5 000 Вт",
               "Каждый час копите Вт•Ч, в дальнейшем их можно будет использовать"
-            )} />
+            )
+          }
+        />
         {isModalVisible && (
           <Modal
             title={modalTitle}

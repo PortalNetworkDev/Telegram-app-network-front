@@ -28,7 +28,7 @@ const Modal = ({ title, text, setModalClose }) => {
         <div className="modal__content">
           <img
             className="modal__img"
-            src="./icon/lightningWithBackground.svg"
+            src="./images/lightningWithBackground.png"
             alt="lightning"
           />
           <h1 className="modal__title">{title}</h1>
