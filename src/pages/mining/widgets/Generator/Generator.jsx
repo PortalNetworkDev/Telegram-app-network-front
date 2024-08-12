@@ -13,7 +13,7 @@ const Generator = ({ onClick }) => {
   const rotation = useRef(0.01);
   const animationRef = useRef(null);
   const [isRotating, setIsRotating] = useState(false);
-  const speedFromVibration = useRef(0);
+  const [canVibrate, setCanVibrate] = useState(false);
 
   const rotateFunc = () => {
     let currentSpeed = 0;
@@ -29,11 +29,11 @@ const Generator = ({ onClick }) => {
           Math.sin((Math.PI * rotation.current) / maxRotation) *
           startSpeedMultiplier;
 
-        if (speed < 1) {
-          speed = 1;
+        if (speed < 5) {
+          speed = 5;
         }
 
-        speedFromVibration.current = speed;
+        handleVibration(speed);
 
         rotation.current += speed;
 
@@ -61,6 +61,10 @@ const Generator = ({ onClick }) => {
   const lastClickTimeRef = useRef(0);
 
   const handleClick = () => {
+    if (!canVibrate) {
+      setCanVibrate(true);
+    }
+
     const now = Date.now();
     if (now - lastClickTimeRef.current < 200) {
       return;
@@ -73,15 +77,13 @@ const Generator = ({ onClick }) => {
     lastClickTimeRef.current = now;
 
     setCountOfRotate((prev) => prev + 1);
+  };
 
-    const handleVibration = (speed) => {
-      const vibrationStrength = Math.min(speed / 12, 1); // maxSpeed = 12
-      if (navigator.vibrate) {
-        navigator.vibrate(vibrationStrength * 100); // Вибрация в миллисекундах
-      }
-    };
-
-    handleVibration(speedFromVibration);
+  const handleVibration = (speed) => {
+    const vibrationStrength = Math.min(speed / 12, 1); // maxSpeed = 12
+    if (navigator.vibrate) {
+      navigator.vibrate(vibrationStrength * 100); // Вибрация в миллисекундах
+    }
   };
 
   useEffect(() => {
