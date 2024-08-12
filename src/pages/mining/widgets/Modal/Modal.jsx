@@ -10,7 +10,7 @@ const Modal = ({ title, text, setModalClose }) => {
 
   const handleClose = () => {
     setIsClose(true);
-    setTimeout(() => setModalClose(), 400);
+    setTimeout(() => setModalClose(), 500);
   };
 
   return (

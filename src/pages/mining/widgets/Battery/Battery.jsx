@@ -69,7 +69,7 @@ const Battery = ({ onClick }) => {
           />
           <HelpBtn onClick={onClick} />
         </div>
-        <UpBtn />
+        <UpBtn onClick={onClick} />
       </div>
       <LazyLoad>
         <div className="battery__img-container">

@@ -110,23 +110,25 @@ export const Home = () => {
           }`}
         >
           <li>
-            <a href="https://t.me/poenetwork_bot/charging">
+            <Link to="/task">
               <span>
                 <div style={{ width: 20 }}>
                   <img
                     src={
                       colorScheme === "light"
-                        ? "/icon/location-icon.svg"
-                        : "/icon/location-icon_dark.svg"
+                        ? "/icon/task-icon.svg"
+                        : "/icon/task-icon_dark.svg"
                     }
-                    alt="location-icon"
+                    alt="task-icon"
                   />
                 </div>
-                <span>{staticData?.to_chargers}</span>
+                <span>{staticData?.tasks}</span>
               </span>
+
               <MdOutlineArrowForwardIos />
-            </a>
+            </Link>
           </li>
+
           <li>
             <a
               href="https://app.ston.fi/swap?chartVisible=false&ft=TON&tt=POE"
@@ -154,23 +156,43 @@ export const Home = () => {
               <MdOutlineArrowForwardIos />
             </a>
           </li>
+
           <li>
-            <Link to="/task">
+            <a href="https://t.me/poenetwork_bot/charging">
               <span>
                 <div style={{ width: 20 }}>
                   <img
                     src={
                       colorScheme === "light"
-                        ? "/icon/task-icon.svg"
-                        : "/icon/task-icon_dark.svg"
+                        ? "/icon/location-icon.svg"
+                        : "/icon/location-icon_dark.svg"
                     }
-                    alt="task-icon"
+                    alt="location-icon"
                   />
                 </div>
-                <span>{staticData?.tasks}</span>
+                <span>{staticData?.to_chargers}</span>
               </span>
-
               <MdOutlineArrowForwardIos />
+            </a>
+          </li>
+
+          <li className="mining">
+            <img
+              src="./images/generator-preview.png"
+              alt="gen-preview"
+              className="preview-gen"
+            />
+            <Link className="mining__link" to="/mining">
+              <div className="mining__container">
+                <div className="mining__title-container">
+                  <img src={"/icon/miningMenu.svg"} alt="mining-icon" />
+                  <span className="mining__title">Майнить энергию</span>
+                </div>
+                <MdOutlineArrowForwardIos />
+              </div>
+              <span className="mining__info">
+                Покупайте и храните POE — получайте Вт•Ч
+              </span>
             </Link>
           </li>
 
@@ -191,26 +213,6 @@ export const Home = () => {
               </span>
 
               <MdOutlineArrowForwardIos />
-            </Link>
-          </li>
-          <li className="mining">
-            <img
-              src="./images/generator-preview.png"
-              alt="gen-preview"
-              className="preview-gen"
-            />
-            <Link className="mining__link" to="/mining">
-              <div className="mining__container">
-                <div className="mining__title-container">
-                  <img src={"/icon/miningMenu.svg"} alt="mining-icon" />
-                  {/* <span>{staticData?.about_project}</span> */}
-                  <span className="mining__title">Майнить энергию</span>
-                </div>
-                <MdOutlineArrowForwardIos />
-              </div>
-              <span className="mining__info">
-                Покупайте и храните POE — получайте Вт•Ч
-              </span>
             </Link>
           </li>
         </ol>

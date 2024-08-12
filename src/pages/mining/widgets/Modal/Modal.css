@@ -10,7 +10,7 @@
 }
 
 .overlayClose {
-  animation: hideOverlay 0.55s ease-in-out;
+  animation: hideOverlay 0.5s ease-in;
 }
 
 @keyframes showOverlay {
@@ -44,7 +44,7 @@
 }
 
 .modalClose {
-  animation: popDown 0.5s ease-in-out;
+  animation: popDown 0.5s ease-in;
 }
 
 @keyframes popUp {
