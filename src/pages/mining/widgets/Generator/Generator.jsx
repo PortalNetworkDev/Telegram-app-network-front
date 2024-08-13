@@ -144,21 +144,19 @@ const Generator = ({ onClick }) => {
         />
       </div>
       {pointRef.current.map((ref, index) => {
-        console.log(positions[0]?.top);
-
         return (
           <div
             style={{
               top: `${positions[index]?.top}px`,
               left: `calc(40vw + ${positions[index]?.left}px)`,
-              display:
-                index < countOfRotate % pointRef.current.length
-                  ? "block"
-                  : "none",
             }}
             key={index}
             ref={ref}
-            className="generator-point"
+            className={`${
+              index < countOfRotate % pointRef.current.length
+                ? "generator-point"
+                : "generator-point_invisible"
+            }`}
           >
             +1
           </div>
