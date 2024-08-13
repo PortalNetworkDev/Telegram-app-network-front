@@ -5,48 +5,32 @@ import HelpBtn from "../../ui/HelpBtn/HelpBtn";
 import UpBtn from "../../ui/UpBtn/UpBtn";
 
 const Generator = ({ onClick }) => {
-  //Анимация
+  //Анимация вращения start
   const genRef = useRef(null);
   const [countOfRotate, setCountOfRotate] = useState(0);
-  const maxSpeed = 12;
-  const startSpeedMultiplier = 2;
   const rotation = useRef(0.01);
   const animationRef = useRef(null);
   const [isRotating, setIsRotating] = useState(false);
-  const [canVibrate, setCanVibrate] = useState(false);
+  const speedRef = useRef(null);
+  const maxSpeed = 32;
+  const acceleration = 0.1;
 
   const rotateFunc = () => {
-    let currentSpeed = 0;
-    const acceleration = 5;
-    const maxRotation = 360 * countOfRotate;
-
     const rotate = () => {
       if (genRef.current && rotation.current) {
-        currentSpeed = Math.min(currentSpeed + acceleration, maxSpeed);
-
-        let speed =
-          currentSpeed *
-          Math.sin((Math.PI * rotation.current) / maxRotation) *
-          startSpeedMultiplier;
-
-        if (speed < 5) {
-          speed = 5;
+        if (Date.now() - lastClickTimeRef.current < 300) {
+          speedRef.current += acceleration;
+          speedRef.current > maxSpeed && (speedRef.current = maxSpeed);
+        } else {
+          speedRef.current -= acceleration;
+          speedRef.current <= 0 && (speedRef.current = 0);
         }
 
-        handleVibration(speed);
-
-        rotation.current += speed;
-
-        if (rotation.current >= maxRotation) {
-          rotation.current = maxRotation;
-          setIsRotating(false);
-        }
-
+        rotation.current += speedRef.current;
         genRef.current.style.transform = `rotate(${rotation.current}deg)`;
+        speedRef.current === 0 && setIsRotating(false);
+
         animationRef.current = requestAnimationFrame(rotate); // Запрос следующего кадра
-      } else {
-        cancelAnimationFrame(animationRef.current); // Остановка анимации
-        setIsRotating(false);
       }
     };
 
@@ -54,17 +38,53 @@ const Generator = ({ onClick }) => {
     setIsRotating(true);
   };
 
-  const rotateFuncMemo = useCallback(rotateFunc, [countOfRotate]); // Мемоизация функции
+  const rotateFuncMemo = useCallback(rotateFunc, []); // Мемоизация функции
+
+  useEffect(() => {
+    if (!isRotating) {
+      setCountOfRotate(0);
+      cancelAnimationFrame(animationRef.current);
+    }
+  }, [isRotating]);
+  //Анимация вращения end
+
+  //Анимация всплытия points start
+  const rotateContainerRef = useRef(null);
+  const rotateContainerBounding =
+    rotateContainerRef.current?.getBoundingClientRect();
+  const pointRef = useRef(Array.from({ length: 100 }, () => React.createRef()));
+  const [positions, setPositions] = useState([]);
+  const [isImgLoading, setIsImgLoading] = useState(true);
+
+  useEffect(() => {
+    const image = new Image();
+    image.src = "./images/generatorFromRotate.png";
+    image.onload = () => {
+      setIsImgLoading(false);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isImgLoading && genRef.current) {
+      const newPositions = pointRef.current.map(() => ({
+        top:
+          rotateContainerBounding?.y * 1.1 -
+          (Math.floor(Math.random() * 50) + 1),
+        left:
+          rotateContainerBounding?.x / 1.5 +
+          (Math.floor(Math.random() * (2 * 150 + 1)) - 150),
+      }));
+      setPositions(newPositions);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isImgLoading]);
+  //Анимация всплытия points end
 
   // Обработчик кликов с ограничением 5 кликов в секунду
   const clickCountRef = useRef(0);
   const lastClickTimeRef = useRef(0);
 
   const handleClick = () => {
-    if (!canVibrate) {
-      setCanVibrate(true);
-    }
-
     const now = Date.now();
     if (now - lastClickTimeRef.current < 200) {
       return;
@@ -77,13 +97,6 @@ const Generator = ({ onClick }) => {
     lastClickTimeRef.current = now;
 
     setCountOfRotate((prev) => prev + 1);
-  };
-
-  const handleVibration = (speed) => {
-    const vibrationStrength = Math.min(speed / 12, 1); // maxSpeed = 12
-    if (navigator.vibrate) {
-      navigator.vibrate(vibrationStrength * 100); // Вибрация в миллисекундах
-    }
   };
 
   useEffect(() => {
@@ -103,14 +116,6 @@ const Generator = ({ onClick }) => {
     };
   }, [countOfRotate, rotateFuncMemo]);
 
-  useEffect(() => {
-    if (!isRotating) {
-      setCountOfRotate(0);
-      rotation.current = 0.1;
-      cancelAnimationFrame(animationRef.current);
-    }
-  }, [isRotating]);
-
   return (
     <div className="generator">
       <div className=" generator__level level">
@@ -125,7 +130,11 @@ const Generator = ({ onClick }) => {
         </div>
         <UpBtn onClick={onClick} />
       </div>
-      <div className="geterator__rotateContainer">
+      <div
+        ref={rotateContainerRef}
+        onClick={handleClick}
+        className="geterator__rotateContainer"
+      >
         <img
           ref={genRef}
           onClick={handleClick}
@@ -134,6 +143,27 @@ const Generator = ({ onClick }) => {
           alt="generator"
         />
       </div>
+      {pointRef.current.map((ref, index) => {
+        console.log(positions[0]?.top);
+
+        return (
+          <div
+            style={{
+              top: `${positions[index]?.top}px`,
+              left: `calc(40vw + ${positions[index]?.left}px)`,
+              display:
+                index < countOfRotate % pointRef.current.length
+                  ? "block"
+                  : "none",
+            }}
+            key={index}
+            ref={ref}
+            className="generator-point"
+          >
+            +1
+          </div>
+        );
+      })}
       <div className="generator__power level__info">
         <img
           className="generator__lightning lightning-with-back"
