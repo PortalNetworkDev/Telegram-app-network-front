@@ -100,9 +100,7 @@
   );
   background-size: 600% 600%;
   animation: gradient 3s ease infinite;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+
   color: white;
   font-size: 18px;
 }
@@ -114,4 +112,11 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+.backGen-container {
+  width: calc(100% + 20px);
+  /* height: 100vh; */
+  position: relative;
+  margin-left: -10px;
 }

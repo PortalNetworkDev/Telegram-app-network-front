@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./PreviewPage.css";
 
-export const PreviewPage = ({display}) => {
+export const PreviewPage = ({ display }) => {
   const imgRef = useRef(null);
   const [isImgLoading, setIsImgLoading] = useState(true);
   const [imgProperties, setImgProperties] = useState("0");
@@ -18,25 +18,35 @@ export const PreviewPage = ({display}) => {
   useEffect(() => {
     if (!isImgLoading) {
       const rect = imgRef.current?.getBoundingClientRect();
-      setImgProperties(rect?.height);
+      setImgProperties(rect);
     }
-  }, [isImgLoading, imgProperties]);
+  }, [isImgLoading]);
 
   return (
-    <div style={{display:display}}>
-      <img
-        style={{ top: `${(clientHeight - imgProperties) / 2}px` }}
-        ref={imgRef}
-        src="./images/backGen.png"
-        alt="bacground-gen"
-        className="mining-info__gen"
-      />
-      <div className="mining-loader">
+    <div style={{ display: display }}>
+      <div
+        className="backGen-container"
+        style={{
+          top: `${(clientHeight - imgProperties?.height) / 2}px`,
+        }}
+      >
         <img
+          ref={imgRef}
+          src="./images/backGen.png"
+          alt="bacground-gen"
+          className="mining-info__gen"
+        />
+        <img
+          style={{
+            top: `calc(${imgProperties?.height / 2.1105}px)`,
+            left: `calc(${imgProperties?.width / 2.105}px)`,
+          }}
           src="./icon/lightning.svg"
           alt="lightning"
           className="mining-info__lightning"
         />
+      </div>
+      <div className="mining-loader">
         <img
           className="mining-info__logo"
           src="./images/logoFromMining.svg"

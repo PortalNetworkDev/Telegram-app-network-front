@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./MiningPage.css";
 import Balance from "../../widgets/Balance/Balance";
 import TextString from "../../ui/TextSrting/TextString";
@@ -19,9 +19,23 @@ export const MiningPage = ({ opacity }) => {
     setModalText(text);
   };
 
+  const miningRef = useRef(null);
+  const minigBounding = useRef(null);
+
+  useEffect(() => {
+    if (miningRef.current) {
+      minigBounding.current = miningRef.current?.getBoundingClientRect();
+    }
+  }, []);
+
+  window.addEventListener("resize", (e) => {
+    e.preventDefault();
+    minigBounding.current = miningRef.current?.getBoundingClientRect();
+  });
+
   return (
     <>
-      <div style={{ opacity: opacity }} className="mining-main">
+      <div ref={miningRef} style={{ opacity: opacity }} className="mining-main">
         <LazyLoad>
           <img
             className="mining-main__background"
@@ -71,6 +85,7 @@ export const MiningPage = ({ opacity }) => {
             title={modalTitle}
             text={modalText}
             setModalClose={() => setIsModalVivible(false)}
+            bounding={minigBounding}
           />
         )}
       </div>
