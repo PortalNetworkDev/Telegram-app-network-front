@@ -23,6 +23,7 @@ const Battery = ({ onClick }) => {
   useEffect(() => {
     if (!isImgLoading) {
       const rect = imgRef.current?.getBoundingClientRect();
+
       const newDivisions = [];
       const divisionHeight = rect?.height / 3.5;
       const divisionWidth = rect?.width / 140;

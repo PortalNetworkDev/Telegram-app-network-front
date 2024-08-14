@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Modal.css";
 
-const Modal = ({ title, text, setModalClose }) => {
+const Modal = ({ title, text, setModalClose, bounding }) => {
   const [isClose, setIsClose] = useState(false);
 
   const stopPropagation = (e) => {
@@ -19,6 +19,10 @@ const Modal = ({ title, text, setModalClose }) => {
       className={`overlay ${isClose ? "overlayClose" : ""}`}
     >
       <div
+        style={{
+          width: `calc(${bounding.current?.width}px)`,
+          left: `calc(${bounding.current?.left}px)`,
+        }}
         onClick={stopPropagation}
         className={`modal ${isClose ? "modalClose" : ""}`}
       >
