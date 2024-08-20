@@ -63,6 +63,23 @@ export const Home = () => {
     }
   }, [wallet, handleConnect, isConnected]);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch("https://pro-api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&x_cg_pro_api_key=YOUR_API_KEY"); 
+  //       if (!response.ok) {
+  //         throw new Error(`Ошибка: ${response.statusText}`); 
+  //       }
+  //       const result = await response.json(); 
+  //       return result;
+  //     } catch (err) {
+  //       console.log(err.message); // Обрабатываем ошибку
+  //     } 
+  //   };
+
+  //   console.log(fetchData()); 
+  // }, []);
+
   return (
     <>
       <div className="page home animate__animated animate__fadeIn">

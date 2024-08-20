@@ -3,8 +3,24 @@ import "./Generator.css";
 import TextString from "../../ui/TextSrting/TextString";
 import HelpBtn from "../../ui/HelpBtn/HelpBtn";
 import UpBtn from "../../ui/UpBtn/UpBtn";
+import { useMeQuery } from "../../../../context/service/me.service";
+import { useMiningQuery } from "../../../../context/service/mining.service";
 
-const Generator = ({ onClick }) => {
+const Generator = ({ onClick, upBtnAction }) => {
+  const { data: me = null } = useMeQuery();
+  const lang = me?.language_code === "en" ? "en" : "ru";
+  const { data: mining = null } = useMiningQuery();
+
+  const [level, setlevel] = useState(0);
+  const [balance, setBalance] = useState(0);
+  const [limit, setlimit] = useState(0);
+
+  useEffect(() => {
+    setlimit(mining?.generator_limit);
+    setlevel(mining?.generator_level);
+    setBalance(mining?.generator_balance);
+  }, [mining]);
+
   //Анимация вращения start
   const genRef = useRef(null);
   const [countOfRotate, setCountOfRotate] = useState(0);
@@ -69,7 +85,7 @@ const Generator = ({ onClick }) => {
       const newPositions = pointRef.current.map(() => ({
         top: 70 - (Math.floor(Math.random() * 50) + 1),
         left:
-          rotateContainerBounding?.x * 3 +
+          rotateContainerBounding?.x / 1.75 +
           (Math.floor(Math.random() * (2 * 150 + 1)) - 150),
       }));
       setPositions(newPositions);
@@ -114,6 +130,15 @@ const Generator = ({ onClick }) => {
     };
   }, [countOfRotate, rotateFuncMemo]);
 
+  //Определение размеров генератора
+  const genBounding = useRef(null);
+
+  useEffect(() => {
+    if (!isImgLoading && genRef.current) {
+      genBounding.current = genRef.current.getBoundingClientRect();
+    }
+  }, [isImgLoading]);
+
   return (
     <>
       <div className="poin-container">
@@ -122,7 +147,7 @@ const Generator = ({ onClick }) => {
             <div
               style={{
                 top: `${positions[index]?.top}px`,
-                left: `${positions[index]?.left}px`,
+                left: `${positions[index]?.left * 1.7}px`,
               }}
               key={index}
               ref={ref}
@@ -141,23 +166,38 @@ const Generator = ({ onClick }) => {
         <div className=" generator__level level">
           <div className="level__info">
             <TextString
-              firstSmall={"Уровень"}
-              big={1}
+              firstSmall={lang === "ru" ? "Уровень" : "Level"}
+              big={level}
               bigFontSize={"15px"}
               bigTextMargin={"0px 0px 0px 5px"}
             />
             <HelpBtn onClick={onClick} />
           </div>
-          <UpBtn onClick={onClick} />
+          <UpBtn onClick={upBtnAction} />
         </div>
         <div
           ref={rotateContainerRef}
           onClick={handleClick}
           className="geterator__rotateContainer"
         >
+          <div
+            style={{
+              top: `${genBounding.current?.height / 2}px`,
+              left: `${genBounding.current?.width / 2}px`,
+              transform: "translate(-51%, -50%)",
+            }}
+            className="loader-container"
+          >
+            <img
+              className={`loader ${
+                isRotating ? "loader__animation-start" : "loader__animation-end"
+              }`}
+              src="./gif/loader.gif"
+              alt="loader"
+            />
+          </div>
           <img
             ref={genRef}
-            // onClick={handleClick}
             className="geterator__img"
             src="./images/generatorFromRotate.png"
             alt="generator"
@@ -170,8 +210,8 @@ const Generator = ({ onClick }) => {
             alt="lightning"
           />
           <TextString
-            big={[5000, 5000]}
-            secondSmall={"Вт•Ч"}
+            big={[balance || 0, limit]}
+            secondSmall={lang === 'ru' ? "Вт•Ч" : "W•h"}
             bigFontSize={"15px"}
             bigTextMargin={"0px 5px 0px 10px"}
           />

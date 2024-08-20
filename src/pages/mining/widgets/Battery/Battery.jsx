@@ -4,13 +4,31 @@ import LazyLoad from "react-lazyload";
 import UpBtn from "../../ui/UpBtn/UpBtn";
 import HelpBtn from "../../ui/HelpBtn/HelpBtn";
 import "./Battery.css";
+import {
+  useMeQuery,
+} from "../../../../context/service/me.service";
+import { useMiningQuery } from "../../../../context/service/mining.service";
 
-const Battery = ({ onClick }) => {
+const Battery = ({ onClick, upBtnAction }) => {
+  const { data: me = null } = useMeQuery();
+  const lang = me?.language_code === "en" ? "en" : "ru";
+  const { data: mining = null } = useMiningQuery();
+
   const imgRef = useRef(null);
   const [divisions, setDivisions] = useState([]);
   const [isImgLoading, setIsImgLoading] = useState(true);
-  const [percent, setPercent] = useState(1);
+  const [percent, setPercent] = useState(0);
+  const [balance, setBalance] = useState(0);
+  const [capacity, setCapacity] = useState(0);
+  const [power, setpower] = useState(0);
   const [prev, setPrev] = useState(0);
+
+  useEffect(() => {
+    setBalance(mining?.battery_balance);
+    setCapacity(mining?.battery_capacity);
+    setpower(mining?.power_poe);
+    setPercent((balance / capacity) * 100);
+  }, [mining, balance, capacity]);
 
   useEffect(() => {
     const image = new Image();
@@ -44,7 +62,7 @@ const Battery = ({ onClick }) => {
   useEffect(() => {
     // Определяем последний активный индекс
     const lastActiveIndex = divisions.reduce((lastIndex, _, index) => {
-      return percent > index * 10 ? index : lastIndex;
+      return percent > index * 3.2 ? index : lastIndex;
     }, 0); // Начальное значение 0
 
     setPrev(lastActiveIndex);
@@ -52,25 +70,25 @@ const Battery = ({ onClick }) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setPercent((prev) => Math.min(prev + 10, 100));
-    }, 5000);
+      setPercent((prev) => Math.min(prev + power / 3600, 100));
+    }, 1000);
 
     return () => clearInterval(interval); // Очистка интервала при размонтировании
-  }, []);
+  }, [power]);
 
   return (
     <div className="battery">
       <div className="battery__level level">
         <div className="level__info">
           <TextString
-            firstSmall={"Уровень"}
-            big={1}
+            firstSmall={`${lang === "ru" ? "Уровень" : "Level"}`}
+            big={mining?.battery_level}
             bigFontSize={"15px"}
             bigTextMargin={"0px 0px 0px 5px"}
           />
           <HelpBtn onClick={onClick} />
         </div>
-        <UpBtn onClick={onClick} />
+        <UpBtn onClick={upBtnAction} />
       </div>
       <LazyLoad>
         <div className="battery__img-container">
@@ -81,7 +99,7 @@ const Battery = ({ onClick }) => {
             alt="battery"
           />
           {divisions.map((division, index) => {
-            const isActive = percent > index * 10;
+            const isActive = percent > index * 3.2;
             const isLast = index === prev && isActive;
 
             return (
@@ -89,7 +107,7 @@ const Battery = ({ onClick }) => {
                 key={index}
                 className={`battery-division ${
                   isActive
-                    ? isLast
+                    ? isLast && percent !== 100
                       ? "activeDivision last"
                       : "activeDivision"
                     : ""
@@ -113,25 +131,45 @@ const Battery = ({ onClick }) => {
             alt="lightning"
           />
           <TextString
-            big={[4950, 10000]}
-            secondSmall={"Вт•Ч"}
+            big={[balance || 0, capacity]}
+            secondSmall={lang === "ru" ? "Вт•Ч" : "W•h"}
             bigFontSize={"15px"}
             bigTextMargin={"0px 5px 0px 10px"}
           />
         </div>
         <div className="battery__accumulation accumulation">
-          <p className="accumulation__text">Накоплено</p>
+          <p className="accumulation__text">{`${
+            lang === "ru" ? "Накоплено" : "Accumulated"
+          }`}</p>
           <div className="accumulation__percent">
-            <img
-              className="accumulation__progrecc-img"
-              src="./icon/accumulation-progress.svg"
-              alt="progress"
-            />
-            <p className="accumulation__value">100%</p>
+            <div className="accumulation__progress-conteiner">
+              <div
+                style={{ height: "20%" }}
+                className="accumulation__progress-division"
+              ></div>
+              <div
+                style={{
+                  height: "40%",
+                  opacity: percent > 60 ? "1" : "0.5",
+                }}
+                className="accumulation__progress-division"
+              ></div>
+              <div
+                style={{
+                  opacity: percent === 100 ? "1" : "0.5",
+                }}
+                className="accumulation__progress-division"
+              ></div>
+            </div>
+            <p className="accumulation__value">{`${
+              percent < 0.1 ? 0 : percent === 100 ? percent : percent.toFixed(1)
+            } %`}</p>
           </div>
         </div>
       </div>
-      <button className="battyry__collect">СОБРАТЬ</button>
+      <button className="battyry__collect">
+        {lang === "ru" ? "СОБРАТЬ" : "TO COLLECT"}
+      </button>
     </div>
   );
 };
