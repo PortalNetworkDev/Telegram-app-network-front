@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import "./Modal.css";
 
-const Modal = ({ title, text, setModalClose, bounding }) => {
+const Modal = ({
+  title,
+  text,
+  secondText,
+  btnText,
+  btnFunc,
+  setModalClose,
+  bounding,
+}) => {
   const [isClose, setIsClose] = useState(false);
 
   const stopPropagation = (e) => {
@@ -11,6 +19,11 @@ const Modal = ({ title, text, setModalClose, bounding }) => {
   const handleClose = () => {
     setIsClose(true);
     setTimeout(() => setModalClose(), 500);
+  };
+
+  const handleBtnClick = () => {
+    setIsClose(true);
+    setTimeout(() => btnFunc(), 500);
   };
 
   return (
@@ -37,11 +50,12 @@ const Modal = ({ title, text, setModalClose, bounding }) => {
           />
           <h1 className="modal__title">{title}</h1>
           <p className="modal__text">{text}</p>
+          <p className="modal__text">{secondText}</p>
           <button
-            onClick={handleClose}
+            onClick={handleBtnClick}
             className="battyry__collect modal__acceptBtn"
           >
-            ПОНЯТНО
+            {btnText?.toUpperCase()}
           </button>
         </div>
       </div>

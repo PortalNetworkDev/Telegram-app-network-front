@@ -1,8 +1,15 @@
 import React from "react";
 import "./Balance.css";
 import LazyLoad from "react-lazyload";
+import {
+  useMeQuery,
+  useStaticQuery,
+} from "../../../../context/service/me.service";
 
 const Balance = ({ balance, currency }) => {
+  const { data: me = null } = useMeQuery();
+  const lang = me?.language_code === "en" ? "en" : "ru";
+  const { data: staticData = null } = useStaticQuery(lang);
   return (
     <div className="mining-main__balance">
       <div className="balance">
@@ -13,7 +20,7 @@ const Balance = ({ balance, currency }) => {
             alt="wallet"
           />
         </LazyLoad>
-        <p className="balance__text">Баланс</p>
+        <p className="balance__text">{staticData?.your_balance}</p>
       </div>
       <div className="amount">
         <LazyLoad>
@@ -23,9 +30,9 @@ const Balance = ({ balance, currency }) => {
             alt="lightning"
           />
         </LazyLoad>
-        <p className="amount__value">{balance.toLocaleString("ru")} POE</p>
+        <p className="amount__value">{balance?.toLocaleString("ru")} POE</p>
         <p className="amount__currency">
-          ≈ {currency.toLocaleString("ru")} USD
+          ≈ {currency?.toLocaleString("ru")} USD
         </p>
       </div>
     </div>

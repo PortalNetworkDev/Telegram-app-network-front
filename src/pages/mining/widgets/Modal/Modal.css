@@ -34,9 +34,9 @@
 .modal {
   position: fixed;
   z-index: 10;
-  top: 42vh;
+  top: 39vh;
   left: 10px;
-  height: 55vh;
+  height: 60vh;
   background: #1f202f;
   border-radius: 5%;
   animation: popUp 0.3s ease-in-out;
@@ -51,13 +51,13 @@
     top: 200vh;
   }
   100% {
-    top: 42vh;
+    top: 39vh;
   }
 }
 
 @keyframes popDown {
   0% {
-    top: 42vh;
+    top: 39vh;
   }
   100% {
     top: 200vh;
@@ -100,6 +100,7 @@
   display: block;
   width: 80%;
   margin-top: 10%;
+  margin-bottom: 5%;
   text-align: center;
   font-size: 18px;
   line-height: 130%;
@@ -108,7 +109,6 @@
 .modal__text {
   display: block;
   width: 80%;
-  margin-top: 5%;
   text-align: center;
   font-size: 14px;
   line-height: 150%;
@@ -118,4 +118,5 @@
   position: absolute;
   width: calc(100% - 60px);
   bottom: 7%;
+  margin-top: 5%;
 }

@@ -6,6 +6,7 @@ import { PreviewPage } from "./view/PreviewPage/PreviewPage";
 import { MiningPage } from "./view/MiningPage/MiningPage";
 import { useDispatch, useSelector } from "react-redux";
 import { setMiningAction } from "../../context/mining";
+import { useMiningQuery } from "../../context/service/mining.service";
 
 export const Mining = () => {
   const navigate = useNavigate();
@@ -13,6 +14,8 @@ export const Mining = () => {
   const dispatch = useDispatch();
   const colorScheme = useSelector((store) => store.colorScheme);
   const [preview, setPreview] = useState(true);
+
+  let { data: mining = null } = useMiningQuery();
 
   //Устанавливаем цвет фона Telegram
   useEffect(() => {
@@ -63,8 +66,8 @@ export const Mining = () => {
             <IoArrowBack />
           </button>
         </div>
-        <PreviewPage display={preview ? "block" : "none"} />
-        <MiningPage opacity={preview ? "0" : "1"} />
+        <PreviewPage display={preview || mining === null ? "block" : "none"} />
+        <MiningPage opacity={preview || mining === null ? "0" : "1"} />
       </section>
     </>
   );
