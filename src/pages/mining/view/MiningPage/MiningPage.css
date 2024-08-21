@@ -26,7 +26,7 @@
 .mining-main__balance {
   position: absolute;
   right: 0;
-  top: 10px;
+  top: 9px;
   height: 7vh;
   background-color: #0d0b0e;
   width: 88%;
@@ -39,7 +39,7 @@
 
 .battery-power {
   position: relative;
-  margin-top: 5%;
+  margin-top: 1%;
   display: flex;
   align-self: center;
   align-items: flex-end;

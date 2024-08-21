@@ -47,8 +47,8 @@ export const PreviewPage = ({ display }) => {
         />
         <img
           style={{
-            top: `calc(${imgProperties?.height / 2.111}px)`,
-            left: `calc(${imgProperties?.width / 2.11}px)`,
+            top: `calc(${imgProperties?.height / 2.125}px)`,
+            left: `calc(${imgProperties?.width / 2.115}px)`,
           }}
           src="./icon/lightning.svg"
           alt="lightning"

@@ -4,31 +4,20 @@ import LazyLoad from "react-lazyload";
 import UpBtn from "../../ui/UpBtn/UpBtn";
 import HelpBtn from "../../ui/HelpBtn/HelpBtn";
 import "./Battery.css";
-import {
-  useMeQuery,
-} from "../../../../context/service/me.service";
+import { useMeQuery } from "../../../../context/service/me.service";
 import { useMiningQuery } from "../../../../context/service/mining.service";
+import { useBatteryPercent } from "../../helpers/useBatteryPercent";
 
 const Battery = ({ onClick, upBtnAction }) => {
   const { data: me = null } = useMeQuery();
-  const lang = me?.language_code === "en" ? "en" : "ru";
   const { data: mining = null } = useMiningQuery();
+  const lang = me?.language_code === "en" ? "en" : "ru";
 
   const imgRef = useRef(null);
   const [divisions, setDivisions] = useState([]);
   const [isImgLoading, setIsImgLoading] = useState(true);
-  const [percent, setPercent] = useState(0);
-  const [balance, setBalance] = useState(0);
-  const [capacity, setCapacity] = useState(0);
-  const [power, setpower] = useState(0);
-  const [prev, setPrev] = useState(0);
-
-  useEffect(() => {
-    setBalance(mining?.battery_balance);
-    setCapacity(mining?.battery_capacity);
-    setpower(mining?.power_poe);
-    setPercent((balance / capacity) * 100);
-  }, [mining, balance, capacity]);
+  const { percent, balance, capacity, power, prev, setPrev, setPercent } =
+    useBatteryPercent();
 
   useEffect(() => {
     const image = new Image();
@@ -66,15 +55,14 @@ const Battery = ({ onClick, upBtnAction }) => {
     }, 0); // Начальное значение 0
 
     setPrev(lastActiveIndex);
-  }, [percent, divisions]);
+  }, [percent, divisions, setPrev]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setPercent((prev) => Math.min(prev + power / 3600, 100));
     }, 1000);
-
     return () => clearInterval(interval); // Очистка интервала при размонтировании
-  }, [power]);
+  }, [power, setPercent]);
 
   return (
     <div className="battery">
@@ -131,7 +119,12 @@ const Battery = ({ onClick, upBtnAction }) => {
             alt="lightning"
           />
           <TextString
-            big={[balance || 0, capacity]}
+            big={[
+              balance === 0 || balance === 100
+                ? +balance?.toFixed()
+                : +balance?.toFixed(1) || 0,
+              capacity,
+            ]}
             secondSmall={lang === "ru" ? "Вт•Ч" : "W•h"}
             bigFontSize={"15px"}
             bigTextMargin={"0px 5px 0px 10px"}
