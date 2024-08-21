@@ -1,7 +1,6 @@
 .generator {
   width: 100%;
-  margin-top: 10%;
-  /* position: relative; */
+  margin-top: 3%;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -28,7 +27,7 @@
 
 .generator__power {
   z-index: 1;
-  padding: 10px;
+  padding: 1% 10px 0 10px;
   width: 100%;
 }
 

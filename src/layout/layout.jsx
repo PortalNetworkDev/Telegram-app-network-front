@@ -7,7 +7,7 @@ import { setColorSchemeAction } from "../context/colorScheme";
 
 export const Layout = memo(() => {
   const dispatch = useDispatch();
-  const mining = useSelector((store) => store.mining);
+  const mining = useSelector((store) => store.mining.isMining);
   const colorScheme = useSelector((store) => store.colorScheme);
 
   //Устанавливаем цвет фона Telegram

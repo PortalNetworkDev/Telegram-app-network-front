@@ -4,23 +4,28 @@ import TextString from "../../ui/TextSrting/TextString";
 import HelpBtn from "../../ui/HelpBtn/HelpBtn";
 import UpBtn from "../../ui/UpBtn/UpBtn";
 import { useMeQuery } from "../../../../context/service/me.service";
-import { useMiningQuery } from "../../../../context/service/mining.service";
+import { useDispatch, useSelector } from "react-redux";
+import { updateData } from "../../../../context/mining";
+import { useLazyGenRewardQuery } from "../../../../context/service/mining.service";
 
 const Generator = ({ onClick, upBtnAction }) => {
+  const dispatch = useDispatch();
+  const miningStore = useSelector((store) => store.mining);
+  const [genReward] = useLazyGenRewardQuery();
   const { data: me = null } = useMeQuery();
   const lang = me?.language_code === "en" ? "en" : "ru";
-  const { data: mining = null } = useMiningQuery();
 
   const [level, setlevel] = useState(0);
   const [balance, setBalance] = useState(0);
   const [limit, setlimit] = useState(0);
 
   useEffect(() => {
-    setlimit(mining?.generator_limit);
-    setlevel(mining?.generator_level);
-    setBalance(mining?.generator_balance);
-  }, [mining]);
+    setlimit(miningStore?.generator_limit);
+    setlevel(miningStore?.generator_level);
+    setBalance(miningStore?.generator_balance);
+  }, [miningStore]);
 
+  const [isFirstRender, setIsFirstRender] = useState(true);
   //Анимация вращения start
   const genRef = useRef(null);
   const [countOfRotate, setCountOfRotate] = useState(0);
@@ -55,13 +60,13 @@ const Generator = ({ onClick, upBtnAction }) => {
   const rotateFuncMemo = useCallback(rotateFunc, []); // Мемоизация функции
 
   useEffect(() => {
-    if (!isRotating) {
+    if (!isRotating && !isFirstRender) {
+      genReward(countOfRotate);
       console.log("стоит!");
-
       setCountOfRotate(0);
       cancelAnimationFrame(animationRef.current);
     }
-  }, [isRotating]);
+  }, [isRotating, dispatch]);
   //Анимация вращения end
 
   //Анимация всплытия points start
@@ -73,6 +78,7 @@ const Generator = ({ onClick, upBtnAction }) => {
   const [isImgLoading, setIsImgLoading] = useState(true);
 
   useEffect(() => {
+    setIsFirstRender(false);
     const image = new Image();
     image.src = "./images/generatorFromRotate.png";
     image.onload = () => {
@@ -85,7 +91,7 @@ const Generator = ({ onClick, upBtnAction }) => {
       const newPositions = pointRef.current.map(() => ({
         top: 70 - (Math.floor(Math.random() * 50) + 1),
         left:
-          rotateContainerBounding?.x / 1.75 +
+          rotateContainerBounding?.x * 2.2 +
           (Math.floor(Math.random() * (2 * 150 + 1)) - 150),
       }));
       setPositions(newPositions);
@@ -111,6 +117,13 @@ const Generator = ({ onClick, upBtnAction }) => {
     lastClickTimeRef.current = now;
 
     setCountOfRotate((prev) => prev + 1);
+    dispatch(
+      updateData({
+        ...miningStore,
+        battery_balance: miningStore.battery_balance + 1,
+        generator_balance: miningStore.generator_balance - 1,
+      })
+    );
   };
 
   useEffect(() => {
@@ -147,7 +160,7 @@ const Generator = ({ onClick, upBtnAction }) => {
             <div
               style={{
                 top: `${positions[index]?.top}px`,
-                left: `${positions[index]?.left * 1.7}px`,
+                left: `${positions[index]?.left}px`,
               }}
               key={index}
               ref={ref}
@@ -177,7 +190,9 @@ const Generator = ({ onClick, upBtnAction }) => {
         </div>
         <div
           ref={rotateContainerRef}
-          onClick={handleClick}
+          onClick={() => {
+            miningStore.generator_balance > 1 && handleClick(setCountOfRotate);
+          }}
           className="geterator__rotateContainer"
         >
           <div
@@ -210,8 +225,8 @@ const Generator = ({ onClick, upBtnAction }) => {
             alt="lightning"
           />
           <TextString
-            big={[balance || 0, limit]}
-            secondSmall={lang === 'ru' ? "Вт•Ч" : "W•h"}
+            big={[+balance?.toFixed() || 0, limit]}
+            secondSmall={lang === "ru" ? "Вт•Ч" : "W•h"}
             bigFontSize={"15px"}
             bigTextMargin={"0px 5px 0px 10px"}
           />

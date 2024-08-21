@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import "./MiningPage.css";
 import Balance from "../../widgets/Balance/Balance";
 import TextString from "../../ui/TextSrting/TextString";
@@ -11,29 +11,40 @@ import {
   useMeQuery,
   useStaticQuery,
 } from "../../../../context/service/me.service";
-import { useMiningQuery } from "../../../../context/service/mining.service";
+import {
+  useLazyGeneratorUpQuery,
+  useMiningQuery,
+  useLazyBatteryUpQuery,
+} from "../../../../context/service/mining.service";
+import { useGetPOERateQuery } from "../../../../context/service/geckoApi.service";
+import { useModal } from "../../helpers/useModal";
+import { useDispatch } from "react-redux";
+import { updateData } from "../../../../context/mining";
 
 export const MiningPage = ({ opacity }) => {
-  const [isModalVisible, setIsModalVivible] = useState(false);
-  const [modalTitle, setModalTitle] = useState("");
-  const [modalText, setModalText] = useState("");
-  const [secondModalText, setSecondModalText] = useState("");
-  const [modalBtnText, setModalBtnText] = useState("");
-  const modalBtnFunc = useRef(null);
+  const dispatch = useDispatch();
   const { data: me = null } = useMeQuery();
   const lang = me?.language_code === "en" ? "en" : "ru";
-  const { data: mining = null } = useMiningQuery();
   const { data: staticData = null } = useStaticQuery(lang);
-  console.log(me, staticData, mining);
+  const { data: mining = null, refetch: refetchMining } = useMiningQuery();
+  const { data: rate } = useGetPOERateQuery();
+  const [generatorUp] = useLazyGeneratorUpQuery();
+  const [batteryUp] = useLazyBatteryUpQuery();
 
-  const handleOpenModal = (title, text, secondText, btnText, btnFunc) => {
-    setIsModalVivible(true);
-    setModalTitle(title);
-    setModalText(text);
-    setSecondModalText(secondText);
-    setModalBtnText(btnText);
-    modalBtnFunc.current = btnFunc;
-  };
+  const {
+    isModalVisible,
+    modalTitle,
+    modalText,
+    secondModalText,
+    modalBtnText,
+    modalBtnFunc,
+    handleOpenModal,
+    handleCloseModal,
+  } = useModal();
+
+  useEffect(() => {
+    dispatch(updateData(mining));
+  }, [mining, dispatch]);
 
   const miningRef = useRef(null);
   const minigBounding = useRef(null);
@@ -49,6 +60,14 @@ export const MiningPage = ({ opacity }) => {
     minigBounding.current = miningRef.current?.getBoundingClientRect();
   });
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refetchMining();
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [refetchMining]);
+
   return (
     <>
       <div ref={miningRef} style={{ opacity: opacity }} className="mining-main">
@@ -59,7 +78,10 @@ export const MiningPage = ({ opacity }) => {
             alt="background"
           />
         </LazyLoad>
-        <Balance balance={me?.balance} currency={1000} />
+        <Balance
+          balance={me?.balance}
+          currency={rate?.["portal-network-token"].usd * me?.balance}
+        />
         <Power
           onClick={() =>
             handleOpenModal(
@@ -67,7 +89,7 @@ export const MiningPage = ({ opacity }) => {
               staticData?.PoePowerDisc2,
               "",
               staticData?.PoePowerDiscButton,
-              () => setIsModalVivible(false)
+              () => handleCloseModal()
             )
           }
           upBtnAction={() => {
@@ -77,7 +99,7 @@ export const MiningPage = ({ opacity }) => {
               "",
               staticData?.PoePowerUpButton,
               () => {
-                setIsModalVivible(false);
+                handleCloseModal();
                 window.location.href =
                   "https://app.ston.fi/swap?chartVisible=false&ft=TON&tt=POE";
               }
@@ -103,7 +125,7 @@ export const MiningPage = ({ opacity }) => {
               `${staticData?.BatteryDisc2}`,
               "",
               staticData?.BatteryDiscButton,
-              () => setIsModalVivible(false)
+              () => handleCloseModal()
             )
           }
           upBtnAction={() => {
@@ -113,7 +135,28 @@ export const MiningPage = ({ opacity }) => {
               `${staticData?.BatteryUp3} ${mining?.price_rize_battery}`,
               staticData?.BatteryUpButton,
               () => {
-                setIsModalVivible(false);
+                if (me?.balance < mining?.price_rize_battery) {
+                  handleCloseModal();
+                  setTimeout(
+                    () =>
+                      handleOpenModal(
+                        "Недостаточно средств",
+                        "Пополните Ваш баланс",
+                        "",
+                        staticData?.PoePowerUpButton,
+                        () => {
+                          handleCloseModal();
+                          window.location.href =
+                            "https://app.ston.fi/swap?chartVisible=false&ft=TON&tt=POE";
+                        }
+                      ),
+                    100
+                  );
+                } else {
+                  handleCloseModal();
+                  batteryUp();
+                  refetchMining();
+                }
               }
             );
           }}
@@ -125,7 +168,7 @@ export const MiningPage = ({ opacity }) => {
               `${staticData?.GeneratorDisc2}`,
               "",
               staticData?.GeneratorDiscButton,
-              () => setIsModalVivible(false)
+              () => handleCloseModal()
             )
           }
           upBtnAction={() => {
@@ -135,7 +178,28 @@ export const MiningPage = ({ opacity }) => {
               `${staticData?.GeneratorUp3} ${mining?.price_rize_generator}`,
               staticData?.GeneratorUpButton,
               () => {
-                setIsModalVivible(false);
+                if (me?.balance < mining?.price_rize_generator) {
+                  handleCloseModal();
+                  setTimeout(
+                    () =>
+                      handleOpenModal(
+                        "Недостаточно средств",
+                        "Пополните Ваш баланс",
+                        "",
+                        staticData?.PoePowerUpButton,
+                        () => {
+                          handleCloseModal();
+                          window.location.href =
+                            "https://app.ston.fi/swap?chartVisible=false&ft=TON&tt=POE";
+                        }
+                      ),
+                    100
+                  );
+                } else {
+                  handleCloseModal();
+                  generatorUp();
+                  refetchMining();
+                }
               }
             );
           }}
@@ -147,7 +211,7 @@ export const MiningPage = ({ opacity }) => {
             secondText={secondModalText}
             btnText={modalBtnText}
             btnFunc={modalBtnFunc.current}
-            setModalClose={() => setIsModalVivible(false)}
+            setModalClose={handleCloseModal}
             bounding={minigBounding}
           />
         )}

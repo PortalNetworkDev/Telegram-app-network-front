@@ -10,7 +10,33 @@ export const miningService = apiSlice.injectEndpoints({
       }),
       providesTags: ["mining"],
     }),
+    generatorUp: builder.query({
+      query: () => ({
+        url: "mining/buyrizegenerator",
+        method: "POST",
+      }),
+    }),
+    batteryUp: builder.query({
+      query: () => ({
+        url: "mining/buyrizebattery",
+        method: "POST",
+      }),
+    }),
+    genReward: builder.query({
+      query: (power) => ({
+        url: "mining/setgeneratorreward",
+        method: "POST",
+        body: {
+          power,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useMiningQuery } = miningService;
+export const {
+  useMiningQuery,
+  useLazyGeneratorUpQuery,
+  useLazyBatteryUpQuery,
+  useLazyGenRewardQuery,
+} = miningService;
