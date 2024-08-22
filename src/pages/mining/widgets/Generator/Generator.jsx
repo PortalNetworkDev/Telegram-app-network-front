@@ -52,12 +52,14 @@ const Generator = ({ onClick, upBtnAction }) => {
 
   const fetchData = async (count) => {
     await genReward(count);
-    await refetchMining();
+    setTimeout(() => {
+      refetchMining().catch((err) => console.error(err));
+    }, 1000);
   };
 
   useEffect(() => {
     setIsFirstRender(false);
-    if (!isRotating && !isFirstRender) {
+    if (!isRotating && !isFirstRender && !miningStore.isClaiming) {
       fetchData(countOfRotate);
       setCountOfRotate(0);
       cancelAnimationFrame(animationRef.current);
