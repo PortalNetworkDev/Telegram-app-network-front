@@ -114,7 +114,7 @@ export const MiningPage = ({ opacity }) => {
               `${staticData?.BatteryUp3} ${mining?.price_rize_battery}`,
               staticData?.BatteryUpButton,
               async () => {
-                if (me?.balance < mining?.price_rize_battery) {
+                if (mining?.power_balance < mining?.price_rize_battery) {
                   handleCloseModal();
                   setTimeout(
                     () =>
@@ -157,7 +157,7 @@ export const MiningPage = ({ opacity }) => {
               `${staticData?.GeneratorUp3} ${mining?.price_rize_generator}`,
               staticData?.GeneratorUpButton,
               async () => {
-                if (me?.balance < mining?.price_rize_generator) {
+                if (mining?.power_balance < mining?.price_rize_generator) {
                   handleCloseModal();
                   setTimeout(
                     () =>
