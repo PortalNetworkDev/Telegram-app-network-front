@@ -34,7 +34,7 @@
 .modal {
   position: fixed;
   z-index: 10;
-  top: 39vh;
+  top: 38vh;
   left: 10px;
   height: 60vh;
   background: #1f202f;
@@ -51,13 +51,13 @@
     top: 200vh;
   }
   100% {
-    top: 39vh;
+    top: 38vh;
   }
 }
 
 @keyframes popDown {
   0% {
-    top: 39vh;
+    top: 38vh;
   }
   100% {
     top: 200vh;
