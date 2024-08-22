@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import "./MiningPage.css";
 import Balance from "../../widgets/Balance/Balance";
-import TextString from "../../ui/TextSrting/TextString";
 import Power from "../../widgets/Power/Power";
 import LazyLoad from "react-lazyload";
 import Battery from "../../widgets/Battery/Battery";
@@ -60,14 +59,6 @@ export const MiningPage = ({ opacity }) => {
     minigBounding.current = miningRef.current?.getBoundingClientRect();
   });
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      refetchMining();
-    }, 10000);
-
-    return () => clearInterval(interval);
-  }, [refetchMining]);
-
   return (
     <>
       <div ref={miningRef} style={{ opacity: opacity }} className="mining-main">
@@ -106,18 +97,6 @@ export const MiningPage = ({ opacity }) => {
             );
           }}
         />
-        <div className="battery-power">
-          <img
-            className="battery-power__lightning lightning-with-back"
-            src="./images/lightningWithBackground.png"
-            alt="lightning"
-          />
-          <TextString
-            secondSmall={"кВт•Ч"}
-            big={me?.power_balance}
-            bigFontSize={"32px"}
-          />
-        </div>
         <Battery
           onClick={() =>
             handleOpenModal(
@@ -134,7 +113,7 @@ export const MiningPage = ({ opacity }) => {
               `${staticData?.BatteryUp2} ${mining?.power_rize_battery}`,
               `${staticData?.BatteryUp3} ${mining?.price_rize_battery}`,
               staticData?.BatteryUpButton,
-              () => {
+              async () => {
                 if (me?.balance < mining?.price_rize_battery) {
                   handleCloseModal();
                   setTimeout(
@@ -154,8 +133,8 @@ export const MiningPage = ({ opacity }) => {
                   );
                 } else {
                   handleCloseModal();
-                  batteryUp();
-                  refetchMining();
+                  await batteryUp();
+                  await refetchMining();
                 }
               }
             );
@@ -177,7 +156,7 @@ export const MiningPage = ({ opacity }) => {
               `${staticData?.GeneratorUp2} ${mining?.power_rize_generator}`,
               `${staticData?.GeneratorUp3} ${mining?.price_rize_generator}`,
               staticData?.GeneratorUpButton,
-              () => {
+              async () => {
                 if (me?.balance < mining?.price_rize_generator) {
                   handleCloseModal();
                   setTimeout(
@@ -197,8 +176,8 @@ export const MiningPage = ({ opacity }) => {
                   );
                 } else {
                   handleCloseModal();
-                  generatorUp();
-                  refetchMining();
+                  await generatorUp();
+                  await refetchMining();
                 }
               }
             );

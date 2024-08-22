@@ -31,6 +31,12 @@ export const miningService = apiSlice.injectEndpoints({
         },
       }),
     }),
+    claimPower: builder.query({
+      query: () => ({
+        url: "mining/claimpower",
+        method: "POST",
+      }),
+    }),
   }),
 });
 
@@ -39,4 +45,5 @@ export const {
   useLazyGeneratorUpQuery,
   useLazyBatteryUpQuery,
   useLazyGenRewardQuery,
+  useLazyClaimPowerQuery,
 } = miningService;
