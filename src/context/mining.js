@@ -4,6 +4,7 @@ export const setMining = createSlice({
   name: "mining",
   initialState: {
     isMining: false,
+    isClaiming: false,
     battery_balance: null,
     battery_capacity: null,
     battery_level: null,
@@ -22,6 +23,9 @@ export const setMining = createSlice({
   reducers: {
     setMining: (state, action) => {
       state.isMining = action.payload;
+    },
+    setClaiming: (state, action) => {
+      state.isClaiming = action.payload;
     },
     updateData: (state, action) => {
       state.battery_balance = action.payload?.battery_balance;
@@ -42,5 +46,9 @@ export const setMining = createSlice({
   },
 });
 
-export const { setMining: setMiningAction, updateData } = setMining.actions;
+export const {
+  setMining: setMiningAction,
+  setClaiming: setClaimingAction,
+  updateData,
+} = setMining.actions;
 export const mining = setMining.reducer;

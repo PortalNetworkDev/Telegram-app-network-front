@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./Generator.css";
 import TextString from "../../ui/TextSrting/TextString";
 import HelpBtn from "../../ui/HelpBtn/HelpBtn";
@@ -6,7 +6,12 @@ import UpBtn from "../../ui/UpBtn/UpBtn";
 import { useMeQuery } from "../../../../context/service/me.service";
 import { useDispatch, useSelector } from "react-redux";
 import { updateData } from "../../../../context/mining";
-import { useLazyGenRewardQuery } from "../../../../context/service/mining.service";
+import {
+  useLazyGenRewardQuery,
+  useMiningQuery,
+} from "../../../../context/service/mining.service";
+import { useRotate } from "../../helpers/useRotate";
+import { usePoints } from "../../helpers/usePoints";
 
 const Generator = ({ onClick, upBtnAction }) => {
   const dispatch = useDispatch();
@@ -14,96 +19,62 @@ const Generator = ({ onClick, upBtnAction }) => {
   const [genReward] = useLazyGenRewardQuery();
   const { data: me = null } = useMeQuery();
   const lang = me?.language_code === "en" ? "en" : "ru";
-
-  const [level, setlevel] = useState(0);
-  const [balance, setBalance] = useState(0);
-  const [limit, setlimit] = useState(0);
-
-  useEffect(() => {
-    setlimit(miningStore?.generator_limit);
-    setlevel(miningStore?.generator_level);
-    setBalance(miningStore?.generator_balance);
-  }, [miningStore]);
+  const level = miningStore?.generator_level;
+  const balance = miningStore?.generator_balance;
+  const limit = miningStore?.generator_limit;
 
   const [isFirstRender, setIsFirstRender] = useState(true);
-  //Анимация вращения start
+
+  //Анимация вращения и отправка данных start
   const genRef = useRef(null);
   const [countOfRotate, setCountOfRotate] = useState(0);
-  const rotation = useRef(0.01);
   const animationRef = useRef(null);
-  const [isRotating, setIsRotating] = useState(false);
-  const speedRef = useRef(null);
-  const maxSpeed = 32;
-  const acceleration = 0.3;
-
-  const rotateFunc = () => {
-    const rotate = () => {
-      if (genRef.current && rotation.current) {
-        if (Date.now() - lastClickTimeRef.current < 300) {
-          speedRef.current += acceleration;
-          speedRef.current > maxSpeed && (speedRef.current = maxSpeed);
-        } else {
-          speedRef.current -= acceleration * 2;
-          speedRef.current <= 0 && (speedRef.current = 0);
-        }
-
-        rotation.current += speedRef.current;
-        genRef.current.style.transform = `rotate(${rotation.current}deg)`;
-
-        animationRef.current = requestAnimationFrame(rotate); // Запрос следующего кадра
-        speedRef.current !== 0 ? setIsRotating(true) : setIsRotating(false);
-      }
-    };
-    animationRef.current = requestAnimationFrame(rotate); // Запуск анимации
-  };
-
-  const rotateFuncMemo = useCallback(rotateFunc, []); // Мемоизация функции
+  const lastClickTimeRef = useRef(0);
+  const clickCountRef = useRef(0);
+  const { isRotating, rotateFuncMemo } = useRotate(
+    genRef,
+    lastClickTimeRef,
+    animationRef
+  );
+  const { refetch: refetchMining } = useMiningQuery(undefined, {
+    skip: isRotating || miningStore.isClaiming,
+  });
 
   useEffect(() => {
-    if (!isRotating && !isFirstRender) {
-      genReward(countOfRotate);
-      console.log("стоит!");
-      setCountOfRotate(0);
-      cancelAnimationFrame(animationRef.current);
-    }
-  }, [isRotating, dispatch]);
-  //Анимация вращения end
+    const interval = setInterval(() => {
+      if (!miningStore.isClaiming) {
+        !isRotating && refetchMining();
+      }
+    }, 10000);
 
-  //Анимация всплытия points start
-  const rotateContainerRef = useRef(null);
-  const rotateContainerBounding =
-    rotateContainerRef.current?.getBoundingClientRect();
-  const pointRef = useRef(Array.from({ length: 100 }, () => React.createRef()));
-  const [positions, setPositions] = useState([]);
-  const [isImgLoading, setIsImgLoading] = useState(true);
+    return () => clearInterval(interval);
+  }, [refetchMining, isRotating, miningStore.isClaiming]);
+
+  const fetchData = async (count) => {
+    await genReward(count);
+    await refetchMining();
+  };
 
   useEffect(() => {
     setIsFirstRender(false);
-    const image = new Image();
-    image.src = "./images/generatorFromRotate.png";
-    image.onload = () => {
-      setIsImgLoading(false);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!isImgLoading && genRef.current) {
-      const newPositions = pointRef.current.map(() => ({
-        top: 70 - (Math.floor(Math.random() * 50) + 1),
-        left:
-          rotateContainerBounding?.x * 2.2 +
-          (Math.floor(Math.random() * (2 * 150 + 1)) - 150),
-      }));
-      setPositions(newPositions);
+    if (!isRotating && !isFirstRender) {
+      fetchData(countOfRotate);
+      setCountOfRotate(0);
+      cancelAnimationFrame(animationRef.current);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isImgLoading]);
-  //Анимация всплытия points end
+  }, [isRotating, dispatch]);
+
+  //Анимация всплытия points start
+  const rotateContainerRef = useRef(null);
+  const pointRef = useRef(Array.from({ length: 100 }, () => React.createRef()));
+  const { positions, isImgLoading } = usePoints(
+    genRef,
+    rotateContainerRef,
+    pointRef
+  );
 
   // Обработчик кликов с ограничением 5 кликов в секунду
-  const clickCountRef = useRef(0);
-  const lastClickTimeRef = useRef(0);
-
   const handleClick = () => {
     const now = Date.now();
     if (now - lastClickTimeRef.current < 200) {
@@ -145,7 +116,6 @@ const Generator = ({ onClick, upBtnAction }) => {
 
   //Определение размеров генератора
   const genBounding = useRef(null);
-
   useEffect(() => {
     if (!isImgLoading && genRef.current) {
       genBounding.current = genRef.current.getBoundingClientRect();
@@ -191,7 +161,9 @@ const Generator = ({ onClick, upBtnAction }) => {
         <div
           ref={rotateContainerRef}
           onClick={() => {
-            miningStore.generator_balance > 1 && handleClick(setCountOfRotate);
+            miningStore.generator_balance > 1 &&
+              miningStore.battery_balance < miningStore.battery_capacity &&
+              handleClick(setCountOfRotate);
           }}
           className="geterator__rotateContainer"
         >
