@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 export const setMining = createSlice({
   name: "mining",
   initialState: {
-    openModal: false,
     isMining: false,
     isClaiming: false,
     isRotate: false,
@@ -34,9 +33,7 @@ export const setMining = createSlice({
     setRotate: (state, action) => {
       state.isRotate = action.payload;
     },
-    setOpenModal: (state, action) => {
-      state.openModal = action.payload;
-    },
+    
     updateData: (state, action) => {
       state.battery_balance = action.payload?.battery_balance;
       state.battery_capacity = action.payload?.battery_capacity;
@@ -62,7 +59,6 @@ export const {
   setMining: setMiningAction,
   setClaiming: setClaimingAction,
   setRotate: setRotateAction,
-  setOpenModal: setOpenModalAction,
   updateData,
 } = setMining.actions;
 export const mining = setMining.reducer;

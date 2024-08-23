@@ -78,21 +78,23 @@ const Battery = ({ onClick, upBtnAction }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setPercent((prev) => Math.min(prev + power / 3600, 100));
+      setBalance((prev) => Math.min(prev + percent * capacity), capacity);
     }, 1000);
     return () => clearInterval(interval); // Очистка интервала при размонтировании
-  }, [power, setPercent]);
+  }, []);
 
   // Сбор энергии
   const lastClickTimeRef = useRef(0);
 
   const handleClick = () => {
     const now = Date.now();
-    if (now - lastClickTimeRef.current < 1000) {
+    if (now - lastClickTimeRef.current < 5000) {
+      lastClickTimeRef.current = now;
       return;
     }
     lastClickTimeRef.current = now;
 
-    if (!miningStore.isRotate) {
+    if (!miningStore.isRotate && balance > 0) {
       dispatch(setClaimingAction(true));
     }
   };
@@ -116,7 +118,7 @@ const Battery = ({ onClick, upBtnAction }) => {
         />
         <TextString
           secondSmall={lang === "ru" ? "Вт•Ч" : "W•h"}
-          big={powerBalance}
+          big={(+powerBalance?.toFixed())?.toLocaleString("ru")}
           bigFontSize={"32px"}
         />
       </div>
@@ -214,7 +216,7 @@ const Battery = ({ onClick, upBtnAction }) => {
                   ? 0
                   : percent === 100
                   ? percent
-                  : percent.toFixed(1)
+                  : percent?.toFixed(1)
               } %`}</p>
             </div>
           </div>

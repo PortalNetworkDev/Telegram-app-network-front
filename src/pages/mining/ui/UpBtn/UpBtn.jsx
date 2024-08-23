@@ -1,10 +1,18 @@
 import React from "react";
 import "./UpBtn.css";
 
-const UpBtn = ({ onClick }) => {
+const UpBtn = ({ onClick, multitab }) => {
   return (
     <button onClick={onClick} className="up-button">
-      UP <img src="./icon/arrow-up.svg" alt="up" />
+      {multitab ? (
+        <>
+          {multitab} <img src="./icon/arrow-up.svg" alt="up" />
+        </>
+      ) : (
+        <>
+          UP <img src="./icon/arrow-up.svg" alt="up" />
+        </>
+      )}
     </button>
   );
 };
