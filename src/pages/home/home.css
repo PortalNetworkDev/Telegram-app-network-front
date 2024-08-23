@@ -27,13 +27,19 @@
 }
 
 .home__list > :nth-last-child(1) {
-  border-top: none;
   border-bottom: 1px solid #cecdd4;
 }
 
 .home__list_dark > :nth-last-child(1) {
-  border-top: none;
   border-bottom: 1px solid #2c353e;
+}
+
+.home__list > :nth-last-child(2) {
+  border: none;
+}
+
+.home__list_dark > :nth-last-child(2) {
+  border: none;
 }
 
 .home__list > li > a {
@@ -112,7 +118,7 @@
   z-index: 2;
 }
 
-.home__list > :nth-last-child(2) > a > div > div > img {
+.home__list > :nth-last-child(3) > a > div > div > img {
   margin-right: 8px;
   position: relative;
   z-index: 2;
@@ -221,4 +227,25 @@
   background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: buy-gradient 3s ease infinite;
+}
+
+.poe-power {
+  display: flex;
+  justify-content: center;
+  background: linear-gradient(to left, #054e3d, #07011af5, #044458);
+  width: 90% !important;
+  position: absolute !important;
+  height: 70%;
+  right: 5%;
+  top: 100%;
+  border-radius: 0 0 5px 5px;
+}
+
+.poe-power > .battery-power > .string > .string__text_big {
+  margin: 0 5px 0 5px;
+}
+
+.main-lightning {
+  width: 18px !important;
+  margin-bottom: 3px !important;
 }

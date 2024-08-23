@@ -37,6 +37,12 @@ export const miningService = apiSlice.injectEndpoints({
         method: "POST",
       }),
     }),
+    multitabUp: builder.query({
+      query: () => ({
+        url: "mining/buyrizemultitab",
+        method: "POST",
+      }),
+    }),
   }),
 });
 
@@ -46,4 +52,5 @@ export const {
   useLazyBatteryUpQuery,
   useLazyGenRewardQuery,
   useLazyClaimPowerQuery,
+  useLazyMultitabUpQuery,
 } = miningService;
