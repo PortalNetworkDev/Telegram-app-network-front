@@ -122,12 +122,11 @@ a {
   position: relative;
 }
 
-.main-balance__logo{
+.main-balance__logo {
   position: absolute;
   left: -35%;
   top: 11%;
-  width: 25%;
-
+  width: 14px;
 }
 
 .main-balance > h2 {
@@ -139,7 +138,7 @@ a {
 .main-balance > span {
   position: absolute;
   right: 0;
-  color: #1B538B;
+  color: #1b538b;
   font-size: 10px;
   font-weight: 700;
 }
