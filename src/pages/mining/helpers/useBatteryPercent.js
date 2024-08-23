@@ -18,15 +18,9 @@ export const useBatteryPercent = () => {
       setCapacity(mining?.battery_capacity);
       setPower(mining?.power_poe);
       setPercent((balance / capacity) * 100);
-      setPowerBalance(mining.power_balance);
+      setPowerBalance(mining?.power_balance);
     }
-  }, [
-    mining,
-    balance,
-    capacity,
-    percent,
-    miningStore.isClaiming,
-  ]);
+  }, [mining, balance, capacity, percent, miningStore.isClaiming]);
 
   return {
     percent,

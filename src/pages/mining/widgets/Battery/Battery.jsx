@@ -4,20 +4,21 @@ import LazyLoad from "react-lazyload";
 import UpBtn from "../../ui/UpBtn/UpBtn";
 import HelpBtn from "../../ui/HelpBtn/HelpBtn";
 import "./Battery.css";
-import { useMeQuery } from "../../../../context/service/me.service";
 import {
-  useLazyClaimPowerQuery,
-  useMiningQuery,
-} from "../../../../context/service/mining.service";
+  useMeQuery,
+  useStaticQuery,
+} from "../../../../context/service/me.service";
+import { useMiningQuery } from "../../../../context/service/mining.service";
 import { useBatteryPercent } from "../../helpers/useBatteryPercent";
 import { useDispatch, useSelector } from "react-redux";
 import { setClaimingAction } from "../../../../context/mining";
+import { useClaim } from "../../helpers/useClaim";
 
 const Battery = ({ onClick, upBtnAction }) => {
   const { data: me = null } = useMeQuery();
   const lang = me?.language_code === "en" ? "en" : "ru";
-  const [claimPower] = useLazyClaimPowerQuery();
-  const { data: mining = null, refetch: refetchMining } = useMiningQuery();
+  const { data: mining = null } = useMiningQuery();
+  const { data: staticData = null } = useStaticQuery(lang);
   const dispatch = useDispatch();
   const imgRef = useRef(null);
   const [divisions, setDivisions] = useState([]);
@@ -33,7 +34,6 @@ const Battery = ({ onClick, upBtnAction }) => {
     setPrev,
     setPercent,
     setBalance,
-    percentReductionStep,
   } = useBatteryPercent();
   const miningStore = useSelector((store) => store.mining);
 
@@ -83,64 +83,28 @@ const Battery = ({ onClick, upBtnAction }) => {
   }, [power, setPercent]);
 
   // Сбор энергии
-  useEffect(() => {
-    if (!miningStore.isClaiming) return;
-    const setPercentReductionStep = percent / balance;
+  const lastClickTimeRef = useRef(0);
 
-    const handleBalanceUpdate = async () => {
-      setPercent((prev) => {
-        if (prev > 0.01) {
-          return prev - setPercentReductionStep;
-        } else {
-          return prev;
-        }
-      });
-      setPowerBalance((prev) => {
-        if (prev < powerBalance + balance - 1) {
-          return prev + 1;
-        } else {
-          return prev;
-        }
-      });
-      setBalance((prev) => {
-        if (prev > 1) {
-          return prev - 1;
-        } else {
-          return prev;
-        }
-      });
-      const currentBalance = balance - 1;
+  const handleClick = () => {
+    const now = Date.now();
+    if (now - lastClickTimeRef.current < 1000) {
+      return;
+    }
+    lastClickTimeRef.current = now;
 
-      if (currentBalance <= 1) {
-        try {
-          await claimPower();
-          await refetchMining();
-          dispatch(setClaimingAction(false));
-        } catch (error) {
-          console.error(error);
-        } finally {
-          clearInterval(interval);
-        }
-      }
-    };
+    if (!miningStore.isRotate) {
+      dispatch(setClaimingAction(true));
+    }
+  };
 
-    const interval = setInterval(() => {
-      handleBalanceUpdate();
-    }, 25);
-
-    return () => clearInterval(interval);
-  }, [
-    miningStore.isClaiming,
-    claimPower,
-    dispatch,
+  useClaim(
     percent,
     balance,
     powerBalance,
-    refetchMining,
-    setBalance,
     setPercent,
     setPowerBalance,
-  ]);
+    setBalance
+  );
 
   return (
     <>
@@ -151,7 +115,7 @@ const Battery = ({ onClick, upBtnAction }) => {
           alt="lightning"
         />
         <TextString
-          secondSmall={"кВт•Ч"}
+          secondSmall={lang === "ru" ? "Вт•Ч" : "W•h"}
           big={powerBalance}
           bigFontSize={"32px"}
         />
@@ -255,13 +219,8 @@ const Battery = ({ onClick, upBtnAction }) => {
             </div>
           </div>
         </div>
-        <button
-          onClick={() => {
-            dispatch(setClaimingAction(true));
-          }}
-          className="battyry__collect"
-        >
-          {lang === "ru" ? "СОБРАТЬ" : "TO COLLECT"}
+        <button onClick={() => handleClick()} className="battyry__collect">
+          {staticData?.ClaimButton.toUpperCase()}
         </button>
       </div>
     </>

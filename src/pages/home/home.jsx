@@ -13,11 +13,14 @@ import {
 import { usePostTaskSelfConfirmMutation } from "../../context/service/task.service";
 import { useSelector } from "react-redux";
 import { useGetPOERateQuery } from "../../context/service/geckoApi.service";
+import TextString from "../mining/ui/TextSrting/TextString";
+import { useMiningQuery } from "../../context/service/mining.service";
 
 export const Home = () => {
   const colorScheme = useSelector((store) => store.colorScheme);
   const { data: rate } = useGetPOERateQuery();
   const { data: me = null } = useMeQuery();
+  const { data: mining = null } = useMiningQuery();
   const lang = me?.language_code === "en" ? "en" : "ru";
   const { data: staticData = null } = useStaticQuery(lang);
   const [connect_wallet, setConnectWallet] = useState(true);
@@ -91,20 +94,66 @@ export const Home = () => {
             />
             <span>{staticData?.your_balance}</span>
           </h1>
-
-          <h2>
-            {me ? (
-              `${me?.balance || 0} ${staticData?.token_symbol}`
-            ) : (
-              <div
-                style={{ width: 100, height: 19, borderRadius: 5 }}
-                className={`loading-div ${
-                  colorScheme === "light" ? "" : "loading-div_dark"
-                }`}
-              ></div>
-            )}
-          </h2>
+          {me ? (
+            <div
+              className={`main-balance ${
+                colorScheme === "light" ? "" : "main-balance_dark"
+              }`}
+            >
+              {colorScheme === "light" && (
+                <img
+                  className="main-balance__logo"
+                  src="./icon/lightningFromBalance-light.svg"
+                  alt="lightning"
+                />
+              )}
+              {colorScheme !== "light" && (
+                <img
+                  className="main-balance__logo"
+                  src="./icon/lightningFromBalance-dark.svg"
+                  alt="lightning"
+                />
+              )}
+              <h2>{`${me?.balance || 0} ${staticData?.token_symbol}`}</h2>
+              <span>
+                ≈ {rate?.["portal-network-token"].usd * me?.balance} USD
+              </span>
+            </div>
+          ) : (
+            <div
+              style={{ width: 100, height: 19, borderRadius: 5 }}
+              className={`loading-div ${
+                colorScheme === "light" ? "" : "loading-div_dark"
+              }`}
+            ></div>
+          )}
+          <div className="poe-power">
+            <div className="battery-power">
+              {mining ? (
+                <>
+                  <img
+                    className="battery-power__lightning lightning-with-back main-lightning"
+                    src="./images/lightningWithBackground.png"
+                    alt="lightning"
+                  />
+                  <TextString
+                    secondSmall={lang === "ru" ? "Вт•Ч" : "W•h"}
+                    big={mining?.power_balance}
+                    bigFontSize={"20px"}
+                  />
+                </>
+              ) : (
+                <div
+                  style={{ width: 100, height: 19, borderRadius: 5 }}
+                  className={`loading-div ${
+                    colorScheme === "light" ? "" : "loading-div_dark"
+                  }`}
+                ></div>
+              )}
+            </div>
+          </div>
         </div>
+
         <ol
           className={`home__list ${
             colorScheme === "light" ? "" : "home__list_dark"
@@ -158,25 +207,6 @@ export const Home = () => {
             </a>
           </li>
 
-          <li>
-            <a href="https://t.me/poenetwork_bot/charging">
-              <span>
-                <div style={{ width: 20 }}>
-                  <img
-                    src={
-                      colorScheme === "light"
-                        ? "/icon/location-icon.svg"
-                        : "/icon/location-icon_dark.svg"
-                    }
-                    alt="location-icon"
-                  />
-                </div>
-                <span>{staticData?.to_chargers}</span>
-              </span>
-              <MdOutlineArrowForwardIos />
-            </a>
-          </li>
-
           <li className="mining">
             <img
               src="./images/generator-preview.png"
@@ -195,6 +225,25 @@ export const Home = () => {
                 Покупайте и храните POE — получайте Вт•Ч
               </span>
             </Link>
+          </li>
+
+          <li>
+            <a href="https://t.me/poenetwork_bot/charging">
+              <span>
+                <div style={{ width: 20 }}>
+                  <img
+                    src={
+                      colorScheme === "light"
+                        ? "/icon/location-icon.svg"
+                        : "/icon/location-icon_dark.svg"
+                    }
+                    alt="location-icon"
+                  />
+                </div>
+                <span>{staticData?.to_chargers}</span>
+              </span>
+              <MdOutlineArrowForwardIos />
+            </a>
           </li>
 
           <li>

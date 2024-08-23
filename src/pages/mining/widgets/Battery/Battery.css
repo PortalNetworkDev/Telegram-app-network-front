@@ -128,4 +128,10 @@
   font-weight: 600;
   background: linear-gradient(to top, #00c1ff, #64fcd7);
   height: 50px;
+  transition: transform 0.1s ease;
+}
+
+.battyry__collect:active {
+  background: linear-gradient(to top, #00bfffae, #64fcd6bf);
+  transform: scale(0.98);
 }

@@ -3,8 +3,10 @@ import { createSlice } from "@reduxjs/toolkit";
 export const setMining = createSlice({
   name: "mining",
   initialState: {
+    openModal: false,
     isMining: false,
     isClaiming: false,
+    isRotate: false,
     battery_balance: null,
     battery_capacity: null,
     battery_level: null,
@@ -19,6 +21,8 @@ export const setMining = createSlice({
     price_rize_battery: null,
     price_rize_generator: null,
     recovery_power_lim: null,
+    multitab: null,
+    price_rize_multitab: null,
   },
   reducers: {
     setMining: (state, action) => {
@@ -26,6 +30,12 @@ export const setMining = createSlice({
     },
     setClaiming: (state, action) => {
       state.isClaiming = action.payload;
+    },
+    setRotate: (state, action) => {
+      state.isRotate = action.payload;
+    },
+    setOpenModal: (state, action) => {
+      state.openModal = action.payload;
     },
     updateData: (state, action) => {
       state.battery_balance = action.payload?.battery_balance;
@@ -42,6 +52,8 @@ export const setMining = createSlice({
       state.price_rize_battery = action.payload?.price_rize_battery;
       state.price_rize_generator = action.payload?.price_rize_generator;
       state.recovery_power_lim = action.payload?.recovery_power_lim;
+      state.multitab = action.payload?.multitab;
+      state.price_rize_multitab = action.payload?.price_rize_multitab;
     },
   },
 });
@@ -49,6 +61,8 @@ export const setMining = createSlice({
 export const {
   setMining: setMiningAction,
   setClaiming: setClaimingAction,
+  setRotate: setRotateAction,
+  setOpenModal: setOpenModalAction,
   updateData,
 } = setMining.actions;
 export const mining = setMining.reducer;

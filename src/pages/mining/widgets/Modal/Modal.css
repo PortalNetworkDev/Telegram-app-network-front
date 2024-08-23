@@ -34,7 +34,7 @@
 .modal {
   position: fixed;
   z-index: 10;
-  top: 38vh;
+  top: 36vh;
   left: 10px;
   height: 60vh;
   background: #1f202f;
@@ -51,13 +51,13 @@
     top: 200vh;
   }
   100% {
-    top: 38vh;
+    top: 36vh;
   }
 }
 
 @keyframes popDown {
   0% {
-    top: 38vh;
+    top: 36vh;
   }
   100% {
     top: 200vh;
@@ -102,7 +102,7 @@
   margin-top: 10%;
   margin-bottom: 5%;
   text-align: center;
-  font-size: 18px;
+  font-size: 20px;
   line-height: 130%;
 }
 
@@ -110,7 +110,7 @@
   display: block;
   width: 80%;
   text-align: center;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 150%;
 }
 

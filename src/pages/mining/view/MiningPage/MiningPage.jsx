@@ -14,21 +14,24 @@ import {
   useLazyGeneratorUpQuery,
   useMiningQuery,
   useLazyBatteryUpQuery,
+  useLazyMultitabUpQuery,
 } from "../../../../context/service/mining.service";
 import { useGetPOERateQuery } from "../../../../context/service/geckoApi.service";
 import { useModal } from "../../helpers/useModal";
-import { useDispatch } from "react-redux";
-import { updateData } from "../../../../context/mining";
+import { useDispatch, useSelector } from "react-redux";
+import { setOpenModalAction, updateData } from "../../../../context/mining";
 
-export const MiningPage = ({ opacity }) => {
+export const MiningPage = ({ opacity, setGeneratorLoading }) => {
   const dispatch = useDispatch();
   const { data: me = null } = useMeQuery();
   const lang = me?.language_code === "en" ? "en" : "ru";
   const { data: staticData = null } = useStaticQuery(lang);
   const { data: mining = null, refetch: refetchMining } = useMiningQuery();
+  const miningStore = useSelector((store) => store.mining);
   const { data: rate } = useGetPOERateQuery();
   const [generatorUp] = useLazyGeneratorUpQuery();
   const [batteryUp] = useLazyBatteryUpQuery();
+  const [multitabUp] = useLazyMultitabUpQuery();
 
   const {
     isModalVisible,
@@ -58,6 +61,46 @@ export const MiningPage = ({ opacity }) => {
     e.preventDefault();
     minigBounding.current = miningRef.current?.getBoundingClientRect();
   });
+
+  useEffect(() => {
+    if (
+      miningStore.generator_balance < 1 &&
+      !isModalVisible &&
+      miningStore.openModal === true
+    ) {
+      setTimeout(() => {
+        handleOpenModal(
+          `${staticData?.LowGenerator1}`,
+          `${staticData?.LowGenerator2}`,
+          "",
+          staticData?.LowGeneratorButton,
+          () => {
+            handleCloseModal();
+            dispatch(setOpenModalAction(false));
+          }
+        );
+      }, 500);
+    }
+    if (
+      miningStore.battery_balance === mining?.battery_capacity &&
+      !isModalVisible &&
+      miningStore.openModal === true
+    ) {
+      setTimeout(() => {
+        handleOpenModal(
+          `${staticData?.FullBattery1}`,
+          `${staticData?.FullBattery2}`,
+          "",
+          staticData?.FullBatteryButton,
+          () => {
+            handleCloseModal();
+            dispatch(setOpenModalAction(false));
+          }
+        );
+      }, []);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [miningStore.openModal]);
 
   return (
     <>
@@ -119,10 +162,10 @@ export const MiningPage = ({ opacity }) => {
                   setTimeout(
                     () =>
                       handleOpenModal(
-                        "Недостаточно средств",
-                        "Пополните Ваш баланс",
+                        staticData?.NotEnoughBalance1,
+                        staticData?.NotEnoughBalance2,
                         "",
-                        staticData?.PoePowerUpButton,
+                        staticData?.NotEnoughBalanceButton,
                         () => {
                           handleCloseModal();
                           window.location.href =
@@ -141,6 +184,7 @@ export const MiningPage = ({ opacity }) => {
           }}
         />
         <Generator
+          setGeneratorLoading={setGeneratorLoading}
           onClick={() =>
             handleOpenModal(
               `${staticData?.GeneratorDisc1}`,
@@ -162,10 +206,10 @@ export const MiningPage = ({ opacity }) => {
                   setTimeout(
                     () =>
                       handleOpenModal(
-                        "Недостаточно средств",
-                        "Пополните Ваш баланс",
+                        staticData?.NotEnoughBalance1,
+                        staticData?.NotEnoughBalance2,
                         "",
-                        staticData?.PoePowerUpButton,
+                        staticData?.NotEnoughBalanceButton,
                         () => {
                           handleCloseModal();
                           window.location.href =
@@ -177,6 +221,38 @@ export const MiningPage = ({ opacity }) => {
                 } else {
                   handleCloseModal();
                   await generatorUp();
+                  await refetchMining();
+                }
+              }
+            );
+          }}
+          multitabUp={() => {
+            handleOpenModal(
+              staticData?.MultitabUp1,
+              `${staticData?.MultitabUp2} ${mining?.price_rize_multitab}`,
+              `${staticData?.MultitabUp3}`,
+              staticData?.MultitabUpButton,
+              async () => {
+                if (mining?.power_balance < mining?.price_rize_multitab) {
+                  handleCloseModal();
+                  setTimeout(
+                    () =>
+                      handleOpenModal(
+                        staticData?.NotEnoughBalance1,
+                        staticData?.NotEnoughBalance2,
+                        "",
+                        staticData?.NotEnoughBalanceButton,
+                        () => {
+                          handleCloseModal();
+                          window.location.href =
+                            "https://app.ston.fi/swap?chartVisible=false&ft=TON&tt=POE";
+                        }
+                      ),
+                    100
+                  );
+                } else {
+                  handleCloseModal();
+                  await multitabUp();
                   await refetchMining();
                 }
               }

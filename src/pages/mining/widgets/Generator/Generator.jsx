@@ -5,7 +5,11 @@ import HelpBtn from "../../ui/HelpBtn/HelpBtn";
 import UpBtn from "../../ui/UpBtn/UpBtn";
 import { useMeQuery } from "../../../../context/service/me.service";
 import { useDispatch, useSelector } from "react-redux";
-import { updateData } from "../../../../context/mining";
+import {
+  setOpenModalAction,
+  setRotateAction,
+  updateData,
+} from "../../../../context/mining";
 import {
   useLazyGenRewardQuery,
   useMiningQuery,
@@ -13,7 +17,12 @@ import {
 import { useRotate } from "../../helpers/useRotate";
 import { usePoints } from "../../helpers/usePoints";
 
-const Generator = ({ onClick, upBtnAction }) => {
+const Generator = ({
+  onClick,
+  upBtnAction,
+  setGeneratorLoading,
+  multitabUp,
+}) => {
   const dispatch = useDispatch();
   const miningStore = useSelector((store) => store.mining);
   const [genReward] = useLazyGenRewardQuery();
@@ -54,11 +63,12 @@ const Generator = ({ onClick, upBtnAction }) => {
     await genReward(count);
     setTimeout(() => {
       refetchMining().catch((err) => console.error(err));
-    }, 1000);
+    }, 300);
   };
 
   useEffect(() => {
     setIsFirstRender(false);
+    dispatch(setRotateAction(isRotating));
     if (!isRotating && !isFirstRender && !miningStore.isClaiming) {
       fetchData(countOfRotate);
       setCountOfRotate(0);
@@ -89,12 +99,19 @@ const Generator = ({ onClick, upBtnAction }) => {
     clickCountRef.current += 1;
     lastClickTimeRef.current = now;
 
-    setCountOfRotate((prev) => prev + 1);
+    setCountOfRotate((prev) => prev + miningStore?.multitab);
     dispatch(
       updateData({
         ...miningStore,
-        battery_balance: miningStore.battery_balance + 1,
-        generator_balance: miningStore.generator_balance - 1,
+        battery_balance:
+          miningStore.battery_balance + miningStore?.multitab >
+          miningStore.battery_capacity
+            ? miningStore.battery_capacity
+            : miningStore.battery_balance + miningStore?.multitab,
+        generator_balance:
+          miningStore.generator_balance - miningStore?.multitab < 1
+            ? 0
+            : miningStore.generator_balance - miningStore?.multitab,
       })
     );
   };
@@ -119,10 +136,11 @@ const Generator = ({ onClick, upBtnAction }) => {
   //Определение размеров генератора
   const genBounding = useRef(null);
   useEffect(() => {
+    !isImgLoading && setGeneratorLoading(false);
     if (!isImgLoading && genRef.current) {
       genBounding.current = genRef.current.getBoundingClientRect();
     }
-  }, [isImgLoading]);
+  }, [isImgLoading, setGeneratorLoading]);
 
   return (
     <>
@@ -137,12 +155,14 @@ const Generator = ({ onClick, upBtnAction }) => {
               key={index}
               ref={ref}
               className={`${
-                index < countOfRotate % pointRef.current.length
+                index <
+                (countOfRotate / miningStore?.multitab) %
+                  pointRef.current.length
                   ? "generator-point"
                   : "generator-point_invisible"
               }`}
             >
-              +1
+              {`+${miningStore?.multitab}`}
             </div>
           );
         })}
@@ -163,9 +183,14 @@ const Generator = ({ onClick, upBtnAction }) => {
         <div
           ref={rotateContainerRef}
           onClick={() => {
-            miningStore.generator_balance > 1 &&
-              miningStore.battery_balance < miningStore.battery_capacity &&
+            if (
+              miningStore.generator_balance > 1 &&
+              miningStore.battery_balance < miningStore.battery_capacity
+            ) {
               handleClick(setCountOfRotate);
+            } else {
+              dispatch(setOpenModalAction(true));
+            }
           }}
           className="geterator__rotateContainer"
         >
@@ -193,17 +218,20 @@ const Generator = ({ onClick, upBtnAction }) => {
           />
         </div>
         <div className="generator__power level__info">
-          <img
-            className="generator__lightning lightning-with-back"
-            src="./images/lightningWithBackground.png"
-            alt="lightning"
-          />
-          <TextString
-            big={[+balance?.toFixed() || 0, limit]}
-            secondSmall={lang === "ru" ? "Вт•Ч" : "W•h"}
-            bigFontSize={"15px"}
-            bigTextMargin={"0px 5px 0px 10px"}
-          />
+          <div className="battery__level-info level__info">
+            <img
+              className="battery__lightning lightning-with-back"
+              src="./images/lightningWithBackground.png"
+              alt="lightning"
+            />
+            <TextString
+              big={[+balance?.toFixed() || 0, limit]}
+              secondSmall={lang === "ru" ? "Вт•Ч" : "W•h"}
+              bigFontSize={"15px"}
+              bigTextMargin={"0px 5px 0px 10px"}
+            />
+          </div>
+          <UpBtn onClick={multitabUp} />
         </div>
       </div>
     </>

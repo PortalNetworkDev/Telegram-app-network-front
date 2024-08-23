@@ -26,15 +26,12 @@
 }
 
 .generator__power {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   z-index: 1;
   padding: 1% 10px 0 10px;
   width: 100%;
-}
-
-.generator__lightning {
-  margin-bottom: 0.7%;
-  height: 14px;
-  align-self: flex-end;
 }
 
 .generator-point {

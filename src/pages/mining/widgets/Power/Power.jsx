@@ -7,7 +7,7 @@ import "./Power.css";
 import { useMeQuery } from "../../../../context/service/me.service";
 import { useMiningQuery } from "../../../../context/service/mining.service";
 
-const Power = ({ onClick , upBtnAction }) => {
+const Power = ({ onClick, upBtnAction }) => {
   const { data: me = null } = useMeQuery();
   const lang = me?.language_code === "en" ? "en" : "ru";
   const { data: mining = null } = useMiningQuery();
@@ -16,13 +16,17 @@ const Power = ({ onClick , upBtnAction }) => {
     <div className="power">
       <div className="power__info">
         <TextString
-          firstSmall={`${lang === 'ru' ? 'Мощность' : 'Power'}`}
-          secondSmall={`${lang === 'ru' ? 'Вт (в час)' : 'W (per hour)'}`}
-          big={mining?.power_poe}
+          firstSmall={`${lang === "ru" ? "Мощность" : "Power"}`}
+          secondSmall={`${lang === "ru" ? "Вт (в час)" : "W (per hour)"}`}
+          big={
+            Number.isInteger(mining?.power_poe)
+              ? mining?.power_poe
+              : mining?.power_poe.toFixed(1)
+          }
         />
         <HelpBtn onClick={onClick} />
       </div>
-      <UpBtn onClick={upBtnAction}/>
+      <UpBtn onClick={upBtnAction} />
     </div>
   );
 };
