@@ -75,7 +75,6 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
           "",
           staticData?.LowGeneratorButton,
           () => {
-            dispatch(setOpenModalAction(false));
             handleCloseModal();
           }
         );
