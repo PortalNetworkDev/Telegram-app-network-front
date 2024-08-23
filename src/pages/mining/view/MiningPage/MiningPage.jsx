@@ -19,7 +19,7 @@ import {
 import { useGetPOERateQuery } from "../../../../context/service/geckoApi.service";
 import { useModal } from "../../helpers/useModal";
 import { useDispatch, useSelector } from "react-redux";
-import { setOpenModalAction, updateData } from "../../../../context/mining";
+import { updateData } from "../../../../context/mining";
 
 export const MiningPage = ({ opacity, setGeneratorLoading }) => {
   const dispatch = useDispatch();
@@ -61,43 +61,6 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
     e.preventDefault();
     minigBounding.current = miningRef.current?.getBoundingClientRect();
   });
-
-  useEffect(() => {
-    if (
-      miningStore.generator_balance - miningStore?.multitab < 1 &&
-      !isModalVisible &&
-      miningStore.openModal === true
-    ) {
-      setTimeout(() => {
-        handleOpenModal(
-          `${staticData?.LowGenerator1}`,
-          `${staticData?.LowGenerator2}`,
-          "",
-          staticData?.LowGeneratorButton,
-          () => {
-            handleCloseModal();
-          }
-        );
-      }, 100);
-    } else if (
-      miningStore.battery_balance >= mining?.battery_capacity &&
-      !isModalVisible &&
-      miningStore.openModal === true
-    ) {
-      setTimeout(() => {
-        handleOpenModal(
-          `${staticData?.FullBattery1}`,
-          `${staticData?.FullBattery2}`,
-          "",
-          staticData?.FullBatteryButton,
-          () => {
-            handleCloseModal();
-          }
-        );
-      }, 100);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [miningStore.openModal]);
 
   return (
     <>
@@ -182,6 +145,31 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
         />
         <Generator
           setGeneratorLoading={setGeneratorLoading}
+          handleOpenModal={() => {
+            if (miningStore.generator_balance - miningStore?.multitab < 1) {
+              handleOpenModal(
+                `${staticData?.LowGenerator1}`,
+                `${staticData?.LowGenerator2}`,
+                "",
+                staticData?.LowGeneratorButton,
+                () => {
+                  handleCloseModal();
+                }
+              );
+            } else if (
+              miningStore.battery_balance >= mining?.battery_capacity
+            ) {
+              handleOpenModal(
+                `${staticData?.FullBattery1}`,
+                `${staticData?.FullBattery2}`,
+                "",
+                staticData?.FullBatteryButton,
+                () => {
+                  handleCloseModal();
+                }
+              );
+            }
+          }}
           onClick={() =>
             handleOpenModal(
               `${staticData?.GeneratorDisc1}`,

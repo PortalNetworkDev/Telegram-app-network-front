@@ -22,6 +22,7 @@ const Generator = ({
   upBtnAction,
   setGeneratorLoading,
   multitabUp,
+  handleOpenModal,
 }) => {
   const dispatch = useDispatch();
   const miningStore = useSelector((store) => store.mining);
@@ -189,7 +190,7 @@ const Generator = ({
             ) {
               handleClick(setCountOfRotate);
             } else {
-              dispatch(setOpenModalAction(true));
+              handleOpenModal()
             }
           }}
           className="geterator__rotateContainer"
@@ -231,7 +232,7 @@ const Generator = ({
               bigTextMargin={"0px 5px 0px 10px"}
             />
           </div>
-          <UpBtn onClick={multitabUp} />
+          <UpBtn onClick={multitabUp} multitab={miningStore.multitab} />
         </div>
       </div>
     </>

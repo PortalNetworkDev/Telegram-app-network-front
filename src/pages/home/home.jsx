@@ -119,7 +119,7 @@ export const Home = () => {
               }`}</h2>
               <span>
                 ≈{" "}
-                {(+(rate?.["portal-network-token"].usd * me?.balance).toFixed(
+                {(+(rate?.["portal-network-token"]?.usd * me?.balance).toFixed(
                   2
                 )).toLocaleString("ru")}{" "}
                 USD

@@ -22,6 +22,7 @@ export const useClaim = (
   useEffect(() => {
     if (!miningStore.isClaiming) return;
     const setPercentReductionStep = percent / balance;
+    const balanceReductionStep = balance / 100;
 
     const handleBalanceUpdate = async () => {
       setPercent((prev) => {
@@ -32,15 +33,15 @@ export const useClaim = (
         }
       });
       setPowerBalance((prev) => {
-        if (prev < powerBalance + balance - 1) {
-          return prev + 1;
+        if (prev < powerBalance + balance - balanceReductionStep) {
+          return prev + balanceReductionStep;
         } else {
           return prev;
         }
       });
       setBalance((prev) => {
-        if (prev > 1) {
-          return prev - 1;
+        if (prev > balanceReductionStep) {
+          return prev - balanceReductionStep;
         } else {
           return prev;
         }
@@ -62,7 +63,7 @@ export const useClaim = (
 
     const interval = setInterval(() => {
       handleBalanceUpdate();
-    }, 5 / (balance / 100));
+    }, 1);
 
     return () => clearInterval(interval);
   }, [
