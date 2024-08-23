@@ -32,7 +32,7 @@ const Balance = ({ balance, currency }) => {
         </LazyLoad>
         <p className="amount__value">{balance?.toLocaleString("ru")} POE</p>
         <p className="amount__currency">
-          {currency && `≈ ${currency?.toLocaleString("ru")} USD`}
+          {currency && `≈ ${(+currency?.toFixed(2)).toLocaleString("ru")} USD`}
         </p>
       </div>
     </div>

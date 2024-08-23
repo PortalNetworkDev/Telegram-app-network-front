@@ -114,9 +114,15 @@ export const Home = () => {
                   alt="lightning"
                 />
               )}
-              <h2>{`${me?.balance || 0} ${staticData?.token_symbol}`}</h2>
+              <h2>{`${me?.balance.toLocaleString("ru") || 0} ${
+                staticData?.token_symbol
+              }`}</h2>
               <span>
-                ≈ {rate?.["portal-network-token"].usd * me?.balance} USD
+                ≈{" "}
+                {(+(rate?.["portal-network-token"].usd * me?.balance).toFixed(
+                  2
+                )).toLocaleString("ru")}{" "}
+                USD
               </span>
             </div>
           ) : (
