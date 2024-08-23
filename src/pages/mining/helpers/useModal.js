@@ -1,4 +1,6 @@
 import { useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setOpenModalAction } from "../../../context/mining";
 
 export const useModal = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -7,6 +9,7 @@ export const useModal = () => {
   const [secondModalText, setSecondModalText] = useState("");
   const [modalBtnText, setModalBtnText] = useState("");
   const modalBtnFunc = useRef(null);
+  const dispatch = useDispatch();
 
   const handleOpenModal = (title, text, secondText, btnText, btnFunc) => {
     setIsModalVisible(true);
@@ -19,6 +22,7 @@ export const useModal = () => {
 
   const handleCloseModal = () => {
     setIsModalVisible(false);
+    dispatch(setOpenModalAction(false));
   };
 
   return {

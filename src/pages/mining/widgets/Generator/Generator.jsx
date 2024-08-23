@@ -184,7 +184,7 @@ const Generator = ({
           ref={rotateContainerRef}
           onClick={() => {
             if (
-              miningStore.generator_balance > 1 &&
+              miningStore.generator_balance >= miningStore.multitab &&
               miningStore.battery_balance < miningStore.battery_capacity
             ) {
               handleClick(setCountOfRotate);

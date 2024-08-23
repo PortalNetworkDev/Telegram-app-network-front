@@ -64,7 +64,7 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
 
   useEffect(() => {
     if (
-      miningStore.generator_balance < 1 &&
+      miningStore.generator_balance - miningStore?.multitab < 1 &&
       !isModalVisible &&
       miningStore.openModal === true
     ) {
@@ -75,14 +75,13 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
           "",
           staticData?.LowGeneratorButton,
           () => {
-            handleCloseModal();
             dispatch(setOpenModalAction(false));
+            handleCloseModal();
           }
         );
       }, 500);
-    }
-    if (
-      miningStore.battery_balance === mining?.battery_capacity &&
+    } else if (
+      miningStore.battery_balance >= mining?.battery_capacity &&
       !isModalVisible &&
       miningStore.openModal === true
     ) {
@@ -93,8 +92,8 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
           "",
           staticData?.FullBatteryButton,
           () => {
-            handleCloseModal();
             dispatch(setOpenModalAction(false));
+            handleCloseModal();
           }
         );
       }, []);
