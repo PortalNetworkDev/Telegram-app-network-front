@@ -79,7 +79,7 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
             handleCloseModal();
           }
         );
-      }, 500);
+      }, 100);
     } else if (
       miningStore.battery_balance >= mining?.battery_capacity &&
       !isModalVisible &&
@@ -92,11 +92,10 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
           "",
           staticData?.FullBatteryButton,
           () => {
-            dispatch(setOpenModalAction(false));
             handleCloseModal();
           }
         );
-      }, []);
+      }, 100);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [miningStore.openModal]);

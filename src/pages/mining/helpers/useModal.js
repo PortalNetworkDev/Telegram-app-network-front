@@ -21,8 +21,8 @@ export const useModal = () => {
   };
 
   const handleCloseModal = () => {
-    setIsModalVisible(false);
     dispatch(setOpenModalAction(false));
+    setIsModalVisible(false);
   };
 
   return {
