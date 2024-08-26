@@ -5,11 +5,7 @@ import HelpBtn from "../../ui/HelpBtn/HelpBtn";
 import UpBtn from "../../ui/UpBtn/UpBtn";
 import { useMeQuery } from "../../../../context/service/me.service";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setOpenModalAction,
-  setRotateAction,
-  updateData,
-} from "../../../../context/mining";
+import { setRotateAction, updateData } from "../../../../context/mining";
 import {
   useLazyGenRewardQuery,
   useMiningQuery,
@@ -55,23 +51,17 @@ const Generator = ({
       if (!miningStore.isClaiming) {
         !isRotating && refetchMining();
       }
-    }, 10000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [refetchMining, isRotating, miningStore.isClaiming]);
 
-  const fetchData = async (count) => {
-    await genReward(count);
-    setTimeout(() => {
-      refetchMining().catch((err) => console.error(err));
-    }, 300);
-  };
-
   useEffect(() => {
     setIsFirstRender(false);
     dispatch(setRotateAction(isRotating));
-    if (!isRotating && !isFirstRender && !miningStore.isClaiming) {
-      fetchData(countOfRotate);
+
+    if (!isRotating && !isFirstRender) {
+      genReward(countOfRotate);
       setCountOfRotate(0);
       cancelAnimationFrame(animationRef.current);
     }
@@ -90,10 +80,10 @@ const Generator = ({
   // Обработчик кликов с ограничением 5 кликов в секунду
   const handleClick = () => {
     const now = Date.now();
-    if (now - lastClickTimeRef.current < 200) {
+    if (now - lastClickTimeRef.current < 100) {
       return;
     }
-    if (clickCountRef.current >= 5) {
+    if (clickCountRef.current >= 10) {
       return;
     }
 
@@ -190,7 +180,7 @@ const Generator = ({
             ) {
               handleClick(setCountOfRotate);
             } else {
-              handleOpenModal()
+              handleOpenModal();
             }
           }}
           className="geterator__rotateContainer"
