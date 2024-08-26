@@ -33,7 +33,6 @@ export const setMining = createSlice({
     setRotate: (state, action) => {
       state.isRotate = action.payload;
     },
-    
     updateData: (state, action) => {
       state.battery_balance = action.payload?.battery_balance;
       state.battery_capacity = action.payload?.battery_capacity;

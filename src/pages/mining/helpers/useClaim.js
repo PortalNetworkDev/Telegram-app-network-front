@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   useLazyClaimPowerQuery,
@@ -19,37 +19,48 @@ export const useClaim = (
   const { refetch: refetchMining } = useMiningQuery();
   const miningStore = useSelector((store) => store.mining);
 
+  const percentReductionStep = useRef(null);
+  const balanceReductionStep = useRef(null);
+  const isClaimingFinished = useRef(false);
+
   useEffect(() => {
-    if (!miningStore.isClaiming) return;
-    const setPercentReductionStep = percent / balance;
-    const balanceReductionStep = balance / 100;
+    if (!miningStore.isClaiming || isClaimingFinished.current) return;
+
+    if (
+      percentReductionStep.current === null &&
+      balanceReductionStep.current === null
+    ) {
+      balanceReductionStep.current = balance / 100;
+      percentReductionStep.current =
+        (percent * balanceReductionStep.current) / balance;
+    }
 
     const handleBalanceUpdate = async () => {
       setPercent((prev) => {
         if (prev > 0.01) {
-          return prev - setPercentReductionStep;
+          return prev - percentReductionStep.current;
         } else {
           return prev;
         }
       });
       setPowerBalance((prev) => {
-        if (prev < powerBalance + balance - balanceReductionStep) {
-          return prev + balanceReductionStep;
+        if (prev < powerBalance + balance - balanceReductionStep.current) {
+          return prev + balanceReductionStep.current;
         } else {
           return prev;
         }
       });
       setBalance((prev) => {
-        if (prev > balanceReductionStep) {
-          return prev - balanceReductionStep;
+        if (prev > balanceReductionStep.current) {
+          return prev - balanceReductionStep.current;
         } else {
-          return prev;
+          return 0;
         }
       });
-      const currentBalance = balance - 1;
 
-      if (currentBalance <= 1) {
+      if (balance === 0 && !isClaimingFinished.current) {
         try {
+          isClaimingFinished.current = true;
           await claimPower();
           await refetchMining();
           dispatch(setClaimingAction(false));
@@ -57,13 +68,16 @@ export const useClaim = (
           console.error(error);
         } finally {
           clearInterval(interval);
+          percentReductionStep.current = null;
+          balanceReductionStep.current = null;
+          isClaimingFinished.current = false;
         }
       }
     };
 
     const interval = setInterval(() => {
       handleBalanceUpdate();
-    }, 1);
+    }, 20);
 
     return () => clearInterval(interval);
   }, [

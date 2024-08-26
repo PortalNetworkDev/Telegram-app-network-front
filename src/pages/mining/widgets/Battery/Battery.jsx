@@ -10,7 +10,7 @@ import {
 } from "../../../../context/service/me.service";
 import { useMiningQuery } from "../../../../context/service/mining.service";
 import { useBatteryPercent } from "../../helpers/useBatteryPercent";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setClaimingAction } from "../../../../context/mining";
 import { useClaim } from "../../helpers/useClaim";
 
@@ -27,7 +27,6 @@ const Battery = ({ onClick, upBtnAction }) => {
     percent,
     balance,
     capacity,
-    power,
     prev,
     powerBalance,
     setPowerBalance,
@@ -35,7 +34,6 @@ const Battery = ({ onClick, upBtnAction }) => {
     setPercent,
     setBalance,
   } = useBatteryPercent();
-  const miningStore = useSelector((store) => store.mining);
 
   useEffect(() => {
     const image = new Image();
@@ -75,26 +73,18 @@ const Battery = ({ onClick, upBtnAction }) => {
     setPrev(lastActiveIndex);
   }, [percent, divisions, setPrev]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setPercent((prev) => Math.min(prev + power / 3600, 100));
-      setBalance((prev) => Math.min(prev + percent * capacity), capacity);
-    }, 1000);
-    return () => clearInterval(interval); // Очистка интервала при размонтировании
-  }, []);
-
   // Сбор энергии
   const lastClickTimeRef = useRef(0);
 
   const handleClick = () => {
     const now = Date.now();
-    if (now - lastClickTimeRef.current < 5000) {
+    if (now - lastClickTimeRef.current < 2500) {
       lastClickTimeRef.current = now;
       return;
     }
     lastClickTimeRef.current = now;
 
-    if (!miningStore.isRotate && balance > 0) {
+    if (balance > 0) {
       dispatch(setClaimingAction(true));
     }
   };
