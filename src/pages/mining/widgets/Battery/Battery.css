@@ -135,3 +135,8 @@
   background: linear-gradient(to top, #00bfffae, #64fcd6bf);
   transform: scale(0.98);
 }
+
+.battyry__collect:disabled {
+  background: linear-gradient(to top, #00bfffae, #64fcd6bf);
+  transform: scale(0.98);
+}
