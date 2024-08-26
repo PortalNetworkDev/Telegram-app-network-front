@@ -10,7 +10,7 @@ import {
 } from "../../../../context/service/me.service";
 import { useMiningQuery } from "../../../../context/service/mining.service";
 import { useBatteryPercent } from "../../helpers/useBatteryPercent";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setClaimingAction } from "../../../../context/mining";
 import { useClaim } from "../../helpers/useClaim";
 
@@ -19,6 +19,7 @@ const Battery = ({ onClick, upBtnAction }) => {
   const lang = me?.language_code === "en" ? "en" : "ru";
   const { data: mining = null } = useMiningQuery();
   const { data: staticData = null } = useStaticQuery(lang);
+  const miningStore = useSelector((store) => store.mining);
   const dispatch = useDispatch();
   const imgRef = useRef(null);
   const [divisions, setDivisions] = useState([]);
@@ -74,15 +75,10 @@ const Battery = ({ onClick, upBtnAction }) => {
   }, [percent, divisions, setPrev]);
 
   // Сбор энергии
-  const lastClickTimeRef = useRef(0);
-
   const handleClick = () => {
-    const now = Date.now();
-    if (now - lastClickTimeRef.current < 2500) {
-      lastClickTimeRef.current = now;
+    if (miningStore.isClaiming) {
       return;
     }
-    lastClickTimeRef.current = now;
 
     if (balance > 0) {
       dispatch(setClaimingAction(true));
@@ -211,7 +207,11 @@ const Battery = ({ onClick, upBtnAction }) => {
             </div>
           </div>
         </div>
-        <button onClick={() => handleClick()} className="battyry__collect">
+        <button
+          disabled={miningStore.isClaiming}
+          onClick={() => handleClick()}
+          className="battyry__collect"
+        >
           {staticData?.ClaimButton.toUpperCase()}
         </button>
       </div>
