@@ -8,6 +8,7 @@ import { Charging } from "./pages/charging/charging";
 import { About } from "./pages/about/about";
 import { Confirm } from "./pages/confirm/confirm";
 import { Unauthorized } from "./pages/unauthorized/unauthorized";
+import { Mining } from "./pages/mining/mining";
 
 export const Router = memo(() => {
   return (
@@ -17,6 +18,7 @@ export const Router = memo(() => {
         <Route path="task" element={<Task />} />
         <Route path="charging" element={<Charging />} />
         <Route path="about" element={<About />} />
+        <Route path="mining" element={<Mining />} />
         <Route path="confirm/:id" element={<Confirm />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/unauthorized" element={<Unauthorized />} />

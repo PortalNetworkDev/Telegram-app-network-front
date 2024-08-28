@@ -1,0 +1,142 @@
+.battery {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.battery__level {
+  position: relative;
+  margin-top: 0%;
+  display: flex;
+  align-self: center;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.battery__level-info {
+  width: 50%;
+}
+
+.battery__img-container {
+  position: relative;
+  width: fit-content;
+}
+
+.battery-division {
+  position: absolute;
+  background: linear-gradient(to top, #4d4d4d, #262626) padding-box;
+  border-radius: 5px;
+}
+
+.activeDivision {
+  background: linear-gradient(to top, #8dfab4, #26ff3c) padding-box;
+  will-change: filter;
+  filter: drop-shadow(0px 62px 5px rgba(141, 250, 180, 1))
+    drop-shadow(0px 0px 10px rgba(141, 250, 180, 1));
+}
+
+.last {
+  animation: charge 3s infinite;
+  filter: brightness(0);
+}
+
+@keyframes charge {
+  0%,
+  100% {
+    filter: drop-shadow(0 62px 5px rgba(141, 250, 180, 1))
+      drop-shadow(0px 0px 10px rgba(141, 250, 180, 1)) brightness(1);
+  }
+  50% {
+    filter: drop-shadow(0 62px 5px rgba(141, 250, 180, 1))
+      drop-shadow(0px 0px 1px rgba(141, 250, 180, 1)) brightness(0.1);
+  }
+}
+
+.battery__img {
+  position: relative;
+  display: block;
+  width: 18rem;
+  margin: 4% 0 4% 0;
+  align-self: center;
+}
+
+.battery__lightning {
+  margin-bottom: 0.7%;
+  height: 14px;
+  align-self: flex-end;
+}
+
+.battery__capacity {
+  justify-content: space-between;
+  margin-top: 5%;
+}
+
+.accumulation {
+  display: flex;
+  align-items: center;
+}
+
+.accumulation__text {
+  font-size: 12px;
+  font-weight: 300;
+  margin: 0 10px 0 0;
+}
+
+.accumulation__percent {
+  display: flex;
+  padding: 4px 9px 4px 9px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: linear-gradient(to top, #153467, #112320) padding-box,
+    linear-gradient(to top, #423e3e, #423e3eab) border-box;
+}
+
+.accumulation__progress-img {
+  width: 8px;
+}
+
+.accumulation__progress-conteiner {
+  display: flex;
+  align-items: end;
+  width: fit-content;
+}
+
+.accumulation__progress-division {
+  margin: 0 0 0.23em 0.1em;
+  width: 0.1em;
+  height: 60%;
+  border-radius: 10px;
+  background-color: #0aff6d;
+}
+
+.accumulation__value {
+  color: #0aff6d;
+  margin-left: 5px;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.battyry__collect {
+  z-index: 9;
+  border: none;
+  border-radius: 30px;
+  margin: 3% 10px 0 10px;
+  color: #0f0c10;
+  font-size: 22px;
+  font-weight: 600;
+  background: linear-gradient(to top, #00c1ff, #64fcd7);
+  height: 50px;
+  transition: transform 0.1s ease;
+}
+
+.battyry__collect:active {
+  background: linear-gradient(to top, #00bfffae, #64fcd6bf);
+  transform: scale(0.98);
+}
+
+.battyry__collect:disabled {
+  background: linear-gradient(to top, #00bfffae, #64fcd6bf);
+  transform: scale(0.98);
+}

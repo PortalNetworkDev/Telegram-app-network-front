@@ -74,9 +74,18 @@ a {
   color: #ffffff;
 }
 
+.back-btn {
+  color: #64fcd7;
+  display: flex;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+}
+
 /* ========== WALLET INFO ========== */
 
 .wallet_info {
+  position: relative;
   width: 100%;
   height: 54px;
   border-radius: 15px;
@@ -85,6 +94,7 @@ a {
   align-items: center;
   justify-content: space-between;
   padding: 0 15px;
+  margin-bottom: 12%;
 }
 
 .wallet_info_dark {
@@ -115,6 +125,35 @@ a {
 }
 
 .wallet_info_dark > h2 {
+  color: #63e3ff;
+}
+
+.main-balance {
+  position: relative;
+}
+
+.main-balance__logo {
+  position: absolute;
+  left: -35%;
+  top: 11%;
+  width: 14px;
+}
+
+.main-balance > h2 {
+  color: #0034bb;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.main-balance > span {
+  position: absolute;
+  right: 0;
+  color: #1b538b;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.main-balance_dark > h2 {
   color: #63e3ff;
 }
 

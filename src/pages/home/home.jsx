@@ -12,11 +12,15 @@ import {
 } from "@tonconnect/ui-react";
 import { usePostTaskSelfConfirmMutation } from "../../context/service/task.service";
 import { useSelector } from "react-redux";
+import { useGetPOERateQuery } from "../../context/service/geckoApi.service";
+import TextString from "../mining/ui/TextSrting/TextString";
+import { useMiningQuery } from "../../context/service/mining.service";
 
 export const Home = () => {
   const colorScheme = useSelector((store) => store.colorScheme);
-
-  let { data: me = null } = useMeQuery();
+  const { data: rate } = useGetPOERateQuery();
+  const { data: me = null } = useMeQuery();
+  const { data: mining = null } = useMiningQuery();
   const lang = me?.language_code === "en" ? "en" : "ru";
   const { data: staticData = null } = useStaticQuery(lang);
   const [connect_wallet, setConnectWallet] = useState(true);
@@ -90,43 +94,97 @@ export const Home = () => {
             />
             <span>{staticData?.your_balance}</span>
           </h1>
-
-          <h2>
-            {me ? (
-              `${me?.balance || 0} ${staticData?.token_symbol}`
-            ) : (
-              <div
-                style={{ width: 100, height: 19, borderRadius: 5 }}
-                className={`loading-div ${
-                  colorScheme === "light" ? "" : "loading-div_dark"
-                }`}
-              ></div>
-            )}
-          </h2>
+          {me ? (
+            <div
+              className={`main-balance ${
+                colorScheme === "light" ? "" : "main-balance_dark"
+              }`}
+            >
+              {colorScheme === "light" && (
+                <img
+                  className="main-balance__logo"
+                  src="./icon/lightningFromBalance-light.svg"
+                  alt="lightning"
+                />
+              )}
+              {colorScheme !== "light" && (
+                <img
+                  className="main-balance__logo"
+                  src="./icon/lightningFromBalance-dark.svg"
+                  alt="lightning"
+                />
+              )}
+              <h2>{`${me?.balance.toLocaleString("ru") || 0} ${
+                staticData?.token_symbol
+              }`}</h2>
+              <span>
+                ≈{" "}
+                {(+(rate?.["portal-network-token"]?.usd * me?.balance).toFixed(
+                  2
+                )).toLocaleString("ru")}{" "}
+                USD
+              </span>
+            </div>
+          ) : (
+            <div
+              style={{ width: 100, height: 19, borderRadius: 5 }}
+              className={`loading-div ${
+                colorScheme === "light" ? "" : "loading-div_dark"
+              }`}
+            ></div>
+          )}
+          <div className="poe-power">
+            <div className="battery-power">
+              {mining ? (
+                <>
+                  <img
+                    className="battery-power__lightning lightning-with-back main-lightning"
+                    src="./images/lightningWithBackground.png"
+                    alt="lightning"
+                  />
+                  <TextString
+                    secondSmall={lang === "ru" ? "Вт•Ч" : "W•h"}
+                    big={mining?.power_balance}
+                    bigFontSize={"20px"}
+                  />
+                </>
+              ) : (
+                <div
+                  style={{ width: 100, height: 19, borderRadius: 5 }}
+                  className={`loading-div ${
+                    colorScheme === "light" ? "" : "loading-div_dark"
+                  }`}
+                ></div>
+              )}
+            </div>
+          </div>
         </div>
+
         <ol
           className={`home__list ${
             colorScheme === "light" ? "" : "home__list_dark"
           }`}
         >
           <li>
-            <a href="https://t.me/poenetwork_bot/charging">
+            <Link to="/task">
               <span>
                 <div style={{ width: 20 }}>
                   <img
                     src={
                       colorScheme === "light"
-                        ? "/icon/location-icon.svg"
-                        : "/icon/location-icon_dark.svg"
+                        ? "/icon/task-icon.svg"
+                        : "/icon/task-icon_dark.svg"
                     }
-                    alt="location-icon"
+                    alt="task-icon"
                   />
                 </div>
-                <span>{staticData?.to_chargers}</span>
+                <span>{staticData?.tasks}</span>
               </span>
+
               <MdOutlineArrowForwardIos />
-            </a>
+            </Link>
           </li>
+
           <li>
             <a
               href="https://app.ston.fi/swap?chartVisible=false&ft=TON&tt=POE"
@@ -154,24 +212,44 @@ export const Home = () => {
               <MdOutlineArrowForwardIos />
             </a>
           </li>
+
+          <li className="mining">
+            <img
+              src="./images/generator-preview.png"
+              alt="gen-preview"
+              className="preview-gen"
+            />
+            <Link className="mining__link" to="/mining">
+              <div className="mining__container">
+                <div className="mining__title-container">
+                  <img src={"/icon/miningMenu.svg"} alt="mining-icon" />
+                  <span className="mining__title">Майнить энергию</span>
+                </div>
+                <MdOutlineArrowForwardIos />
+              </div>
+              <span className="mining__info">
+                Покупайте и храните POE — получайте Вт•Ч
+              </span>
+            </Link>
+          </li>
+
           <li>
-            <Link to="/task">
+            <a href="https://t.me/poenetwork_bot/charging">
               <span>
                 <div style={{ width: 20 }}>
                   <img
                     src={
                       colorScheme === "light"
-                        ? "/icon/task-icon.svg"
-                        : "/icon/task-icon_dark.svg"
+                        ? "/icon/location-icon.svg"
+                        : "/icon/location-icon_dark.svg"
                     }
-                    alt="task-icon"
+                    alt="location-icon"
                   />
                 </div>
-                <span>{staticData?.tasks}</span>
+                <span>{staticData?.to_chargers}</span>
               </span>
-
               <MdOutlineArrowForwardIos />
-            </Link>
+            </a>
           </li>
 
           <li>

@@ -1,0 +1,23 @@
+.power {
+  z-index: 2;
+  position: relative;
+  margin-top: 15%;
+  padding: 0 10px 0 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: linear-gradient(#1f202f, #1f202f 0) padding-box,
+    linear-gradient(to top, rgba(100, 252, 214, 0.33), rgb(23, 30, 36))
+      border-box;
+  width: calc(100% + 2px);
+  height: 7vh;
+}
+
+.power__info {
+  display: flex;
+  margin-bottom: 5px;
+  justify-content: space-between;
+  align-items: center;
+}

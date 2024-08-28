@@ -1,0 +1,64 @@
+/* common */
+.lazyload-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* main */
+.mining-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  user-select: none;
+}
+
+.mining-main__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mining-main__balance {
+  position: absolute;
+  right: 0;
+  top: 9px;
+  height: 7vh;
+  background-color: #0d0b0e;
+  width: 88%;
+  padding: 21px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 5px 0 0 5px;
+}
+
+.battery-power {
+  position: relative;
+  margin-top: 1%;
+  display: flex;
+  align-self: center;
+  align-items: flex-end;
+  justify-content: space-around;
+  width: fit-content;
+}
+
+.battery-power__lightning {
+  width: 1.5rem;
+  margin-bottom: 5px;
+}
+
+.level {
+  width: 100%;
+  padding: 0 10px 0 10px;
+  display: flex;
+  align-items: center;
+}
+
+.level__info {
+  display: flex;
+}
