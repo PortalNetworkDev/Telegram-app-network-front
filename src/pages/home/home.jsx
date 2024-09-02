@@ -14,13 +14,11 @@ import { usePostTaskSelfConfirmMutation } from "../../context/service/task.servi
 import { useSelector } from "react-redux";
 import { useGetPOERateQuery } from "../../context/service/geckoApi.service";
 import TextString from "../mining/ui/TextSrting/TextString";
-import { useMiningQuery } from "../../context/service/mining.service";
 
 export const Home = () => {
   const colorScheme = useSelector((store) => store.colorScheme);
   const { data: rate } = useGetPOERateQuery();
   const { data: me = null } = useMeQuery();
-  const { data: mining = null } = useMiningQuery();
   const lang = me?.language_code === "en" ? "en" : "ru";
   const { data: staticData = null } = useStaticQuery(lang);
   const [connect_wallet, setConnectWallet] = useState(true);
@@ -135,7 +133,7 @@ export const Home = () => {
           )}
           <div className="poe-power">
             <div className="battery-power">
-              {mining ? (
+              {me ? (
                 <>
                   <img
                     className="battery-power__lightning lightning-with-back main-lightning"
@@ -144,7 +142,7 @@ export const Home = () => {
                   />
                   <TextString
                     secondSmall={lang === "ru" ? "Вт•Ч" : "W•h"}
-                    big={mining?.power_balance}
+                    big={me?.power_balance}
                     bigFontSize={"20px"}
                   />
                 </>
