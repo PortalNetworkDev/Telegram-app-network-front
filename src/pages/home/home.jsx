@@ -220,7 +220,7 @@ export const Home = () => {
             <Link className="mining__link" to="/mining">
               <div className="mining__container">
                 <div className="mining__title-container">
-                  <img src={"/icon/miningMenu.svg"} alt="mining-icon" />
+                  <img className="gamepad" src={"/icon/gamepad.svg"} alt="mining-icon" />
                   <span className="mining__title">Майнить энергию</span>
                 </div>
                 <MdOutlineArrowForwardIos />
