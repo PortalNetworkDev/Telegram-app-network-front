@@ -40,6 +40,7 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
     secondModalText,
     modalBtnText,
     modalBtnFunc,
+    upInfo,
     handleOpenModal,
     handleCloseModal,
   } = useModal();
@@ -113,8 +114,12 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
           upBtnAction={() => {
             handleOpenModal(
               staticData?.BatteryUp1,
-              `${staticData?.BatteryUp2} ${mining?.power_rize_battery}`,
-              `${staticData?.BatteryUp3} ${mining?.price_rize_battery}`,
+              `+${mining?.power_rize_battery} ${staticData?.BatteryUp2} ${
+                mining?.battery_level + 1
+              } ${staticData?.LevelStatic}`,
+              `${mining?.price_rize_battery} ${staticData?.BatteryUp3} ${
+                mining?.battery_level + 1
+              } Lvl`,
               staticData?.BatteryUpButton,
               async () => {
                 if (mining?.power_balance < mining?.price_rize_battery) {
@@ -139,7 +144,8 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
                   await batteryUp();
                   await refetchMining();
                 }
-              }
+              },
+              "battery"
             );
           }}
         />
@@ -182,8 +188,12 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
           upBtnAction={() => {
             handleOpenModal(
               staticData?.GeneratorUp1,
-              `${staticData?.GeneratorUp2} ${mining?.power_rize_generator}`,
-              `${staticData?.GeneratorUp3} ${mining?.price_rize_generator}`,
+              `+${mining?.power_rize_generator} ${staticData?.GeneratorUp2} ${
+                mining?.generator_level + 1
+              } ${staticData?.LevelStatic}`,
+              `${mining?.price_rize_generator} ${staticData?.GeneratorUp3} ${
+                mining?.generator_level + 1
+              } Lvl`,
               staticData?.GeneratorUpButton,
               async () => {
                 if (mining?.power_balance < mining?.price_rize_generator) {
@@ -208,14 +218,18 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
                   await generatorUp();
                   await refetchMining();
                 }
-              }
+              }, 'generator'
             );
           }}
           multitabUp={() => {
             handleOpenModal(
               staticData?.MultitabUp1,
-              `${staticData?.MultitabUp2} ${mining?.price_rize_multitab}`,
-              `${staticData?.MultitabUp3}`,
+              `${staticData?.MultitabUp2} ${
+                mining?.multitab + 1
+              } ${staticData?.LevelStatic}`,
+              `${mining?.price_rize_multitab} ${staticData?.MultitabUp3} ${
+                mining?.multitab + 1
+              } Lvl`,
               staticData?.MultitabUpButton,
               async () => {
                 if (mining?.power_balance < mining?.price_rize_multitab) {
@@ -240,7 +254,7 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
                   await multitabUp();
                   await refetchMining();
                 }
-              }
+              }, 'multitab'
             );
           }}
         />
@@ -253,6 +267,7 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
             btnFunc={modalBtnFunc.current}
             setModalClose={handleCloseModal}
             bounding={minigBounding}
+            upInfo={upInfo}
           />
         )}
       </div>

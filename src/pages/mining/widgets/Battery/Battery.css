@@ -32,9 +32,8 @@
 
 .activeDivision {
   background: linear-gradient(to top, #8dfab4, #26ff3c) padding-box;
-  will-change: filter;
-  filter: drop-shadow(0px 62px 5px rgba(141, 250, 180, 1))
-    drop-shadow(0px 0px 10px rgba(141, 250, 180, 1));
+  box-shadow: 0px 62px 5px rgba(141, 250, 180, 1),
+    0px 0px 10px rgba(141, 250, 180, 1);
 }
 
 .last {
