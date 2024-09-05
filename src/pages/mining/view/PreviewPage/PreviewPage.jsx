@@ -4,11 +4,9 @@ import {
   useMeQuery,
   useStaticQuery,
 } from "../../../../context/service/me.service";
-import { useMiningQuery } from "../../../../context/service/mining.service";
 
 export const PreviewPage = ({ display }) => {
   const { data: me = null } = useMeQuery();
-  const { data: mining = null } = useMiningQuery();
   const lang = me?.language_code === "en" ? "en" : "ru";
   const { data: staticData = null } = useStaticQuery(lang);
   const imgRef = useRef(null);
@@ -62,10 +60,10 @@ export const PreviewPage = ({ display }) => {
           alt="logo"
         />
         <div className="mininf-info__text info-text">
-          <h1 className="info-text__title">{staticData?.MiningDisc || ''}</h1>
-          <p className="info-text__desc">
-            {`1 POE = ${mining?.power_price || ''} ${lang === "en" ? "W" : "Вт"}`}
-          </p>
+          <h1 className="info-text__title">
+            {staticData?.ScreenLoader1 || ""}
+          </h1>
+          <p className="info-text__desc">{staticData?.ScreenLoader2 || ""}</p>
         </div>
       </div>
     </div>
