@@ -102,7 +102,7 @@
   margin-top: 10%;
   margin-bottom: 5%;
   text-align: center;
-  font-size: 18.5px;
+  font-size: 20px;
   line-height: 130%;
 }
 
@@ -119,4 +119,31 @@
   width: calc(100% - 60px);
   bottom: 7%;
   margin-top: 5%;
+}
+
+.modal__battery {
+  width: 60%;
+  margin-top: 20%;
+}
+
+.modal__generator {
+  width: 35%;
+}
+
+.modal__multitab {
+  width: 70%;
+  margin-top: -5%;
+}
+
+.upContainer{
+  display: flex;
+  margin-top: 3%;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal__text_up{
+  width: auto;
+  margin-left: 3%;
+  font-size: 16px;
 }
