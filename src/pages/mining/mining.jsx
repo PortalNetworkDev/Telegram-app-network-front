@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 
-import { PreviewPage } from "./view/PreviewPage/PreviewPage";
-import { MiningPage } from "./view/MiningPage/MiningPage";
 import { useDispatch, useSelector } from "react-redux";
 import { setMiningAction } from "../../context/mining";
 
 export const Mining = () => {
   const navigate = useNavigate();
-  const back = () => navigate(-1);
+  const back = () => navigate("/");
   const dispatch = useDispatch();
   const colorScheme = useSelector((store) => store.colorScheme);
   const [preview, setPreview] = useState(true);
-  const [isGeneratorLoading, setIsGeneratorLoading] = useState(true);
 
   //Устанавливаем цвет фона Telegram
   useEffect(() => {
@@ -40,7 +37,7 @@ export const Mining = () => {
   useEffect(() => {
     setTimeout(() => {
       setPreview(false);
-    }, 3000);
+    }, 0);
   }, []);
 
   return (
@@ -64,13 +61,7 @@ export const Mining = () => {
             <IoArrowBack />
           </button>
         </div>
-        <PreviewPage
-          display={preview || isGeneratorLoading ? "block" : "none"}
-        />
-        <MiningPage
-          setGeneratorLoading={setIsGeneratorLoading}
-          opacity={preview || isGeneratorLoading ? "0" : "1"}
-        />
+        <Outlet />
       </section>
     </>
   );

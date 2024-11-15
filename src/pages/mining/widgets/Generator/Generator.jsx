@@ -201,6 +201,18 @@ const Generator = ({
               alt="loader"
             />
           </div>
+
+          <div
+            style={{ opacity: 1 - balance / limit }}
+            // className={
+            //   isRotating
+            //     ? "overheating-wrapper overheating__visible"
+            //     : "overheating-wrapper overheating__hidden"
+            // }
+            className="overheating-wrapper"
+          >
+            <div className="overheating" />
+          </div>
           <img
             ref={genRef}
             className="geterator__img"

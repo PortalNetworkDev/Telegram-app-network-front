@@ -6,6 +6,8 @@ import LazyLoad from "react-lazyload";
 import Battery from "../../widgets/Battery/Battery";
 import Generator from "../../widgets/Generator/Generator";
 import Modal from "../../widgets/Modal/Modal";
+import Navigation from "../../widgets/Navigation/Navigation";
+
 import {
   useMeQuery,
   useStaticQuery,
@@ -25,7 +27,9 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
   const dispatch = useDispatch();
   const { data: me = null } = useMeQuery();
   const lang = me?.language_code === "en" ? "en" : "ru";
-  const { data: staticData = null } = useStaticQuery(lang);
+  const { data: staticData } = useStaticQuery(lang, {
+    keepUnusedDataFor: 600, // Данные хранятся 10 минут
+  });
   const { data: mining = null, refetch: refetchMining } = useMiningQuery();
   const miningStore = useSelector((store) => store.mining);
   const { data: rate } = useGetPOERateQuery();
@@ -218,15 +222,16 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
                   await generatorUp();
                   await refetchMining();
                 }
-              }, 'generator'
+              },
+              "generator"
             );
           }}
           multitabUp={() => {
             handleOpenModal(
               staticData?.MultitabUp1,
-              `${staticData?.MultitabUp2} ${
-                mining?.multitab + 1
-              } ${staticData?.LevelStatic}`,
+              `${staticData?.MultitabUp2} ${mining?.multitab + 1} ${
+                staticData?.LevelStatic
+              }`,
               `${mining?.price_rize_multitab} ${staticData?.MultitabUp3} ${
                 mining?.multitab + 1
               } Lvl`,
@@ -254,7 +259,8 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
                   await multitabUp();
                   await refetchMining();
                 }
-              }, 'multitab'
+              },
+              "multitab"
             );
           }}
         />
@@ -270,6 +276,7 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
             upInfo={upInfo}
           />
         )}
+        <Navigation />
       </div>
     </>
   );
