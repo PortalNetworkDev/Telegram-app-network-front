@@ -232,7 +232,7 @@ export const Home = () => {
           </li>
 
           <li>
-            <a href="https://t.me/poenetwork_bot/charging">
+            <a href="https://onelink.to/7j9k8j">
               <span>
                 <div style={{ width: 20 }}>
                   <img
