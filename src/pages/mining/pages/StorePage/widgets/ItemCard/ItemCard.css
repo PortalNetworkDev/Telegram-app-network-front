@@ -1,0 +1,85 @@
+.cards-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.item-card {
+  width: 48%;
+  aspect-ratio: 40/38;
+  border-radius: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  background: linear-gradient(to top, #00c1ff33, #64fcd733);
+  box-sizing: border-box;
+}
+
+.item-card_pick {
+  background: linear-gradient(to top, #8dfab44d, #54946b4d);
+}
+
+.item-card_own {
+  background: linear-gradient(to top, #1466b833, #03224133);
+}
+
+.item-card:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 20px;
+  border: 2px solid transparent;
+  background: linear-gradient(0deg, #00c1ff, #64fcd7) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+}
+
+.item-card_pick:before {
+  background: linear-gradient(0deg, #8dfab4, #5ca998) border-box;
+}
+
+.item-card_own:before {
+  background: linear-gradient(0deg, #032241, #1466b8) border-box;
+}
+
+.item-card__img {
+  width: 85%;
+  margin-top: 15%;
+}
+
+.item-card__price {
+  margin-top: 15%;
+  font-weight: 500;
+  font-size: 18px;
+  color: white;
+}
+
+.item-card__btn {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border-radius: 18px;
+  height: 50px;
+  font-weight: 500;
+  font-size: 18px;
+  color: white;
+  border: none;
+  box-sizing: border-box;
+  background: linear-gradient(to top, #00c1ff, #64fcd7);
+}
+
+.item-card__btn_pick {
+  background: linear-gradient(to top, #54946b, #19ff6b);
+}
+
+.item-card__btn_own {
+  background: linear-gradient(to top, #032241, #1466b8);
+}

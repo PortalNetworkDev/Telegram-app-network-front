@@ -12,20 +12,24 @@ const Navigation = () => {
   ];
 
   const location = useLocation();
+  console.log(location.pathname);
 
   return (
     <div className="miningNavigation">
       <ul className="miningNavigation__list">
         {navItems.map((el) => {
-          const isMainRoute =
-            el.route === "" && location.pathname === "/mining";
+          let isCurrentRoute;
+
+          el.route === ""
+            ? (isCurrentRoute = location.pathname === "/mining")
+            : (isCurrentRoute = location.pathname === `/mining/${el.route}`);
 
           return (
             <li className="miningNavigation__item" key={el.route || "main"}>
               <NavLink
-                to={`/mining/${el.route}`}
-                className={({ isActive }) =>
-                  isActive || isMainRoute
+                to={el.route === "" ? "/mining" : `/mining/${el.route}`}
+                className={
+                  isCurrentRoute
                     ? "miningNavigation__link miningNavigation__link_active"
                     : "miningNavigation__link"
                 }

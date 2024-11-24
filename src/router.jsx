@@ -10,6 +10,7 @@ import { Confirm } from "./pages/confirm/confirm";
 import { Unauthorized } from "./pages/unauthorized/unauthorized";
 import { Mining } from "./pages/mining/mining";
 import MiningMain from "./pages/mining/pages/MiningMain";
+import StorePage from "./pages/mining/pages/StorePage/StorePage";
 
 export const Router = memo(() => {
   return (
@@ -21,6 +22,7 @@ export const Router = memo(() => {
         <Route path="about" element={<About />} />
         <Route path="mining" element={<Mining />}>
           <Route index element={<MiningMain />} />
+          <Route path="store" element={<StorePage />} />
         </Route>
         <Route path="confirm/:id" element={<Confirm />} />
         <Route path="*" element={<NotFound />} />

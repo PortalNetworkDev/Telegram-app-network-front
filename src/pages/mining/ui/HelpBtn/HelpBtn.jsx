@@ -6,7 +6,7 @@ const HelpBtn = ({ onClick }) => {
   return (
     <button onClick={onClick} className="power__help help">
       <LazyLoad>
-        <img className="help__icon" src="./icon/help.svg" alt="help" />
+        <img className="help__icon" src="/icon/help.svg" alt="help" />
       </LazyLoad>
     </button>
   );
