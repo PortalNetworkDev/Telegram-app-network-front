@@ -1,3 +1,25 @@
+.store__back {
+  position: absolute;
+  height: 110vh;
+  width: 200%;
+  top: -30%;
+  left: -50%;
+  background: linear-gradient(to right, #0b2849, #09464d);
+  filter: blur(100px);
+}
+
+.store-loading-div {
+  width: 100%;
+  background: linear-gradient(270deg, #0b2849, #09464d, #0b2849);
+  background-size: 600% 600%;
+  animation: gradient 3s ease infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+}
+
 .store__header {
   color: white;
   font-size: 22px;
@@ -83,6 +105,7 @@
 }
 
 .giftInfo {
+  position: relative;
   display: flex;
   justify-content: center;
   color: white;
@@ -93,4 +116,30 @@
 
 .giftInfo__text {
   margin-right: 10px;
+  margin-bottom: -3px;
+}
+
+.agree-modal {
+  background: #1f202f;
+  height: 25%;
+  position: fixed;
+  top: 50%;
+  transform: translate(0, -50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  color: white;
+}
+
+.agree-modal__btn-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.agree-modal__btn {
+  width: 40%;
+  position: relative;
 }

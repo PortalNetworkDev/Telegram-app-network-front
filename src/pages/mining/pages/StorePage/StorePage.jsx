@@ -12,6 +12,7 @@ const StorePage = () => {
   const { data: me = null } = useMeQuery();
 
   const [activeTab, setActiveTab] = useState(storeTab[0]);
+  const [isAgreeModalVisible, setIsAgreeModalVisible] = useState(false);
 
   const {
     isModalVisible,
@@ -25,6 +26,7 @@ const StorePage = () => {
     handleCloseModal,
   } = useModal();
 
+  //расчет ширины окна для модалки подтверждения выбора
   const storeRef = useRef(null);
   const storeBounding = useRef(null);
 
@@ -38,6 +40,20 @@ const StorePage = () => {
     e.preventDefault();
     storeBounding.current = storeRef.current?.getBoundingClientRect();
   });
+
+  //функции для модалки подтверждения
+
+  const [isClose, setIsClose] = useState(false);
+
+  const handleCloseAgreeModal = () => {
+    setIsClose(true);
+    setTimeout(() => setIsAgreeModalVisible(false), 500);
+  };
+
+  const handleOpenAgreeModal = () => {
+    setIsClose(false);
+    setTimeout(() => setIsAgreeModalVisible(true), 500);
+  };
 
   const battery = [
     { own: true, pick: true, price: null },
@@ -82,6 +98,7 @@ const StorePage = () => {
 
   return (
     <div className="store" ref={storeRef}>
+      <div className="store__back"></div>
       <h1 className="store__header">МАГАЗИН</h1>
       <div className="store__tabContainer tab">
         {storeTab.map((el) => {
@@ -95,7 +112,7 @@ const StorePage = () => {
           );
         })}
       </div>
-      <div className="store__balance">
+      <div className={`store__balance ${!me && "store-loading-div"}`}>
         Ваш баланс: <span> {me?.balance} </span> кВт•Ч
       </div>
       {activeTab === "Розыгрыш" && (
@@ -157,10 +174,16 @@ const StorePage = () => {
             price={el.price}
             tab={activeTab}
             key={idx}
+            agree={handleOpenAgreeModal}
           />
         ))}
       </div>
-      <Navigation />
+      <Navigation
+        style={{
+          width: `calc(${storeBounding.current?.width}px)`,
+          left: `calc(${storeBounding.current?.left}px)`,
+        }}
+      />
       {isModalVisible && (
         <Modal
           title={modalTitle}
@@ -172,6 +195,39 @@ const StorePage = () => {
           bounding={storeBounding}
           upInfo={upInfo}
         />
+      )}
+      {isAgreeModalVisible && (
+        <div
+          className={`overlay ${isClose ? "overlayClose" : ""}`}
+          onClick={handleCloseAgreeModal}
+        >
+          <div
+            style={{
+              width: `calc(${storeBounding.current?.width}px)`,
+              left: `calc(${storeBounding.current?.left}px)`,
+            }}
+            onClick={(e) => e.stopPropagation()}
+            className="agree-modal"
+          >
+            <p className="modal__title">
+              Вы действительно хотите выбрать эту карточку?
+            </p>
+            <div className="agree-modal__btn-container">
+              <button
+                onClick={handleCloseAgreeModal}
+                className="battyry__collect modal__acceptBtn agree-modal__btn"
+              >
+                Отмена
+              </button>
+              <button
+                onClick={handleCloseAgreeModal}
+                className="battyry__collect modal__acceptBtn agree-modal__btn"
+              >
+                Выбрать
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

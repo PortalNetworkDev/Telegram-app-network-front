@@ -2,9 +2,10 @@ import React from "react";
 
 import "./ItemCard.css";
 
-const ItemCard = ({ own, pick, price, tab }) => {
+const ItemCard = ({ own, pick, price, tab, agree }) => {
   return (
     <div
+      onClick={() => agree && agree()}
       style={{
         aspectRatio:
           tab === "Генератор"

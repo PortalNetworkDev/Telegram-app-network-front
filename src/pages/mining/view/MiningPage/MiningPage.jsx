@@ -209,7 +209,12 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
             upInfo={upInfo}
           />
         )}
-        <Navigation />
+        <Navigation
+          style={{
+            width: `calc(${minigBounding.current?.width}px)`,
+            left: `calc(${minigBounding.current?.left}px)`,
+          }}
+        />
       </div>
     </>
   );

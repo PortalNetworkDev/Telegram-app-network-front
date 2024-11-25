@@ -2,7 +2,7 @@ import React from "react";
 import "./Navigation.css";
 import { NavLink, useLocation } from "react-router-dom";
 
-const Navigation = () => {
+const Navigation = ({ style }) => {
   const navItems = [
     { title: "Майнить энергию", route: "" },
     { title: "Магазин", route: "store" },
@@ -12,10 +12,9 @@ const Navigation = () => {
   ];
 
   const location = useLocation();
-  console.log(location.pathname);
 
   return (
-    <div className="miningNavigation">
+    <div style={style} className="miningNavigation">
       <ul className="miningNavigation__list">
         {navItems.map((el) => {
           let isCurrentRoute;
