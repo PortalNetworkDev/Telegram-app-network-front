@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./MiningPage.css";
 import Balance from "../../widgets/Balance/Balance";
 import Power from "../../widgets/Power/Power";
@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateData } from "../../../../context/mining";
 import { useModalStatic } from "../../helpers/useModalStatic";
 import useBounding from "../../helpers/useBounding";
+import DailyReward from "../../widgets/ DailyReward/DailyReward";
 
 export const MiningPage = ({ opacity, setGeneratorLoading }) => {
   const dispatch = useDispatch();
@@ -62,6 +63,8 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
   }, [mining, dispatch]);
 
   const { pageRef, pageBounding } = useBounding();
+
+  const [reward, setReward] = useState(true);
 
   return (
     <>
@@ -196,6 +199,10 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
             bounding={pageBounding}
             upInfo={upInfo}
           />
+        )}
+
+        {reward && (
+          <DailyReward bounding={pageBounding} setModalClose={setReward} />
         )}
       </div>
     </>
