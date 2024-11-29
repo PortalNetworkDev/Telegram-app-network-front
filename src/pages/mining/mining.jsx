@@ -4,6 +4,8 @@ import { IoArrowBack } from "react-icons/io5";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setMiningAction } from "../../context/mining";
+import Navigation from "./widgets/Navigation/Navigation";
+import useBounding from "./helpers/useBounding";
 
 export const Mining = () => {
   const navigate = useNavigate();
@@ -40,9 +42,12 @@ export const Mining = () => {
     }, 0);
   }, []);
 
+  const { pageRef, left, width } = useBounding(true);
+
   return (
     <>
       <section
+        ref={pageRef}
         className={
           preview
             ? `${"mining-info__body"}`
@@ -62,6 +67,14 @@ export const Mining = () => {
           </button>
         </div>
         <Outlet />
+        {!preview && (
+          <Navigation
+            style={{
+              width: `${width}px`,
+              left: `${left}px`,
+            }}
+          />
+        )}
       </section>
     </>
   );

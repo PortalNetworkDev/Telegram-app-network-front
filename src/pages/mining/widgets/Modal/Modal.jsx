@@ -34,8 +34,8 @@ const Modal = ({
     >
       <div
         style={{
-          width: `calc(${bounding.current?.width}px)`,
-          left: `calc(${bounding.current?.left}px)`,
+          width: `${bounding?.width}px`,
+          left: `${bounding?.left}px`,
         }}
         onClick={stopPropagation}
         className={`modal ${isClose ? "modalClose" : ""}`}

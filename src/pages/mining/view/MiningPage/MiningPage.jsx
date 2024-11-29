@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import "./MiningPage.css";
 import Balance from "../../widgets/Balance/Balance";
 import Power from "../../widgets/Power/Power";
@@ -6,7 +6,6 @@ import LazyLoad from "react-lazyload";
 import Battery from "../../widgets/Battery/Battery";
 import Generator from "../../widgets/Generator/Generator";
 import Modal from "../../widgets/Modal/Modal";
-import Navigation from "../../widgets/Navigation/Navigation";
 
 import { useMeQuery } from "../../../../context/service/me.service";
 import {
@@ -20,6 +19,7 @@ import { useModal } from "../../helpers/useModal";
 import { useDispatch, useSelector } from "react-redux";
 import { updateData } from "../../../../context/mining";
 import { useModalStatic } from "../../helpers/useModalStatic";
+import useBounding from "../../helpers/useBounding";
 
 export const MiningPage = ({ opacity, setGeneratorLoading }) => {
   const dispatch = useDispatch();
@@ -61,23 +61,11 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
     dispatch(updateData(mining));
   }, [mining, dispatch]);
 
-  const miningRef = useRef(null);
-  const minigBounding = useRef(null);
-
-  useEffect(() => {
-    if (miningRef.current) {
-      minigBounding.current = miningRef.current?.getBoundingClientRect();
-    }
-  }, []);
-
-  window.addEventListener("resize", (e) => {
-    e.preventDefault();
-    minigBounding.current = miningRef.current?.getBoundingClientRect();
-  });
+  const { pageRef, pageBounding } = useBounding();
 
   return (
     <>
-      <div ref={miningRef} style={{ opacity: opacity }} className="mining-main">
+      <div ref={pageRef} style={{ opacity: opacity }} className="mining-main">
         <LazyLoad>
           <img
             className="mining-main__background"
@@ -205,16 +193,10 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
             btnText={modalBtnText}
             btnFunc={modalBtnFunc.current}
             setModalClose={handleCloseModal}
-            bounding={minigBounding}
+            bounding={pageBounding}
             upInfo={upInfo}
           />
         )}
-        <Navigation
-          style={{
-            width: `calc(${minigBounding.current?.width}px)`,
-            left: `calc(${minigBounding.current?.left}px)`,
-          }}
-        />
       </div>
     </>
   );

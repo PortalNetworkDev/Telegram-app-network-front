@@ -1,11 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
-import Navigation from "../../widgets/Navigation/Navigation";
+import React, { useState } from "react";
+
 import "./StorePage.css";
 import { useMeQuery } from "../../../../context/service/me.service";
 import ItemCard from "./widgets/ItemCard/ItemCard";
 import HelpBtn from "../../ui/HelpBtn/HelpBtn";
 import Modal from "../../widgets/Modal/Modal";
 import { useModal } from "../../helpers/useModal";
+import useBounding from "../../helpers/useBounding";
 
 const StorePage = () => {
   const storeTab = ["Генератор", "Батарея", "Розыгрыш"];
@@ -26,23 +27,9 @@ const StorePage = () => {
     handleCloseModal,
   } = useModal();
 
-  //расчет ширины окна для модалки подтверждения выбора
-  const storeRef = useRef(null);
-  const storeBounding = useRef(null);
-
-  useEffect(() => {
-    if (storeRef.current) {
-      storeBounding.current = storeRef.current?.getBoundingClientRect();
-    }
-  }, []);
-
-  window.addEventListener("resize", (e) => {
-    e.preventDefault();
-    storeBounding.current = storeRef.current?.getBoundingClientRect();
-  });
+  const { pageRef, pageBounding } = useBounding();
 
   //функции для модалки подтверждения
-
   const [isClose, setIsClose] = useState(false);
 
   const handleCloseAgreeModal = () => {
@@ -52,7 +39,7 @@ const StorePage = () => {
 
   const handleOpenAgreeModal = () => {
     setIsClose(false);
-    setTimeout(() => setIsAgreeModalVisible(true), 500);
+    setIsAgreeModalVisible(true);
   };
 
   const battery = [
@@ -97,15 +84,16 @@ const StorePage = () => {
   ];
 
   return (
-    <div className="store" ref={storeRef}>
+    <div className="store" ref={pageRef}>
       <div className="store__back"></div>
       <h1 className="store__header">МАГАЗИН</h1>
       <div className="store__tabContainer tab">
-        {storeTab.map((el) => {
+        {storeTab.map((el, idx) => {
           return (
             <button
+              key={idx}
               onClick={() => setActiveTab(el)}
-              class={`tab__btn ${activeTab === el && "tab__btn_active"}`}
+              className={`tab__btn ${activeTab === el && "tab__btn_active"}`}
             >
               <span className="tab__btnText">{el}</span>
             </button>
@@ -178,12 +166,6 @@ const StorePage = () => {
           />
         ))}
       </div>
-      <Navigation
-        style={{
-          width: `calc(${storeBounding.current?.width}px)`,
-          left: `calc(${storeBounding.current?.left}px)`,
-        }}
-      />
       {isModalVisible && (
         <Modal
           title={modalTitle}
@@ -192,7 +174,7 @@ const StorePage = () => {
           btnText={modalBtnText}
           btnFunc={modalBtnFunc.current}
           setModalClose={handleCloseModal}
-          bounding={storeBounding}
+          bounding={pageBounding}
           upInfo={upInfo}
         />
       )}
@@ -202,12 +184,12 @@ const StorePage = () => {
           onClick={handleCloseAgreeModal}
         >
           <div
-            style={{
-              width: `calc(${storeBounding.current?.width}px)`,
-              left: `calc(${storeBounding.current?.left}px)`,
-            }}
             onClick={(e) => e.stopPropagation()}
             className="agree-modal"
+            style={{
+              width: `${pageBounding.width}px`,
+              left: `${pageBounding.left}px`,
+            }}
           >
             <p className="modal__title">
               Вы действительно хотите выбрать эту карточку?

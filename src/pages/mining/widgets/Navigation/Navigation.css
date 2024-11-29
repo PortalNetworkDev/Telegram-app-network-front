@@ -3,7 +3,6 @@
   bottom: 5px;
   left: 0;
   z-index: 2;
-
   display: flex;
   flex-direction: column;
 }
@@ -49,8 +48,8 @@
 }
 
 .miningNavigation__provileBtn {
-  border-radius: 5px;
-  margin: 3px 0 0 0;
-  font-size: 14px;
-  font-weight: 400;
+  border-radius: 5px !important;
+  margin: 3px 0 0 0 !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
 }

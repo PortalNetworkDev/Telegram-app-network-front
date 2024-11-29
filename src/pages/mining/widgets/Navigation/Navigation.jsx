@@ -39,7 +39,7 @@ const Navigation = ({ style }) => {
           );
         })}
       </ul>
-      <button className="battyry__collect miningNavigation__provileBtn">
+      <button className=" miningNavigation__provileBtn battyry__collect">
         Мой профиль
       </button>
     </div>
