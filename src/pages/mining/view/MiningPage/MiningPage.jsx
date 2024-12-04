@@ -21,6 +21,7 @@ import { updateData } from "../../../../context/mining";
 import { useModalStatic } from "../../helpers/useModalStatic";
 import useBounding from "../../helpers/useBounding";
 import DailyReward from "../../widgets/ DailyReward/DailyReward";
+import { BoostPage } from "../../pages/BoostPage/BoostPage";
 
 export const MiningPage = ({ opacity, setGeneratorLoading }) => {
   const dispatch = useDispatch();
@@ -161,30 +162,6 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
                 }
               },
               "generator"
-            );
-          }}
-          multitabUp={() => {
-            handleOpenModal(
-              upMultitabModal,
-              async () => {
-                if (mining?.power_balance < mining?.price_rize_multitab) {
-                  handleCloseModal();
-                  setTimeout(
-                    () =>
-                      handleOpenModal(notEnoughtBalance, () => {
-                        handleCloseModal();
-                        window.location.href =
-                          "https://app.ston.fi/swap?chartVisible=false&ft=TON&tt=POE";
-                      }),
-                    100
-                  );
-                } else {
-                  handleCloseModal();
-                  await multitabUp();
-                  await refetchMining();
-                }
-              },
-              "multitab"
             );
           }}
         />

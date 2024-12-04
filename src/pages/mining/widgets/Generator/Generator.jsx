@@ -12,12 +12,13 @@ import {
 } from "../../../../context/service/mining.service";
 import { useRotate } from "../../helpers/useRotate";
 import { usePoints } from "../../helpers/usePoints";
+import { Link } from "react-router-dom";
 
 const Generator = ({
   onClick,
   upBtnAction,
   setGeneratorLoading,
-  multitabUp,
+
   handleOpenModal,
 }) => {
   const dispatch = useDispatch();
@@ -234,7 +235,12 @@ const Generator = ({
               bigTextMargin={"0px 5px 0px 10px"}
             />
           </div>
-          <UpBtn onClick={multitabUp} multitab={miningStore.multitab} />
+          <Link to={"/mining/boost"} className="boostBtn">
+            <>
+              BOOST
+              <img style={{marginLeft: 7}} src="/icon/rocket.svg" alt="rocket" />
+            </>
+          </Link>
         </div>
       </div>
     </>

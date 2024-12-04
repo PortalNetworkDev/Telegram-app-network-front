@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -42,6 +42,8 @@ export const Mining = () => {
     }, 0);
   }, []);
 
+  const location = useLocation();
+
   const { pageRef, left, width } = useBounding(true);
 
   return (
@@ -49,7 +51,7 @@ export const Mining = () => {
       <section
         ref={pageRef}
         className={
-          preview
+          preview || location.pathname === "/mining/boost"
             ? `${"mining-info__body"}`
             : `${"mining-info__body_withScroll"}`
         }
@@ -67,7 +69,7 @@ export const Mining = () => {
           </button>
         </div>
         <Outlet />
-        {!preview && (
+        {!preview && location.pathname !== "/mining/boost" && (
           <Navigation
             style={{
               width: `${width}px`,

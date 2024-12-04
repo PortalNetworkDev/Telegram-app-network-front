@@ -15,7 +15,7 @@ const ItemCard = ({ own, pick, price, tab, agree }) => {
             : " 40/38",
         width: tab === "Розыгрыш" && "30%",
       }}
-      className={`item-card ${
+      className={`item-card gradientBorder ${
         pick ? "item-card_pick" : own ? "item-card_own" : ""
       }`}
     >

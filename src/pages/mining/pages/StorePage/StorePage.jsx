@@ -93,7 +93,7 @@ const StorePage = () => {
             <button
               key={idx}
               onClick={() => setActiveTab(el)}
-              className={`tab__btn ${activeTab === el && "tab__btn_active"}`}
+              className={`tab__btn gradientBorder ${activeTab === el && "tab__btn_active"}`}
             >
               <span className="tab__btnText">{el}</span>
             </button>

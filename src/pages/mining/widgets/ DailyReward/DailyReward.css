@@ -23,23 +23,10 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background: linear-gradient(to top, #64fcd7, #00c1ff);
-  box-sizing: border-box;
 }
 
 .rewardModal__header:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 30px;
-  border: 2px solid transparent;
   background: linear-gradient(0deg, #0b0133, #210399) border-box;
-  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: destination-out;
-  mask-composite: exclude;
 }
 
 .rewardModal__acceptBtn {
@@ -61,7 +48,6 @@
   flex-shrink: 0;
   position: relative;
   width: 26%;
-  box-sizing: border-box;
   height: 25%;
   background-color: transparent;
   border-radius: 10px;
@@ -79,19 +65,9 @@
 }
 
 .rewardModal__item:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   border-radius: 10px;
   border: 2px solid transparent;
   background: linear-gradient(0deg, #64fcd7, #00c1ff) border-box;
-  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: destination-out;
-  mask-composite: exclude;
 }
 
 .rewardModal__item_current:before {

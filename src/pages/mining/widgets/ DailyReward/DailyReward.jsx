@@ -31,7 +31,7 @@ const DailyReward = ({ btnFunc, setModalClose, bounding }) => {
         onClick={stopPropagation}
         className={`modal rewardModal`}
       >
-        <div className="battyry__collect modal__acceptBtn rewardModal__header">
+        <div className="battyry__collect modal__acceptBtn rewardModal__header gradientBorder">
           ЕЖЕДНЕВНАЯ НАГРАДА
         </div>
         <button
@@ -43,7 +43,7 @@ const DailyReward = ({ btnFunc, setModalClose, bounding }) => {
         <div className="modal__content rewardModal__content">
           {days.map((_, idx) => (
             <div
-              className={`rewardModal__item ${
+              className={`rewardModal__item gradientBorder ${
                 idx === 2 && "rewardModal__item_current"
               }`}
             >

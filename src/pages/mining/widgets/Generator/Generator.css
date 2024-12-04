@@ -127,6 +127,19 @@
   transition: transform 0.8s ease-out, visibility 0s 0.8s;
 }
 
+.boostBtn {
+  position: relative;
+  width: 100px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 2px solid #64fcd7;
+  border-radius: 20px;
+  color: #64fcd7;
+}
+
 /* .overheating__hidden {
   transform: scale(0);
   visibility: hidden;

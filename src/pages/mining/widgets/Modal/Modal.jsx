@@ -56,12 +56,6 @@ const Modal = ({
               src="/images/generatorFromRotate.png"
               alt="lightning"
             />
-          ) : upInfo === "multitab" ? (
-            <img
-              className="modal__img modal__multitab"
-              src="/images/multitab.png"
-              alt="lightning"
-            />
           ) : upInfo === "gift" ? (
             <img
               className="modal__img modal__gift"
