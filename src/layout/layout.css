@@ -20,5 +20,6 @@
 }
 
 .layout__content_mining {
-  background: #042029;
+  background: #0e0b0e;
+  overflow: hidden;
 }

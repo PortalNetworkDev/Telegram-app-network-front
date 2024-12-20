@@ -43,6 +43,37 @@ export const miningService = apiSlice.injectEndpoints({
         method: "POST",
       }),
     }),
+    getItems: builder.query({
+      query: (skinType) => ({
+        url: "skinsShop/getItems",
+        method: "GET",
+        params: { skinType },
+      }),
+      providesTags: (result, error, skinType) => [
+        { type: "Items", id: skinType },
+      ],
+      keepUnusedDataFor: 300,
+    }),
+    buySkin: builder.mutation({
+      query: ({ skinId, skinType }) => ({
+        url: "skinsShop/buySkin",
+        method: "POST",
+        body: { skinId },
+      }),
+      invalidatesTags: (result, error, { skinType }) => [
+        { type: "Items", id: skinType },
+      ],
+    }),
+    selectSkin: builder.mutation({
+      query: ({ skinId, skinType }) => ({
+        url: "skinsShop/selectSkin",
+        method: "POST",
+        body: { skinId },
+      }),
+      invalidatesTags: (result, error, { skinType }) => [
+        { type: "Items", id: skinType },
+      ],
+    }),
   }),
 });
 
@@ -53,4 +84,7 @@ export const {
   useLazyGenRewardQuery,
   useLazyClaimPowerQuery,
   useLazyMultitabUpQuery,
+  useGetItemsQuery,
+  useBuySkinMutation,
+  useSelectSkinMutation,
 } = miningService;

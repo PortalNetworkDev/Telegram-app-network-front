@@ -1,20 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 
-import { PreviewPage } from "./view/PreviewPage/PreviewPage";
-import { MiningPage } from "./view/MiningPage/MiningPage";
 import { useDispatch, useSelector } from "react-redux";
 import { setMiningAction } from "../../context/mining";
+import Navigation from "./widgets/Navigation/Navigation";
+import useBounding from "./helpers/useBounding";
 
 export const Mining = () => {
   const navigate = useNavigate();
-  const back = () => navigate(-1);
+  const back = () => navigate("/");
   const dispatch = useDispatch();
   const colorScheme = useSelector((store) => store.colorScheme);
-  const [preview, setPreview] = useState(true);
-  const [isGeneratorLoading, setIsGeneratorLoading] = useState(true);
-
+  const preview = useSelector((store) => store.mining.preview);
+  
   //Устанавливаем цвет фона Telegram
   useEffect(() => {
     window.Telegram?.WebApp.setHeaderColor("#212121");
@@ -37,17 +36,16 @@ export const Mining = () => {
     }
   };
 
-  useEffect(() => {
-    setTimeout(() => {
-      setPreview(false);
-    }, 3000);
-  }, []);
+  const location = useLocation();
+
+  const { pageRef, left, width } = useBounding(true);
 
   return (
     <>
       <section
+        ref={pageRef}
         className={
-          preview
+          preview || location.pathname === "/mining/boost"
             ? `${"mining-info__body"}`
             : `${"mining-info__body_withScroll"}`
         }
@@ -64,13 +62,15 @@ export const Mining = () => {
             <IoArrowBack />
           </button>
         </div>
-        <PreviewPage
-          display={preview || isGeneratorLoading ? "block" : "none"}
-        />
-        <MiningPage
-          setGeneratorLoading={setIsGeneratorLoading}
-          opacity={preview || isGeneratorLoading ? "0" : "1"}
-        />
+        <Outlet />
+        {!preview && location.pathname !== "/mining/boost" && (
+          <Navigation
+            style={{
+              width: `${width}px`,
+              left: `${left}px`,
+            }}
+          />
+        )}
       </section>
     </>
   );

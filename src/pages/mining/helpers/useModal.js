@@ -9,13 +9,13 @@ export const useModal = () => {
   const [upInfo, setUpInfo] = useState("");
   const modalBtnFunc = useRef(null);
 
-  const handleOpenModal = (title, text, secondText, btnText, btnFunc, upInfo) => {
+  const handleOpenModal = (text, btnFunc, upInfo) => {
     setIsModalVisible(true);
-    setModalTitle(title);
-    setModalText(text);
-    setSecondModalText(secondText);
-    setModalBtnText(btnText);
-    setUpInfo(upInfo)
+    setModalTitle(text[0]);
+    setModalText(text[1]);
+    setSecondModalText(text[2]);
+    setModalBtnText(text[3]);
+    setUpInfo(upInfo);
     modalBtnFunc.current = btnFunc;
   };
 
