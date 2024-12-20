@@ -1,19 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "./StorePage.css";
-import { useMeQuery } from "../../../../context/service/me.service";
+import {
+  useMeQuery,
+  useStaticQuery,
+} from "../../../../context/service/me.service";
 import ItemCard from "./widgets/ItemCard/ItemCard";
 import HelpBtn from "../../ui/HelpBtn/HelpBtn";
 import Modal from "../../widgets/Modal/Modal";
 import { useModal } from "../../helpers/useModal";
 import useBounding from "../../helpers/useBounding";
+import { useGetItemsQuery } from "../../../../context/service/mining.service";
+import { useDispatch, useSelector } from "react-redux";
+import { setPreviewAction } from "../../../../context/mining";
 
 const StorePage = () => {
-  const storeTab = ["Генератор", "Батарея", "Розыгрыш"];
+  const dispatch = useDispatch();
+  const storeTab = [
+    { key: "generators", name: "Генератор" },
+    { key: "batteries", name: "Батарея" },
+    { key: "gift", name: "Розыгрыш" },
+  ];
   const { data: me = null } = useMeQuery();
+  const miningStore = useSelector((store) => store.mining);
+
+  const lang = me?.language_code === "en" ? "en" : "ru";
+  const { data: staticData = null } = useStaticQuery(lang);
 
   const [activeTab, setActiveTab] = useState(storeTab[0]);
   const [isAgreeModalVisible, setIsAgreeModalVisible] = useState(false);
+
+  // Запрос данных в зависимости от активной вкладки
+  const { data: generatorItems } = useGetItemsQuery("generator", {
+    skip: activeTab.name !== "Генератор",
+  });
+  const { data: batteryItems, isLoading } = useGetItemsQuery("battery", {
+    skip: activeTab.name !== "Батарея",
+  });
+
+  useEffect(() => {
+    dispatch(setPreviewAction(false));
+  }, [dispatch]);
 
   const {
     isModalVisible,
@@ -42,32 +69,6 @@ const StorePage = () => {
     setIsAgreeModalVisible(true);
   };
 
-  const battery = [
-    { own: true, pick: true, price: null },
-    { own: false, pick: false, price: 5000 },
-    { own: false, pick: false, price: 5000 },
-    { own: false, pick: false, price: 5000 },
-    { own: true, pick: false, price: 5000 },
-    { own: false, pick: false, price: 5000 },
-    { own: false, pick: false, price: 5000 },
-    { own: false, pick: false, price: 5000 },
-    { own: false, pick: false, price: 5000 },
-    { own: false, pick: false, price: 5000 },
-  ];
-
-  const generator = [
-    { own: true, pick: true, price: null },
-    { own: false, pick: false, price: 5000 },
-    { own: false, pick: false, price: 5000 },
-    { own: false, pick: false, price: 5000 },
-    { own: true, pick: false, price: 5000 },
-    { own: false, pick: false, price: 5000 },
-    { own: false, pick: false, price: 5000 },
-    { own: false, pick: false, price: 5000 },
-    { own: false, pick: false, price: 5000 },
-    { own: false, pick: false, price: 5000 },
-  ];
-
   const gift = [
     { own: null, pick: null, price: null },
     { own: null, pick: null, price: null },
@@ -92,18 +93,23 @@ const StorePage = () => {
           return (
             <button
               key={idx}
-              onClick={() => setActiveTab(el)}
-              className={`tab__btn gradientBorder ${activeTab === el && "tab__btn_active"}`}
+              onClick={() => {
+                setActiveTab(el);
+              }}
+              className={`tab__btn gradientBorder ${
+                activeTab.key === el.key && "tab__btn_active"
+              }`}
             >
-              <span className="tab__btnText">{el}</span>
+              <span className="tab__btnText">{el.name}</span>
             </button>
           );
         })}
       </div>
       <div className={`store__balance ${!me && "store-loading-div"}`}>
-        Ваш баланс: <span> {me?.balance} </span> кВт•Ч
+        {`${staticData?.your_balance}:`}{" "}
+        <span> {miningStore?.power_balance} </span> кВт•Ч
       </div>
-      {activeTab === "Розыгрыш" && (
+      {activeTab.name === "Розыгрыш" && (
         <div className="giftInfo">
           <p className="giftInfo__text">1 карточка - 1000 кВт•Ч</p>
           <HelpBtn
@@ -122,50 +128,47 @@ const StorePage = () => {
           />
         </div>
       )}
-      <div
-        style={{ display: activeTab === "Батарея" ? "flex" : "none" }}
-        className="cards-container"
-      >
-        {battery.map((el, idx) => (
-          <ItemCard
-            own={el.own}
-            pick={el.pick}
-            price={el.price}
-            tab={activeTab}
-            key={idx}
-          />
-        ))}
+
+      <div className="cards-container">
+        {activeTab.key === "batteries"
+          ? batteryItems?.items.map((el) => (
+              <ItemCard
+                img={el.imageUrl}
+                own={el.isPurchased}
+                pick={el.isSelected}
+                price={el.price}
+                tab={activeTab.key}
+                key={el.id}
+                id={el.id}
+                isLoading={isLoading}
+              />
+            ))
+          : activeTab.key === "generators"
+          ? generatorItems?.items.map((el) => (
+              <ItemCard
+                img={el.imageUrl}
+                own={el.isPurchased}
+                pick={el.isSelected}
+                price={el.price}
+                tab={activeTab.key}
+                key={el.id}
+                id={el.id}
+              />
+            ))
+          : gift.map((el, idx) => (
+              <ItemCard
+                img={el.imageUrl}
+                own={el.isPurchased}
+                pick={el.isSelected}
+                price={el.price}
+                tab={activeTab.key}
+                key={idx}
+                id={el.id}
+                agree={handleOpenAgreeModal}
+              />
+            ))}
       </div>
 
-      <div
-        style={{ display: activeTab === "Генератор" ? "flex" : "none" }}
-        className="cards-container"
-      >
-        {generator.map((el, idx) => (
-          <ItemCard
-            own={el.own}
-            pick={el.pick}
-            price={el.price}
-            tab={activeTab}
-            key={idx}
-          />
-        ))}
-      </div>
-      <div
-        style={{ display: activeTab === "Розыгрыш" ? "flex" : "none" }}
-        className="cards-container"
-      >
-        {gift.map((el, idx) => (
-          <ItemCard
-            own={el.own}
-            pick={el.pick}
-            price={el.price}
-            tab={activeTab}
-            key={idx}
-            agree={handleOpenAgreeModal}
-          />
-        ))}
-      </div>
       {isModalVisible && (
         <Modal
           title={modalTitle}

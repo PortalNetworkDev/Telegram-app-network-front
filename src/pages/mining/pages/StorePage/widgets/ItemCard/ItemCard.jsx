@@ -1,49 +1,75 @@
-import React from "react";
-
+import React, { useEffect } from "react";
 import "./ItemCard.css";
+import {
+  useBuySkinMutation,
+  useMiningQuery,
+  useSelectSkinMutation,
+} from "../../../../../../context/service/mining.service";
+import { updateData } from "../../../../../../context/mining";
+import { useDispatch } from "react-redux";
+import { useMeQuery } from "../../../../../../context/service/me.service";
+import LazyLoad from "react-lazyload";
 
-const ItemCard = ({ own, pick, price, tab, agree }) => {
+const ItemCard = ({ img, own, pick, price, tab, agree, id }) => {
+  const baseUrl = process.env.REACT_APP_MINIAPPAPI;
+
+  const dispatch = useDispatch();
+  const { data: mining = null, refetch: refetchMining } = useMiningQuery();
+  const { refetch: refetchMe } = useMeQuery();
+  const [buySkin] = useBuySkinMutation();
+  const [selectSkin] = useSelectSkinMutation();
+
+  useEffect(() => {
+    dispatch(updateData(mining));
+  }, [mining, dispatch]);
+
   return (
     <div
       onClick={() => agree && agree()}
       style={{
         aspectRatio:
-          tab === "Генератор"
-            ? "40/55"
-            : tab === "Розыгрыш"
-            ? "40/40"
-            : " 40/38",
+          tab === "generators" ? "40/55" : tab === "gift" ? "40/40" : " 40/38",
         width: tab === "Розыгрыш" && "30%",
+        height: tab === "Батарея" && "25vh",
       }}
       className={`item-card gradientBorder ${
         pick ? "item-card_pick" : own ? "item-card_own" : ""
       }`}
     >
-      {tab === "Батарея" ? (
-        <img src="/images/battery.png" alt="card" className="item-card__img" />
-      ) : tab === "Генератор" ? (
+      <LazyLoad style={{ width: "100%", height: "100%" }}>
         <img
-          style={{ width: "65%" }}
-          src="/images/generatorFromRotate.png"
+          src={`${baseUrl}/static/skins/${tab}/${img}`}
           alt="card"
           className="item-card__img"
         />
-      ) : (
-        <img
-          style={{ width: "70%" }}
-          src="/images/generatorFromRotate.png"
-          alt="card"
-          className="item-card__img"
-        />
-      )}
+      </LazyLoad>
 
-      {tab !== "Розыгрыш" && (
+      {tab !== "gift" && (
         <>
           {" "}
           <div className="item-card__price">
             {!own && `${price?.toLocaleString("ru")} кВт•Ч`}
           </div>
           <button
+            onClick={async () => {
+              if (!own) {
+                await buySkin({
+                  skinId: id,
+                  skinType: tab === "generators" ? "generator" : "battery",
+                });
+                await refetchMining();
+              }
+              if (own && !pick) {
+                await selectSkin({
+                  skinId: id,
+                  skinType: tab === "generators" ? "generator" : "battery",
+                });
+                await refetchMining();
+                await refetchMe();
+              } else {
+                return;
+              }
+            }}
             className={`item-card__btn ${
               pick ? "item-card__btn_pick" : own ? "item-card__btn_own" : ""
             }`}

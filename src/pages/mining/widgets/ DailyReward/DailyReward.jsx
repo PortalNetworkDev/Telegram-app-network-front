@@ -43,6 +43,7 @@ const DailyReward = ({ btnFunc, setModalClose, bounding }) => {
         <div className="modal__content rewardModal__content">
           {days.map((_, idx) => (
             <div
+              key={idx}
               className={`rewardModal__item gradientBorder ${
                 idx === 2 && "rewardModal__item_current"
               }`}

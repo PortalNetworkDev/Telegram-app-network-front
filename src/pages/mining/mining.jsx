@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 
@@ -12,8 +12,8 @@ export const Mining = () => {
   const back = () => navigate("/");
   const dispatch = useDispatch();
   const colorScheme = useSelector((store) => store.colorScheme);
-  const [preview, setPreview] = useState(true);
-
+  const preview = useSelector((store) => store.mining.preview);
+  
   //Устанавливаем цвет фона Telegram
   useEffect(() => {
     window.Telegram?.WebApp.setHeaderColor("#212121");
@@ -35,12 +35,6 @@ export const Mining = () => {
       window.Telegram?.WebApp.setBackgroundColor("#042129");
     }
   };
-
-  useEffect(() => {
-    setTimeout(() => {
-      setPreview(false);
-    }, 0);
-  }, []);
 
   const location = useLocation();
 

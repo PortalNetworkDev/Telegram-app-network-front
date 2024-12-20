@@ -13,14 +13,10 @@ import {
 import { useRotate } from "../../helpers/useRotate";
 import { usePoints } from "../../helpers/usePoints";
 import { Link } from "react-router-dom";
+import LazyLoad from "react-lazyload";
 
-const Generator = ({
-  onClick,
-  upBtnAction,
-  setGeneratorLoading,
-
-  handleOpenModal,
-}) => {
+const Generator = ({ onClick, upBtnAction, handleOpenModal }) => {
+  const baseUrl = process.env.REACT_APP_MINIAPPAPI;
   const dispatch = useDispatch();
   const miningStore = useSelector((store) => store.mining);
   const [genReward] = useLazyGenRewardQuery();
@@ -128,11 +124,10 @@ const Generator = ({
   //Определение размеров генератора
   const genBounding = useRef(null);
   useEffect(() => {
-    !isImgLoading && setGeneratorLoading(false);
     if (!isImgLoading && genRef.current) {
       genBounding.current = genRef.current.getBoundingClientRect();
     }
-  }, [isImgLoading, setGeneratorLoading]);
+  }, [isImgLoading]);
 
   return (
     <>
@@ -186,14 +181,7 @@ const Generator = ({
           }}
           className="geterator__rotateContainer"
         >
-          <div
-            style={{
-              top: `${genBounding.current?.height / 2}px`,
-              left: `${genBounding.current?.width / 2}px`,
-              transform: "translate(-51%, -50%)",
-            }}
-            className="loader-container"
-          >
+          <div className="loader-container">
             <img
               className={`loader ${
                 isRotating ? "loader__animation-start" : "loader__animation-end"
@@ -204,7 +192,7 @@ const Generator = ({
           </div>
 
           <div
-            style={{ opacity: 1 - balance / limit }}
+            style={{ opacity: balance && limit && 1 - balance / limit }}
             // className={
             //   isRotating
             //     ? "overheating-wrapper overheating__visible"
@@ -214,12 +202,14 @@ const Generator = ({
           >
             <div className="overheating" />
           </div>
-          <img
-            ref={genRef}
-            className="geterator__img"
-            src="./images/generatorFromRotate.png"
-            alt="generator"
-          />
+          <LazyLoad>
+            <img
+              ref={genRef}
+              className="geterator__img"
+              src={`${baseUrl}/static/skins/generators/full/${me?.currentGeneratorSkinUrl}`}
+              alt="generator"
+            />
+          </LazyLoad>
         </div>
         <div className="generator__power level__info">
           <div className="battery__level-info level__info">
@@ -238,7 +228,11 @@ const Generator = ({
           <Link to={"/mining/boost"} className="boostBtn">
             <>
               BOOST
-              <img style={{marginLeft: 7}} src="/icon/rocket.svg" alt="rocket" />
+              <img
+                style={{ marginLeft: 7 }}
+                src="/icon/rocket.svg"
+                alt="rocket"
+              />
             </>
           </Link>
         </div>

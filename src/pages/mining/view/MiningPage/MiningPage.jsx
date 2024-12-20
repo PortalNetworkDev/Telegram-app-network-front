@@ -2,17 +2,16 @@ import React, { useEffect, useState } from "react";
 import "./MiningPage.css";
 import Balance from "../../widgets/Balance/Balance";
 import Power from "../../widgets/Power/Power";
-import LazyLoad from "react-lazyload";
 import Battery from "../../widgets/Battery/Battery";
 import Generator from "../../widgets/Generator/Generator";
 import Modal from "../../widgets/Modal/Modal";
+import DailyReward from "../../widgets/ DailyReward/DailyReward";
 
 import { useMeQuery } from "../../../../context/service/me.service";
 import {
   useLazyGeneratorUpQuery,
   useMiningQuery,
   useLazyBatteryUpQuery,
-  useLazyMultitabUpQuery,
 } from "../../../../context/service/mining.service";
 import { useGetPOERateQuery } from "../../../../context/service/geckoApi.service";
 import { useModal } from "../../helpers/useModal";
@@ -20,19 +19,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateData } from "../../../../context/mining";
 import { useModalStatic } from "../../helpers/useModalStatic";
 import useBounding from "../../helpers/useBounding";
-import DailyReward from "../../widgets/ DailyReward/DailyReward";
-import { BoostPage } from "../../pages/BoostPage/BoostPage";
 
-export const MiningPage = ({ opacity, setGeneratorLoading }) => {
+export const MiningPage = ({ opacity }) => {
   const dispatch = useDispatch();
   const { data: me = null } = useMeQuery();
-
   const { data: mining = null, refetch: refetchMining } = useMiningQuery();
   const miningStore = useSelector((store) => store.mining);
   const { data: rate } = useGetPOERateQuery();
   const [generatorUp] = useLazyGeneratorUpQuery();
   const [batteryUp] = useLazyBatteryUpQuery();
-  const [multitabUp] = useLazyMultitabUpQuery();
 
   const {
     isModalVisible,
@@ -56,7 +51,6 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
     lowGeneratorModal,
     fullBatteryModal,
     upGeneratorModal,
-    upMultitabModal,
   } = useModalStatic();
 
   useEffect(() => {
@@ -70,17 +64,13 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
   return (
     <>
       <div ref={pageRef} style={{ opacity: opacity }} className="mining-main">
-        <LazyLoad>
-          <img
-            className="mining-main__background"
-            src="./images/mining-main.png"
-            alt="background"
+        <div className="store__back mining-main__back"></div>
+        {me && rate && (
+          <Balance
+            balance={me?.balance}
+            currency={rate?.["portal-network-token"].usd * me?.balance}
           />
-        </LazyLoad>
-        <Balance
-          balance={me?.balance}
-          currency={rate?.["portal-network-token"].usd * me?.balance}
-        />
+        )}
         <Power
           onClick={() =>
             handleOpenModal(powerInfoModal, () => handleCloseModal())
@@ -123,7 +113,6 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
           }}
         />
         <Generator
-          setGeneratorLoading={setGeneratorLoading}
           handleOpenModal={() => {
             if (miningStore.generator_balance - miningStore?.multitab < 1) {
               handleOpenModal(lowGeneratorModal, () => {
@@ -178,9 +167,9 @@ export const MiningPage = ({ opacity, setGeneratorLoading }) => {
           />
         )}
 
-        {reward && (
+        {/* {reward && (
           <DailyReward bounding={pageBounding} setModalClose={setReward} />
-        )}
+        )} */}
       </div>
     </>
   );

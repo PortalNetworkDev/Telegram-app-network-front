@@ -4,6 +4,7 @@ export const setMining = createSlice({
   name: "mining",
   initialState: {
     isMining: false,
+    preview: true,
     isClaiming: false,
     isRotate: false,
     battery_balance: null,
@@ -26,6 +27,9 @@ export const setMining = createSlice({
   reducers: {
     setMining: (state, action) => {
       state.isMining = action.payload;
+    },
+    setPreview: (state, action) => {
+      state.preview = action.payload;
     },
     setClaiming: (state, action) => {
       state.isClaiming = action.payload;
@@ -56,6 +60,7 @@ export const setMining = createSlice({
 
 export const {
   setMining: setMiningAction,
+  setPreview: setPreviewAction,
   setClaiming: setClaimingAction,
   setRotate: setRotateAction,
   updateData,

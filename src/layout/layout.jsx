@@ -40,6 +40,34 @@ export const Layout = memo(() => {
       tg?.offEvent("themeChanged", handleThemeChange);
     };
   }, [dispatch]);
+  // 5247176376045294117
+  // Запрещаем поворот экрана
+  useEffect(() => {
+    if (window.Telegram.WebApp.setPreferredOrientation) {
+      window.Telegram.WebApp.lockOrientation("portrait");
+    } else {
+      console.warn("lockOrientation is not supported in this environment");
+    }
+  }, []);
+
+  //Пробный запрос установки эмодзи
+  useEffect(() => {
+    if (window.Telegram.WebApp.setEmojiStatus) {
+      window.Telegram.WebApp.setEmojiStatus(
+        "5247176376045294117",
+        { duration: 3600 },
+        (success) => {
+          if (success) {
+            console.log("Эмодзи статус был успешно установлен!");
+          } else {
+            console.log("Не удалось установить эмодзи статус");
+          }
+        }
+      );
+    } else {
+      console.warn("setEmojiStatus is not supported in this environment");
+    }
+  }, []);
 
   return (
     <main className="layout">

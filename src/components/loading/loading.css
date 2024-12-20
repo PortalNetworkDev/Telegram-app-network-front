@@ -15,10 +15,10 @@
 
 .circle {
   position: absolute;
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  background: #333;
+  background: #575757;
   right: 100%;
   animation-name: circle;
   animation-duration: 2s;
