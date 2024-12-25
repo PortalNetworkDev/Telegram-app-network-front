@@ -1,0 +1,123 @@
+.profile__progress {
+  position: relative;
+  top: 8vh;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile__nickname {
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 15px;
+}
+
+.profile__powerBeforeNextLevel {
+  font-size: 16px;
+  background: linear-gradient(
+    0deg,
+    rgba(0, 193, 255, 1),
+    rgba(100, 252, 215, 1)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.rate {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
+  top: 12vh;
+}
+
+.rate__title {
+  font-size: 20px;
+  font-weight: 600;
+  background: linear-gradient(
+    0deg,
+    rgba(0, 193, 255, 1),
+    rgba(100, 252, 215, 1)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.rate__card {
+  margin-top: 15px;
+  background: #027ea7;
+  width: calc(100% + 20px);
+  height: 60px;
+}
+
+.rate__position {
+  width: 45px;
+  height: 45px;
+  color: white;
+  font-size: 14px;
+}
+
+.rate__power {
+  background: linear-gradient(
+    0deg,
+    rgba(0, 193, 255, 1),
+    rgba(100, 252, 215, 1)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.profile__refContainer {
+  margin-top: 35px;
+}
+
+.ref__container {
+  transform: translate(-10px, 0);
+  background: rgba(38, 38, 38, 1);
+  width: calc(100% + 20px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.ref__title {
+  margin: 13px 0;
+  color: rgba(255, 255, 255, 1);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.ref__info {
+  color: rgba(255, 255, 255, 1);
+  text-align: center;
+  width: 75%;
+  line-height: 20px;
+  margin-bottom: 16px;
+}
+
+.ref__link {
+  background: linear-gradient(
+    0deg,
+    rgba(0, 193, 255, 0.5),
+    rgba(100, 252, 215, 0.5)
+  );
+  color: rgba(255, 255, 255, 0.64);
+  height: 45px;
+  width: 75%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 5px;
+  margin-bottom: 21px;
+}

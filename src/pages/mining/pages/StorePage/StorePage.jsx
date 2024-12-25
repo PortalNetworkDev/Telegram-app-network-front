@@ -105,10 +105,19 @@ const StorePage = () => {
           );
         })}
       </div>
-      <div className={`store__balance ${!me && "store-loading-div"}`}>
-        {`${staticData?.your_balance}:`}{" "}
-        <span> {miningStore?.power_balance} </span> кВт•Ч
+
+      <div
+        style={{ height: 45 }}
+        className={`store__balance ${
+          !me && !staticData && "store-loading-div"
+        }`}
+      >
+        {me &&
+          staticData &&
+          miningStore.power_balance &&
+          `${`${staticData?.your_balance}:    ${miningStore?.power_balance}    кВт•Ч`}`}
       </div>
+
       {activeTab.name === "Розыгрыш" && (
         <div className="giftInfo">
           <p className="giftInfo__text">1 карточка - 1000 кВт•Ч</p>
@@ -130,8 +139,9 @@ const StorePage = () => {
       )}
 
       <div className="cards-container">
-        {activeTab.key === "batteries"
-          ? batteryItems?.items.map((el) => (
+        {activeTab.key === "batteries" ? (
+          batteryItems ? (
+            batteryItems?.items.map((el) => (
               <ItemCard
                 img={el.imageUrl}
                 own={el.isPurchased}
@@ -143,8 +153,12 @@ const StorePage = () => {
                 isLoading={isLoading}
               />
             ))
-          : activeTab.key === "generators"
-          ? generatorItems?.items.map((el) => (
+          ) : (
+            <div className="store-loading-div"></div>
+          )
+        ) : activeTab.key === "generators" ? (
+          generatorItems ? (
+            generatorItems?.items.map((el) => (
               <ItemCard
                 img={el.imageUrl}
                 own={el.isPurchased}
@@ -155,18 +169,25 @@ const StorePage = () => {
                 id={el.id}
               />
             ))
-          : gift.map((el, idx) => (
-              <ItemCard
-                img={el.imageUrl}
-                own={el.isPurchased}
-                pick={el.isSelected}
-                price={el.price}
-                tab={activeTab.key}
-                key={idx}
-                id={el.id}
-                agree={handleOpenAgreeModal}
-              />
-            ))}
+          ) : (
+            <div className="store-loading-div"></div>
+          )
+        ) : gift ? (
+          gift.map((el, idx) => (
+            <ItemCard
+              img={el.imageUrl}
+              own={el.isPurchased}
+              pick={el.isSelected}
+              price={el.price}
+              tab={activeTab.key}
+              key={idx}
+              id={el.id}
+              agree={handleOpenAgreeModal}
+            />
+          ))
+        ) : (
+          <div className="store-loading-div"></div>
+        )}
       </div>
 
       {isModalVisible && (

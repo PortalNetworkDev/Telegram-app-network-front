@@ -109,16 +109,25 @@ const Battery = ({ onClick, upBtnAction }) => {
   return (
     <>
       <div className="battery-power">
-        <img
-          className="battery-power__lightning lightning-with-back"
-          src="./images/lightningWithBackground.png"
-          alt="lightning"
-        />
-        <TextString
-          secondSmall={lang === "ru" ? "Вт•Ч" : "W•h"}
-          big={(+powerBalance?.toFixed())?.toLocaleString("ru")}
-          bigFontSize={"32px"}
-        />
+        {me ? (
+          <>
+            <img
+              className="battery-power__lightning lightning-with-back"
+              src="./images/lightningWithBackground.png"
+              alt="lightning"
+            />
+            <TextString
+              secondSmall={lang === "ru" ? "Вт•Ч" : "W•h"}
+              big={(+powerBalance?.toFixed())?.toLocaleString("ru")}
+              bigFontSize={"32px"}
+            />
+          </>
+        ) : (
+          <div
+            style={{ height: "100%", borderRadius: "10px" }}
+            className="store-loading-div"
+          ></div>
+        )}
       </div>
       <div className="battery">
         <div className="battery__level level">
