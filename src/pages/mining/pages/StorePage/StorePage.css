@@ -2,7 +2,7 @@
   position: absolute;
   height: 110vh;
   width: 200%;
-  top: -30%;
+  top: -100vw;
   left: -50%;
   background: linear-gradient(to right, #0b2849, #09464d);
   filter: blur(100px);
@@ -18,6 +18,7 @@
   justify-content: center;
   color: white;
   font-size: 18px;
+  border-radius: 10px;
 }
 
 .store__header {

@@ -40,11 +40,12 @@ export const Layout = memo(() => {
       tg?.offEvent("themeChanged", handleThemeChange);
     };
   }, [dispatch]);
-  // 5247176376045294117
+
+
   // Запрещаем поворот экрана
   useEffect(() => {
-    if (window.Telegram.WebApp.setPreferredOrientation) {
-      window.Telegram.WebApp.lockOrientation("portrait");
+    if (window.Telegram.WebApp.lockOrientation) {
+      window.Telegram.WebApp.lockOrientation();
     } else {
       console.warn("lockOrientation is not supported in this environment");
     }

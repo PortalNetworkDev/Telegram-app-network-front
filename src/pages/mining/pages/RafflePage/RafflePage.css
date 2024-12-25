@@ -1,0 +1,5 @@
+.raffle__content {
+  position: relative;
+  width: calc(100% - 12px);
+  margin: 8vh 6px 15vh 6px;
+}

@@ -24,7 +24,7 @@
 }
 
 .mining-main__back {
-  height: 58vh !important;
+  height: 165vw !important;
 }
 
 .mining-main__balance {
@@ -49,6 +49,8 @@
   align-items: flex-end;
   justify-content: space-around;
   width: fit-content;
+  min-width: 50%;
+  height: 37px;
 }
 
 .battery-power__lightning {

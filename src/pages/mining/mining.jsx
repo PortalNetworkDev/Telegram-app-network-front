@@ -13,7 +13,7 @@ export const Mining = () => {
   const dispatch = useDispatch();
   const colorScheme = useSelector((store) => store.colorScheme);
   const preview = useSelector((store) => store.mining.preview);
-  
+
   //Устанавливаем цвет фона Telegram
   useEffect(() => {
     window.Telegram?.WebApp.setHeaderColor("#212121");
@@ -66,8 +66,8 @@ export const Mining = () => {
         {!preview && location.pathname !== "/mining/boost" && (
           <Navigation
             style={{
-              width: `${width}px`,
-              left: `${left}px`,
+              width: `${width + left * 2}px`,
+              left: `${0}px`,
             }}
           />
         )}

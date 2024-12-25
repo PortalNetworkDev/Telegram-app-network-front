@@ -6,8 +6,8 @@ const Navigation = ({ style }) => {
   const navItems = [
     { title: "Майнить энергию", route: "" },
     { title: "Магазин", route: "store" },
-    { title: "Розыгрыш призов", route: "gift" },
-    { title: "Отправить кВт•Ч", route: "sendPower" },
+    { title: "Розыгрыш призов", route: "raffle" },
+    { title: "Отправить кВт•Ч", route: "transactions" },
     { title: "Задания", route: "tasks" },
   ];
 
@@ -39,9 +39,14 @@ const Navigation = ({ style }) => {
           );
         })}
       </ul>
-      <button className=" miningNavigation__provileBtn battyry__collect">
-        Мой профиль
-      </button>
+      <NavLink style={{ width: "100%" }} to={"/mining/profile"}>
+        <button
+          style={{ width: "100%" }}
+          className=" miningNavigation__provileBtn battyry__collect"
+        >
+          Мой профиль
+        </button>
+      </NavLink>
     </div>
   );
 };
