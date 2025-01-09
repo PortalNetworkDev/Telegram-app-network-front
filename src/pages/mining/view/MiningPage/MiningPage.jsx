@@ -64,7 +64,6 @@ export const MiningPage = ({ opacity }) => {
   return (
     <>
       <div ref={pageRef} style={{ opacity: opacity }} className="mining-main">
-        <div className="store__back mining-main__back"></div>
         {me && rate && (
           <Balance
             balance={me?.balance}
@@ -166,7 +165,6 @@ export const MiningPage = ({ opacity }) => {
             upInfo={upInfo}
           />
         )}
-
         {/* {reward && (
           <DailyReward bounding={pageBounding} setModalClose={setReward} />
         )} */}

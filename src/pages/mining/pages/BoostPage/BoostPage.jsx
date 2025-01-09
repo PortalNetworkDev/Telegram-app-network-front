@@ -33,7 +33,6 @@ export const BoostPage = () => {
   return (
     <>
       <div ref={pageRef} className="boost-page">
-        <div className="store__back mining-main__back"></div>
         <div className="mining-info__header" style={{ left: "90%" }}>
           <Link
             to={"/mining"}

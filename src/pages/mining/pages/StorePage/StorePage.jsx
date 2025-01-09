@@ -86,7 +86,6 @@ const StorePage = () => {
 
   return (
     <div className="store" ref={pageRef}>
-      <div className="store__back"></div>
       <h1 className="store__header">МАГАЗИН</h1>
       <div className="store__tabContainer tab">
         {storeTab.map((el, idx) => {

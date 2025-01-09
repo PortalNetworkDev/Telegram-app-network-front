@@ -23,7 +23,6 @@ const StorePage = () => {
 
   return (
     <div className="store profile">
-      <div className="store__back mining-main__back"></div>
       {!allRate ? (
         <>
           {" "}

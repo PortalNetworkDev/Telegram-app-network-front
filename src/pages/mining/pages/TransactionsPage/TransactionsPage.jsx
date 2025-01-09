@@ -98,7 +98,6 @@ const TransactionsPage = () => {
 
   return (
     <div className="store transaction" ref={pageRef}>
-      <div className="store__back mining-main__back"></div>
       {!allTransactions ? (
         <div className="transactions__main">
           <h1 className="store__header">Отправить кВт•Ч</h1>

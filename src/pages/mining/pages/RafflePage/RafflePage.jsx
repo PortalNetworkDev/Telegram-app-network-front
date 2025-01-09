@@ -31,7 +31,6 @@ const RafflePage = () => {
 
   return (
     <div className="store raffle" ref={pageRef}>
-      <div className="store__back mining-main__back"></div>
       <h1 className="store__header">РОЗЫГРЫШИ</h1>
 
       <div className="raffle__content">
