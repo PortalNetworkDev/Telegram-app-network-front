@@ -37,7 +37,7 @@ export const BoostPage = () => {
 
   useEffect(() => {
     if (recoveryInfo?.activationPeriodLimit) {
-      setTimeToRecovery(recoveryInfo.activationPeriodLimit * 60);
+      setTimeToRecovery(recoveryInfo.activationPeriodLimit);
       setAttempts(recoveryInfo.leftAttempts);
     }
   }, [recoveryGenerator, recoveryInfo]);
