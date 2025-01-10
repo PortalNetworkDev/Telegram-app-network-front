@@ -74,6 +74,18 @@ export const miningService = apiSlice.injectEndpoints({
         { type: "Items", id: skinType },
       ],
     }),
+    recoveryGenerator: builder.query({
+      query: () => ({
+        url: "boosts/useDailyRecovery",
+        method: "GET",
+      }),
+    }),
+    recoveryBoostInfo: builder.query({
+      query: () => ({
+        url: "boosts/getRecoveryBoostInfo",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -87,4 +99,6 @@ export const {
   useGetItemsQuery,
   useBuySkinMutation,
   useSelectSkinMutation,
+  useRecoveryGeneratorQuery,
+  useRecoveryBoostInfoQuery,
 } = miningService;
