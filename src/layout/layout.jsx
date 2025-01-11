@@ -32,15 +32,12 @@ export const Layout = memo(() => {
       }
     };
 
-    handleThemeChange();
-
-    tg?.onEvent("themeChanged", handleThemeChange);
+    tg?.onEvent("themeChanged", () => handleThemeChange);
 
     return () => {
-      tg?.offEvent("themeChanged", handleThemeChange);
+      tg?.offEvent("themeChanged", () => handleThemeChange);
     };
   }, [dispatch]);
-
 
   // Запрещаем поворот экрана
   useEffect(() => {
