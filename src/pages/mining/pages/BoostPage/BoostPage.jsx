@@ -36,8 +36,10 @@ export const BoostPage = () => {
   const [attempts, setAttempts] = useState(0);
 
   useEffect(() => {
-    if (recoveryInfo?.activationPeriodLimit) {
-      setTimeToRecovery(recoveryInfo.activationPeriodLimit);
+    console.log(recoveryInfo);
+
+    if (recoveryInfo) {
+      (recoveryInfo.timeLeftBeforeNewAttempt * 60).toFixed(0);
       setAttempts(recoveryInfo.leftAttempts);
     }
   }, [recoveryGenerator, recoveryInfo]);
@@ -177,19 +179,19 @@ export const BoostPage = () => {
                     Доступно 6 раз в день
                   </p>
                 </div>
-
                 <button
                   disabled={
                     mining?.generator_balance === mining?.generator_limit ||
-                    timeToRecovery ||
+                    timeToRecovery !== 0 ||
                     !attempts
                   }
                   onClick={() => {
                     dispatch(
                       miningService.endpoints.recoveryGenerator.initiate()
                     );
+                    refetchMining();
                     setAttempts((prev) => prev - 1);
-                    setTimeToRecovery(60);
+                    setTimeToRecovery(3600);
                   }}
                   className="battyry__collect boost-page__acceptBtn"
                 >
