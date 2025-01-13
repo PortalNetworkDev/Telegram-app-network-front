@@ -12,6 +12,7 @@ import {
   useLazyGeneratorUpQuery,
   useMiningQuery,
   useLazyBatteryUpQuery,
+  useCheckDailyGiftsQuery,
 } from "../../../../context/service/mining.service";
 import { useGetPOERateQuery } from "../../../../context/service/geckoApi.service";
 import { useModal } from "../../helpers/useModal";
@@ -59,7 +60,15 @@ export const MiningPage = ({ opacity }) => {
 
   const { pageRef, pageBounding } = useBounding();
 
-  const [reward, setReward] = useState(true);
+  //Ежедневные призы
+  const { data: avaibleDailyGift = null } = useCheckDailyGiftsQuery();
+  const [reward, setReward] = useState(false);
+
+  useEffect(() => {
+    if (avaibleDailyGift && avaibleDailyGift.isAbleToClaim) {
+      setReward(true);
+    }
+  }, [avaibleDailyGift]);
 
   return (
     <>
@@ -165,9 +174,9 @@ export const MiningPage = ({ opacity }) => {
             upInfo={upInfo}
           />
         )}
-        {/* {reward && (
+        {reward && (
           <DailyReward bounding={pageBounding} setModalClose={setReward} />
-        )} */}
+        )}
       </div>
     </>
   );

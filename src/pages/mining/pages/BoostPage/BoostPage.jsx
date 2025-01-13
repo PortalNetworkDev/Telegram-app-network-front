@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import {
   miningService,
   useLazyMultitabUpQuery,
+  useLazyRecoveryGeneratorQuery,
   useMiningQuery,
   useRecoveryBoostInfoQuery,
   useRecoveryGeneratorQuery,
@@ -16,18 +17,15 @@ import useBounding from "../../helpers/useBounding";
 import { useDispatch } from "react-redux";
 
 export const BoostPage = () => {
-  const dispatch = useDispatch();
   const [multitabUp] = useLazyMultitabUpQuery();
   const { upMultitabModal, notEnoughtBalance } = useModalStatic();
   const { data: mining = null, refetch: refetchMining } = useMiningQuery();
+  const [recoveryGenerator] = useLazyRecoveryGeneratorQuery();
 
   //Recovery
   const { data: recoveryInfo = null } = useRecoveryBoostInfoQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
-
-  const { data: recoveryGenerator = null } =
-    useRecoveryGeneratorQuery(skipToken);
 
   const [timeToRecovery, setTimeToRecovery] = useState(0);
   const [timeForRender, setTimeForRender] = useState("00:00:00");
@@ -36,8 +34,6 @@ export const BoostPage = () => {
   const [attempts, setAttempts] = useState(0);
 
   useEffect(() => {
-    console.log(recoveryInfo);
-
     if (recoveryInfo) {
       (recoveryInfo.timeLeftBeforeNewAttempt * 60).toFixed(0);
       setAttempts(recoveryInfo.leftAttempts);
@@ -185,11 +181,9 @@ export const BoostPage = () => {
                     timeToRecovery !== 0 ||
                     !attempts
                   }
-                  onClick={() => {
-                    dispatch(
-                      miningService.endpoints.recoveryGenerator.initiate()
-                    );
-                    refetchMining();
+                  onClick={async () => {
+                    await recoveryGenerator();
+                    await refetchMining();
                     setAttempts((prev) => prev - 1);
                     setTimeToRecovery(3600);
                   }}

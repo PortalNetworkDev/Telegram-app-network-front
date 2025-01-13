@@ -86,6 +86,25 @@ export const miningService = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    getDailyGifts: builder.query({
+      query: () => ({
+        url: "dailyGifts/getDailyGifts",
+        method: "GET",
+      }),
+    }),
+    checkDailyGifts: builder.query({
+      query: () => ({
+        url: "dailyGifts/checkIsDailyGiftAvailable",
+        method: "GET",
+      }),
+    }),
+    lotteryRoll: builder.query({
+      query: (position) => ({
+        url: "skinsShop/lottery/roll ",
+        method: "POST",
+        body: { position },
+      }),
+    }),
   }),
 });
 
@@ -99,6 +118,9 @@ export const {
   useGetItemsQuery,
   useBuySkinMutation,
   useSelectSkinMutation,
-  useRecoveryGeneratorQuery,
+  useLazyRecoveryGeneratorQuery,
   useRecoveryBoostInfoQuery,
+  useGetDailyGiftsQuery,
+  useCheckDailyGiftsQuery,
+  useLazyLotteryRollQuery
 } = miningService;
