@@ -78,7 +78,7 @@ const StorePage = () => {
     setIsAgreeModalVisible(true);
   };
 
-  const gift = new Array(14).fill({ own: null, pick: null, price: null });
+  const gift = new Array(15).fill({ own: null, pick: null, price: null });
 
   return (
     <div className="store" ref={pageRef}>

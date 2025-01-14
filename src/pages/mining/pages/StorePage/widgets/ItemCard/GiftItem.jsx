@@ -11,6 +11,7 @@ const ItemCard = ({ img, value, agree, id, type, preview = false }) => {
       onClick={() => agree && agree(id)}
       style={{
         aspectRatio: "40/40",
+        width: "32%",
       }}
       className={`item-card gradientBorder 
       }`}

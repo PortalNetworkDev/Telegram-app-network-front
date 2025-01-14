@@ -27,8 +27,8 @@ const ItemCard = ({ img, own, pick, price, tab, id }) => {
     <div
       style={{
         aspectRatio: tab === "generators" ? "40/55" : " 40/38",
-        width: tab === "Розыгрыш" && "30%",
-        height: tab === "Батарея" && "25vh",
+        width: tab.name === "Розыгрыш" && "32%",
+        height: tab.name === "Батарея" && "25vh",
       }}
       className={`item-card gradientBorder ${
         pick ? "item-card_pick" : own ? "item-card_own" : ""
