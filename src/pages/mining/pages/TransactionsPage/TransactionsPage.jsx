@@ -200,9 +200,14 @@ const TransactionsPage = () => {
               <img src="/icon/cross.svg" alt="cross" />
             </button>
           </div>
-          <h1 className="store__header">История переводов</h1>
+          <h1
+            style={{ width: "100%", textAlign: "center" }}
+            className="store__header"
+          >
+            История переводов
+          </h1>
           <div
-            style={{ top: "8vh", position: "relative", marginBottom: "20vh" }}
+            style={{ top: "8vh", position: "relative", marginBottom: "23vh" }}
           >
             {" "}
             {Object.entries(listOfTransactions).map((el, idx) => {

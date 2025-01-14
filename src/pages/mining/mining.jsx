@@ -45,7 +45,8 @@ export const Mining = () => {
       <section
         ref={pageRef}
         className={
-          preview || location.pathname === "/mining/boost"
+          location.pathname === "/mining/boost" ||
+          (preview && location.pathname === "/mining")
             ? `${"mining-info__body"}`
             : `${"mining-info__body_withScroll"}`
         }
