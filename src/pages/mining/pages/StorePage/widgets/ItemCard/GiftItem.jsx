@@ -3,7 +3,7 @@ import "./ItemCard.css";
 
 import LazyLoad from "react-lazyload";
 
-const ItemCard = ({ img, value, agree, id, type, preview = false }) => {
+const GiftItemCard = ({ img, value, agree, id, type, preview = false }) => {
   const baseUrl = process.env.REACT_APP_MINIAPPAPI;
 
   return (
@@ -19,13 +19,13 @@ const ItemCard = ({ img, value, agree, id, type, preview = false }) => {
       <LazyLoad style={{ width: "100%", height: "100%" }}>
         {preview ? (
           <img
-            src={`${baseUrl}/static/skins/batteries/defaultButtery.png`}
+            src={`../images/giftBag${img}.png`}
             alt="card"
             className="item-card__img"
           />
         ) : (
           <img
-            src={`${baseUrl}/static/shopLottery/${img}`}
+            src={`${baseUrl}/shopLottery/${img}`}
             alt="card"
             className="item-card__img"
           />
@@ -34,7 +34,7 @@ const ItemCard = ({ img, value, agree, id, type, preview = false }) => {
 
       <>
         {type && (
-          <div className="item-card__price">
+          <div className="item-card__price" style={{ bottom: 15 }}>
             {type === "lose"
               ? "НИЧЕГО"
               : type === "nft"
@@ -47,4 +47,4 @@ const ItemCard = ({ img, value, agree, id, type, preview = false }) => {
   );
 };
 
-export default React.memo(ItemCard);
+export default React.memo(GiftItemCard);

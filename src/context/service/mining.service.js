@@ -105,6 +105,12 @@ export const miningService = apiSlice.injectEndpoints({
         body: { position },
       }),
     }),
+    claimDailyGift: builder.query({
+      query: () => ({
+        url: "dailyGifts/claimDailyGift",
+        method: "POST",
+      }),
+    }),
   }),
 });
 
@@ -122,5 +128,6 @@ export const {
   useRecoveryBoostInfoQuery,
   useGetDailyGiftsQuery,
   useCheckDailyGiftsQuery,
-  useLazyLotteryRollQuery
+  useLazyLotteryRollQuery,
+  useLazyClaimDailyGiftQuery
 } = miningService;

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { skipToken } from "@reduxjs/toolkit/query/react";
 import "./BoostPage.css";
 import { Link } from "react-router-dom";
 import {
@@ -14,7 +13,6 @@ import { useModalStatic } from "../../helpers/useModalStatic";
 import { useModal } from "../../helpers/useModal";
 import Modal from "../../widgets/Modal/Modal";
 import useBounding from "../../helpers/useBounding";
-import { useDispatch } from "react-redux";
 
 export const BoostPage = () => {
   const [multitabUp] = useLazyMultitabUpQuery();
@@ -35,7 +33,8 @@ export const BoostPage = () => {
 
   useEffect(() => {
     if (recoveryInfo) {
-      (recoveryInfo.timeLeftBeforeNewAttempt * 60).toFixed(0);
+      setTimeToRecovery(recoveryInfo.timeLeftBeforeNewAttempt.toFixed(0));
+
       setAttempts(recoveryInfo.leftAttempts);
     }
   }, [recoveryGenerator, recoveryInfo]);
@@ -178,7 +177,7 @@ export const BoostPage = () => {
                 <button
                   disabled={
                     mining?.generator_balance === mining?.generator_limit ||
-                    timeToRecovery !== 0 ||
+                    +timeToRecovery !== 0 ||
                     !attempts
                   }
                   onClick={async () => {

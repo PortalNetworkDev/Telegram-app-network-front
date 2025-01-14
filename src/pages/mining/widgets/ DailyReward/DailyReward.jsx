@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 import "./DailyReward.css";
-import { useGetDailyGiftsQuery } from "../../../../context/service/mining.service";
+import {
+  useGetDailyGiftsQuery,
+  useLazyClaimDailyGiftQuery,
+  useMiningQuery,
+} from "../../../../context/service/mining.service";
 
 const DailyReward = ({ btnFunc, setModalClose, bounding }) => {
   const [isClose, setIsClose] = useState(false);
+  const [claimGift] = useLazyClaimDailyGiftQuery();
+  const { data: mining = null, refetch: refetchMining } = useMiningQuery();
   const stopPropagation = (e) => {
     e.stopPropagation();
   };
@@ -11,9 +17,11 @@ const DailyReward = ({ btnFunc, setModalClose, bounding }) => {
     setIsClose(true);
     setTimeout(() => setModalClose(), 500);
   };
-  const handleBtnClick = () => {
+  const handleBtnClick = async () => {
+    await claimGift();
+    await refetchMining();
     setIsClose(true);
-    setTimeout(() => btnFunc(), 500);
+    setTimeout(() => setModalClose(), 500);
   };
 
   const { data: gifts = null } = useGetDailyGiftsQuery();

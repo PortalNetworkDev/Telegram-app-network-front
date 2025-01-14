@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./RafflePage.css";
 import useBounding from "../../helpers/useBounding";
-import { useDispatch } from "react-redux";
-import { setPreviewAction } from "../../../../context/mining";
+
 import Accordion from "../../widgets/Accordion/Accordion";
 
 const RafflePage = () => {
-  const dispatch = useDispatch();
-
   const [isAgreeModalVisible, setIsAgreeModalVisible] = useState(false);
 
   const { pageRef, pageBounding } = useBounding();
@@ -24,10 +21,6 @@ const RafflePage = () => {
     setIsClose(false);
     setIsAgreeModalVisible(true);
   };
-
-  useEffect(() => {
-    dispatch(setPreviewAction(false));
-  }, [dispatch]);
 
   return (
     <div className="store raffle" ref={pageRef}>

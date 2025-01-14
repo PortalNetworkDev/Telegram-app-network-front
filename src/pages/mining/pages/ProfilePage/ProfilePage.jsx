@@ -5,7 +5,6 @@ import {
   useStaticQuery,
 } from "../../../../context/service/me.service";
 import { useDispatch, useSelector } from "react-redux";
-import { setPreviewAction } from "../../../../context/mining";
 import ProgressBar from "../../widgets/ProgressBar/ProgressBar";
 
 const StorePage = () => {
@@ -16,10 +15,6 @@ const StorePage = () => {
   const { data: staticData = null } = useStaticQuery(lang);
   const [allRate, setAllRate] = useState(false);
   const rate = Array(100).fill(0);
-
-  useEffect(() => {
-    dispatch(setPreviewAction(false));
-  }, [dispatch]);
 
   return (
     <div className="store profile">

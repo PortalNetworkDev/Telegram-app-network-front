@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
-
+import React, { useCallback, useState } from "react";
 import "./TransactionsPage.css";
 import {
   useMeQuery,
@@ -9,7 +8,7 @@ import Modal from "../../widgets/Modal/Modal";
 import { useModal } from "../../helpers/useModal";
 import useBounding from "../../helpers/useBounding";
 import { useDispatch } from "react-redux";
-import { setPreviewAction } from "../../../../context/mining";
+
 import TextString from "../../ui/TextSrting/TextString";
 import { useMiningQuery } from "../../../../context/service/mining.service";
 import TransactionCard from "../../widgets/TransactionCard/TransactionCard";
@@ -21,10 +20,6 @@ const TransactionsPage = () => {
   const { data: mining = null, refetch: refetchMining } = useMiningQuery();
   const lang = me?.language_code === "en" ? "en" : "ru";
   const { data: staticData = null } = useStaticQuery(lang);
-
-  useEffect(() => {
-    dispatch(setPreviewAction(false));
-  }, [dispatch]);
 
   const {
     isModalVisible,

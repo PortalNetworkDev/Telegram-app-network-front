@@ -58,6 +58,10 @@ export const MiningPage = ({ opacity }) => {
     dispatch(updateData(mining));
   }, [mining, dispatch]);
 
+  useEffect(() => {
+    refetchMining();
+  }, []);
+
   const { pageRef, pageBounding } = useBounding();
 
   //Ежедневные призы

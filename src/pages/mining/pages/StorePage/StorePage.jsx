@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 import "./StorePage.css";
 import {
@@ -15,7 +15,7 @@ import {
   useLazyLotteryRollQuery,
 } from "../../../../context/service/mining.service";
 import { useDispatch, useSelector } from "react-redux";
-import { setPreviewAction, updateData } from "../../../../context/mining";
+import { updateData } from "../../../../context/mining";
 import GiftItem from "./widgets/ItemCard/GiftItem";
 
 const StorePage = () => {
@@ -44,10 +44,6 @@ const StorePage = () => {
 
   //Лотерея
   const [lotteryRoll, lotteryRollResult] = useLazyLotteryRollQuery();
-
-  useEffect(() => {
-    dispatch(setPreviewAction(false));
-  }, [dispatch]);
 
   const {
     isModalVisible,
@@ -78,11 +74,19 @@ const StorePage = () => {
     setIsAgreeModalVisible(true);
   };
 
-  const gift = new Array(15).fill({ own: null, pick: null, price: null });
+  const gift = useMemo(() => {
+    return new Array(15).fill(null).map(() => ({
+      own: null,
+      pick: null,
+      price: null,
+      imageUrl: (Math.random() * (4 - 1) + 1).toFixed(0),
+    }));
+  }, []);
 
   return (
     <div className="store" ref={pageRef}>
       <h1 className="store__header">МАГАЗИН</h1>
+
       <div className="store__tabContainer tab">
         {storeTab.map((el, idx) => {
           return (
@@ -169,7 +173,13 @@ const StorePage = () => {
           )
         ) : gift && !lotteryRollResult.data ? (
           gift.map((el, idx) => (
-            <GiftItem key={idx} id={idx} agree={handleOpenAgreeModal} />
+            <GiftItem
+              preview={true}
+              key={idx}
+              id={idx}
+              agree={handleOpenAgreeModal}
+              img={el.imageUrl}
+            />
           ))
         ) : gift && lotteryRollResult.data ? (
           lotteryRollResult.data.lots.map((el, idx) => (

@@ -3,7 +3,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 
 import { useDispatch, useSelector } from "react-redux";
-import { setMiningAction } from "../../context/mining";
+import { setMiningAction, setPreviewAction } from "../../context/mining";
 import Navigation from "./widgets/Navigation/Navigation";
 import useBounding from "./helpers/useBounding";
 
@@ -56,6 +56,7 @@ export const Mining = () => {
             onClick={() => {
               back();
               dispatch(setMiningAction(false));
+              dispatch(setPreviewAction(true));
               returnTgColor();
             }}
           >
@@ -63,7 +64,11 @@ export const Mining = () => {
           </button>
         </div>
         <Outlet />
-        {!preview && location.pathname !== "/mining/boost" && (
+        {location.pathname === "/mining/boost" ? (
+          <div></div>
+        ) : location.pathname === "/mining" && preview ? (
+          <div></div>
+        ) : (
           <Navigation
             style={{
               width: `${width + left * 2}px`,
