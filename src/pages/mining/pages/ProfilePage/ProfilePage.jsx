@@ -6,6 +6,10 @@ import {
 } from "../../../../context/service/me.service";
 import { useDispatch, useSelector } from "react-redux";
 import ProgressBar from "../../widgets/ProgressBar/ProgressBar";
+import {
+  useGetUserPositionQuery,
+  useLazyGetTopMinersQuery,
+} from "../../../../context/service/mining.service";
 
 const StorePage = () => {
   const dispatch = useDispatch();
@@ -14,7 +18,15 @@ const StorePage = () => {
   const lang = me?.language_code === "en" ? "en" : "ru";
   const { data: staticData = null } = useStaticQuery(lang);
   const [allRate, setAllRate] = useState(false);
-  const rate = Array(100).fill(0);
+  const { data: userPosition = null } = useGetUserPositionQuery();
+  const [getTopMinersList, { data, isLoading, error }] =
+    useLazyGetTopMinersQuery();
+
+  useEffect(() => {
+    if (allRate) {
+      getTopMinersList(0);
+    }
+  }, [allRate]);
 
   return (
     <div className="store profile">
@@ -23,47 +35,89 @@ const StorePage = () => {
           {" "}
           <h1 className="store__header">МОЙ ПРОФИЛЬ</h1>
           <div className="profile__progress">
-            <p className="profile__nickname">@userNickname</p>
-            <ProgressBar progress={35} />
-            <p style={{ marginBottom: 5 }} className="profile__nickname">
-              100 уровень
-            </p>
-            <p className="profile__powerBeforeNextLevel">
-              {" "}
-              1 000 кВт•Ч до следующего уровня
-            </p>
+            {me ? (
+              <p className="profile__nickname">{`@${me?.username}`}</p>
+            ) : (
+              <div
+                style={{
+                  height: 19,
+                  width: "50%",
+                  borderRadius: "5px",
+                  marginBottom: 15,
+                }}
+                className="store-loading-div"
+              ></div>
+            )}
+
+            <ProgressBar progress={50} />
+            {me ? (
+              <p style={{ marginBottom: 5 }} className="profile__nickname">
+                {`${me?.level} уровень`}
+              </p>
+            ) : (
+              <div
+                style={{
+                  height: 19,
+                  width: "50%",
+                  borderRadius: "5px",
+                  marginBottom: 5,
+                }}
+                className="store-loading-div"
+              ></div>
+            )}
+            {me ? (
+              <p className="profile__powerBeforeNextLevel">
+                {`${me?.nextLevelPowerBalance.toLocaleString(
+                  "ru"
+                )} кВт•Ч до следующего уровня`}
+              </p>
+            ) : (
+              <div
+                style={{
+                  height: 19,
+                  width: "50vw",
+                  borderRadius: "5px",
+                  marginBottom: 15,
+                }}
+                className="store-loading-div"
+              ></div>
+            )}
           </div>
           <div className="profile_progress rate">
             <h2 className="rate__title">РЕЙТИНГ</h2>
             <div className="power transaction-card rate__card">
-              <div className="transaction-card__cont ">
-                <div className="transaction-card__img-cont rate__position">
-                  {"1150".toLocaleString("ru")}
-                </div>
-                <div
-                  className="transaction-card__status-cont"
-                  style={{ alignItems: "flex-start" }}
-                >
-                  <p className="transaction-card__mainText">Name</p>
-                  <p className="transaction-card__subText">level</p>
-                </div>
-              </div>
-              <div className="transaction-card__info-cont">
-                {me ? (
-                  <p className="rate__power">
-                    {me?.power_balance.toLocaleString("ru")} кВт•Ч
-                  </p>
-                ) : (
+              {userPosition && me ? (
+                <div className="transaction-card__cont ">
+                  <div className="transaction-card__img-cont rate__position">
+                    {userPosition?.position.toLocaleString("ru")}
+                  </div>
+
                   <div
-                    style={{
-                      height: 25,
-                      width: 150,
-                      borderRadius: "5px",
-                    }}
-                    className="store-loading-div"
-                  ></div>
-                )}
-              </div>
+                    className="transaction-card__status-cont"
+                    style={{ alignItems: "flex-start" }}
+                  >
+                    <p className="transaction-card__mainText">{`${me?.first_name} ${me?.last_name}`}</p>
+                    <p className="transaction-card__subText">{`${me?.level} уровень`}</p>
+                  </div>
+                  <div
+                    style={{ position: "absolute", right: 0 }}
+                    className="transaction-card__info-cont"
+                  >
+                    <p className="rate__power">
+                      {me?.power_balance.toLocaleString("ru")} кВт•Ч
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div
+                  style={{
+                    height: 25,
+                    width: "100%",
+                    borderRadius: "5px",
+                  }}
+                  className="store-loading-div"
+                ></div>
+              )}
             </div>
             <button
               onClick={() => setAllRate(true)}
@@ -118,47 +172,64 @@ const StorePage = () => {
             style={{ marginBottom: "22vh", top: "8vh" }}
             className="profile_progress rate"
           >
-            {rate.map((el, idx) => {
-              return (
-                <div
-                  style={{ marginBottom: 15 }}
-                  key={idx}
-                  className="power transaction-card "
-                >
-                  <div className="transaction-card__cont ">
-                    <div
-                      style={{ color: "white", fontSize: 12 }}
-                      className="transaction-card__img-cont "
-                    >
-                      {"1150".toLocaleString("ru")}
-                    </div>
-                    <div
-                      className="transaction-card__status-cont"
-                      style={{ alignItems: "flex-start" }}
-                    >
-                      <p className="transaction-card__mainText">Name</p>
-                      <p className="transaction-card__subText">level</p>
-                    </div>
-                  </div>
-                  <div className="transaction-card__info-cont">
-                    {me ? (
-                      <p className="rate__power">
-                        {me?.power_balance.toLocaleString("ru")} кВт•Ч
-                      </p>
-                    ) : (
+            {!isLoading && data?.list ? (
+              data?.list.map((el, idx) => {
+                return (
+                  <div
+                    style={{ marginBottom: 15 }}
+                    key={idx}
+                    className="power transaction-card "
+                  >
+                    <div className="transaction-card__cont ">
+                      {el?.position <= 3 ? (
+                        <div className="star-container">
+                          <div className="star"> </div>
+                          <div className="star__num">
+                            {el?.position?.toLocaleString("ru")}
+                          </div>
+                        </div>
+                      ) : (
+                        <div
+                          style={{ color: "white", fontSize: 12 }}
+                          className="transaction-card__img-cont "
+                        >
+                          {el?.position?.toLocaleString("ru")}
+                        </div>
+                      )}
+
                       <div
-                        style={{
-                          height: 25,
-                          width: 150,
-                          borderRadius: "5px",
-                        }}
-                        className="store-loading-div"
-                      ></div>
-                    )}
+                        className="transaction-card__status-cont"
+                        style={{ alignItems: "flex-start" }}
+                      >
+                        <p className="transaction-card__mainText">Name</p>
+                        <p className="transaction-card__subText">{`${el?.level} уровень`}</p>
+                      </div>
+                    </div>
+                    <div className="transaction-card__info-cont">
+                      {me ? (
+                        <p className="rate__power">
+                          {el?.powerBalance.toLocaleString("ru")} кВт•Ч
+                        </p>
+                      ) : (
+                        <div
+                          style={{
+                            height: 25,
+                            width: 150,
+                            borderRadius: "5px",
+                          }}
+                          className="store-loading-div"
+                        ></div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })
+            ) : (
+              <div
+                style={{ height: "100vh", width: "100%", borderRadius: "10px" }}
+                className="store-loading-div"
+              ></div>
+            )}
           </div>
         </>
       )}

@@ -130,6 +130,7 @@ a {
 
 .main-balance {
   position: relative;
+  padding-left: 2px;
 }
 
 .main-balance__logo {
@@ -199,7 +200,7 @@ a {
   box-sizing: border-box;
 }
 
-.gradientBorder:before{
+.gradientBorder:before {
   content: "";
   position: absolute;
   top: 0;

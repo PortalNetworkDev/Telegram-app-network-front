@@ -111,6 +111,18 @@ export const miningService = apiSlice.injectEndpoints({
         method: "POST",
       }),
     }),
+    getTopMiners: builder.query({
+      query: (page) => ({
+        url: `topMinersList/getMinersList?page=${page}`,
+        method: "GET",
+      }),
+    }),
+    getUserPosition: builder.query({
+      query: (page) => ({
+        url: `topMinersList/getUserListPosition`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -129,5 +141,7 @@ export const {
   useGetDailyGiftsQuery,
   useCheckDailyGiftsQuery,
   useLazyLotteryRollQuery,
-  useLazyClaimDailyGiftQuery
+  useLazyClaimDailyGiftQuery,
+  useLazyGetTopMinersQuery,
+  useGetUserPositionQuery
 } = miningService;
