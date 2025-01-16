@@ -212,7 +212,7 @@ const StorePage = () => {
                         className="transaction-card__status-cont"
                         style={{ alignItems: "flex-start" }}
                       >
-                        <p className="transaction-card__mainText">Name</p>
+                        <p className="transaction-card__mainText">{`${el?.firstName} ${el?.lastName}`}</p>
                         <p className="transaction-card__subText">{`${el?.level} уровень`}</p>
                       </div>
                     </div>
