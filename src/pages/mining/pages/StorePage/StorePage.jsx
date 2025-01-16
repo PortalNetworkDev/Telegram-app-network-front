@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import "./StorePage.css";
 import {
@@ -33,6 +33,14 @@ const StorePage = () => {
 
   const [activeTab, setActiveTab] = useState(storeTab[0]);
   const [isAgreeModalVisible, setIsAgreeModalVisible] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  }, []);
 
   // Запрос данных в зависимости от активной вкладки
   const { data: generatorItems } = useGetItemsQuery("generator", {

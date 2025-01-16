@@ -37,6 +37,7 @@
   width: 100%;
   flex-direction: column;
   top: 12vh;
+  margin-bottom: 55%;
 }
 
 .rate__title {

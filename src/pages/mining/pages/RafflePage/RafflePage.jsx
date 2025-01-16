@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./RafflePage.css";
 import useBounding from "../../helpers/useBounding";
 
@@ -21,6 +21,14 @@ const RafflePage = () => {
     setIsClose(false);
     setIsAgreeModalVisible(true);
   };
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  }, []);
 
   return (
     <div className="store raffle" ref={pageRef}>

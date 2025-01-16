@@ -225,7 +225,11 @@ const Generator = ({ onClick, upBtnAction, handleOpenModal }) => {
               bigTextMargin={"0px 5px 0px 10px"}
             />
           </div>
-          <Link to={"/mining/boost"} className="boostBtn">
+          <Link
+            style={{ pointerEvents: miningStore.isRotate && "none" }}
+            to={"/mining/boost"}
+            className="boostBtn"
+          >
             <>
               BOOST
               <img

@@ -2,12 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import "./BoostPage.css";
 import { Link } from "react-router-dom";
 import {
-  miningService,
   useLazyMultitabUpQuery,
   useLazyRecoveryGeneratorQuery,
   useMiningQuery,
   useRecoveryBoostInfoQuery,
-  useRecoveryGeneratorQuery,
 } from "../../../../context/service/mining.service";
 import { useModalStatic } from "../../helpers/useModalStatic";
 import { useModal } from "../../helpers/useModal";
@@ -19,6 +17,14 @@ export const BoostPage = () => {
   const { upMultitabModal, notEnoughtBalance } = useModalStatic();
   const { data: mining = null, refetch: refetchMining } = useMiningQuery();
   const [recoveryGenerator] = useLazyRecoveryGeneratorQuery();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 100,
+      left: 100,
+      behavior: "smooth",
+    });
+  }, []);
 
   //Recovery
   const { data: recoveryInfo = null } = useRecoveryBoostInfoQuery(undefined, {

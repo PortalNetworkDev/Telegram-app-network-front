@@ -26,6 +26,14 @@ const StorePage = () => {
   const [progressPercent, setProgressPercent] = useState(0);
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
+  useEffect(() => {
     me &&
       minig &&
       setProgressPercent(

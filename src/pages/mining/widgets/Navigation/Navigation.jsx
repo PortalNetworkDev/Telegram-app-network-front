@@ -1,6 +1,7 @@
 import React from "react";
 import "./Navigation.css";
 import { NavLink, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Navigation = ({ style }) => {
   const navItems = [
@@ -10,6 +11,8 @@ const Navigation = ({ style }) => {
     { title: "Отправить кВт•Ч", route: "transactions" },
     { title: "Задания", route: "tasks" },
   ];
+
+  const miningStore = useSelector((store) => store.mining);
 
   const location = useLocation();
 
@@ -26,6 +29,7 @@ const Navigation = ({ style }) => {
           return (
             <li className="miningNavigation__item" key={el.route || "main"}>
               <NavLink
+                style={{ pointerEvents: miningStore.isRotate && "none" }}
                 to={el.route === "" ? "/mining" : `/mining/${el.route}`}
                 className={
                   isCurrentRoute
@@ -39,7 +43,10 @@ const Navigation = ({ style }) => {
           );
         })}
       </ul>
-      <NavLink style={{ width: "100%" }} to={"/mining/profile"}>
+      <NavLink
+        style={{ width: "100%", pointerEvents: miningStore.isRotate && "none" }}
+        to={"/mining/profile"}
+      >
         <button
           style={{ width: "100%" }}
           className=" miningNavigation__provileBtn battyry__collect"

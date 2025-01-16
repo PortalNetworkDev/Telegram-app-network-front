@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./TransactionsPage.css";
 import {
   useMeQuery,
@@ -36,6 +36,14 @@ const TransactionsPage = () => {
   const powerBalance = mining?.power_balance;
 
   const { pageRef, pageBounding } = useBounding();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  }, []);
 
   //transactions
   const transactions = [1, 2, 3];
