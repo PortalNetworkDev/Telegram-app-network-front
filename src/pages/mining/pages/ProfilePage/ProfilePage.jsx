@@ -9,18 +9,29 @@ import ProgressBar from "../../widgets/ProgressBar/ProgressBar";
 import {
   useGetUserPositionQuery,
   useLazyGetTopMinersQuery,
+  useMiningQuery,
 } from "../../../../context/service/mining.service";
 
 const StorePage = () => {
   const dispatch = useDispatch();
   const { data: me = null } = useMeQuery();
+  const { data: minig = null } = useMiningQuery();
   const miningStore = useSelector((store) => store.mining);
   const lang = me?.language_code === "en" ? "en" : "ru";
   const { data: staticData = null } = useStaticQuery(lang);
   const [allRate, setAllRate] = useState(false);
   const { data: userPosition = null } = useGetUserPositionQuery();
-  const [getTopMinersList, { data, isLoading, error }] =
-    useLazyGetTopMinersQuery();
+  const [getTopMinersList, { data, isLoading }] = useLazyGetTopMinersQuery();
+
+  const [progressPercent, setProgressPercent] = useState(0);
+
+  useEffect(() => {
+    me &&
+      minig &&
+      setProgressPercent(
+        Math.floor((minig?.power_balance / me?.nextLevelPowerBalance) * 100)
+      );
+  }, [minig?.power_balance, me]);
 
   useEffect(() => {
     if (allRate) {
@@ -49,7 +60,7 @@ const StorePage = () => {
               ></div>
             )}
 
-            <ProgressBar progress={50} />
+            <ProgressBar progress={progressPercent} />
             {me ? (
               <p style={{ marginBottom: 5 }} className="profile__nickname">
                 {`${me?.level} уровень`}
@@ -67,9 +78,9 @@ const StorePage = () => {
             )}
             {me ? (
               <p className="profile__powerBeforeNextLevel">
-                {`${me?.nextLevelPowerBalance.toLocaleString(
-                  "ru"
-                )} кВт•Ч до следующего уровня`}
+                {`${(
+                  me?.nextLevelPowerBalance - me?.power_balance
+                ).toLocaleString("ru")} кВт•Ч до следующего уровня`}
               </p>
             ) : (
               <div
