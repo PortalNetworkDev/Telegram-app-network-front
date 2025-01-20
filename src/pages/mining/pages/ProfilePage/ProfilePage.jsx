@@ -22,6 +22,8 @@ const StorePage = () => {
   const [allRate, setAllRate] = useState(false);
   const { data: userPosition = null } = useGetUserPositionQuery();
   const [getTopMinersList, { data, isLoading }] = useLazyGetTopMinersQuery();
+  const [rateList, setRateList] = useState([]);
+  const [partOfRate, setPartOfRate] = useState(0);
 
   const [progressPercent, setProgressPercent] = useState(0);
 
@@ -43,9 +45,16 @@ const StorePage = () => {
 
   useEffect(() => {
     if (allRate) {
-      getTopMinersList(0);
+      getTopMinersList(partOfRate);
+      setPartOfRate((prev) => prev + 1);
     }
   }, [allRate]);
+
+  useEffect(() => {
+    if (data) {
+      setRateList((prev) => [...prev, ...data?.list]);
+    }
+  }, [data]);
 
   return (
     <div className="store profile">
@@ -188,16 +197,30 @@ const StorePage = () => {
             </button>
           </div>
           <div
+            onScroll={(e) => {
+              const target = e.target;
+              const scrollTop = target.scrollTop;
+              const scrollHeight = target.scrollHeight;
+              const clientHeight = target.clientHeight;
+              const scrollFromBottom = scrollHeight - scrollTop - clientHeight;
+
+              if (scrollFromBottom <= 0) {
+                if (data.hasNextPage) {
+                  getTopMinersList(partOfRate);
+                  setPartOfRate((prev) => prev + 1);
+                }
+              }
+            }}
             style={{ marginBottom: "22vh", top: "8vh" }}
-            className="profile_progress rate"
+            className="profile_progress rate allRate"
           >
-            {!isLoading && data?.list ? (
-              data?.list.map((el, idx) => {
+            {!isLoading && rateList ? (
+              rateList.map((el, idx) => {
                 return (
                   <div
                     style={{ marginBottom: 15 }}
                     key={idx}
-                    className="power transaction-card "
+                    className="power transaction-card allRateCard"
                   >
                     <div className="transaction-card__cont ">
                       {el?.position <= 3 ? (

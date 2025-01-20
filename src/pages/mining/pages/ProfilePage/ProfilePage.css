@@ -40,6 +40,12 @@
   margin-bottom: 55%;
 }
 
+.allRate {
+  height: 78vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
 .rate__title {
   font-size: 20px;
   font-weight: 600;
@@ -180,4 +186,12 @@
     rgba(0, 193, 255, 1),
     rgba(100, 252, 215, 1)
   );
+}
+
+.allRate {
+  justify-content: flex-start;
+}
+
+.allRateCard {
+  padding: 10px;
 }
