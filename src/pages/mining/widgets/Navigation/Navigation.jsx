@@ -1,9 +1,14 @@
 import React from "react";
 import "./Navigation.css";
-import { NavLink, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setMiningAction, setPreviewAction } from "../../../../context/mining";
 
 const Navigation = ({ style }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const colorScheme = useSelector((store) => store.colorScheme);
+
   const navItems = [
     { title: "Майнить энергию", route: "" },
     { title: "Магазин", route: "store" },
@@ -25,7 +30,34 @@ const Navigation = ({ style }) => {
           el.route === ""
             ? (isCurrentRoute = location.pathname === "/mining")
             : (isCurrentRoute = location.pathname === `/mining/${el.route}`);
-
+          if (el.route === "tasks") {
+            return (
+              <li className="miningNavigation__item" key={el.route || "main"}>
+                <div
+                  style={{ pointerEvents: miningStore.isRotate && "none" }}
+                  className={
+                    isCurrentRoute
+                      ? "miningNavigation__link miningNavigation__link_active"
+                      : "miningNavigation__link"
+                  }
+                  onClick={() => {
+                    navigate("/task");
+                    dispatch(setMiningAction(false));
+                    dispatch(setPreviewAction(true));
+                    if (colorScheme === "light") {
+                      window.Telegram?.WebApp.setHeaderColor("#ffffff");
+                      window.Telegram?.WebApp.setBackgroundColor("#ffffff");
+                    } else {
+                      window.Telegram?.WebApp.setHeaderColor("#212121");
+                      window.Telegram?.WebApp.setBackgroundColor("#042129");
+                    }
+                  }}
+                >
+                  {el.title}
+                </div>
+              </li>
+            );
+          }
           return (
             <li className="miningNavigation__item" key={el.route || "main"}>
               <NavLink
