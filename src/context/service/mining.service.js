@@ -123,6 +123,27 @@ export const miningService = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    getTransactionHistory: builder.query({
+      query: ({ limit, page, timePeriod }) => ({
+        url: `transactions/history`,
+        method: "POST",
+        body: { limit, page, timePeriod },
+      }),
+    }),
+    sendPower: builder.query({
+      query: ({ recipient, amount }) => ({
+        url: `sendPower/send`,
+        method: "POST",
+        body: { recipient, amount },
+      }),
+    }),
+    sendPowerById: builder.query({
+      query: ({ recipientId, amount }) => ({
+        url: `sendPower/sendById`,
+        method: "POST",
+        body: { recipientId, amount },
+      }),
+    }),
   }),
 });
 
@@ -143,5 +164,8 @@ export const {
   useLazyLotteryRollQuery,
   useLazyClaimDailyGiftQuery,
   useLazyGetTopMinersQuery,
-  useGetUserPositionQuery
+  useGetUserPositionQuery,
+  useLazyGetTransactionHistoryQuery,
+  useLazySendPowerQuery,
+  useLazySendPowerByIdQuery,
 } = miningService;

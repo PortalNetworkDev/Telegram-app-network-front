@@ -4,7 +4,6 @@ import {
   useMeQuery,
   useStaticQuery,
 } from "../../../../context/service/me.service";
-import { useDispatch, useSelector } from "react-redux";
 import ProgressBar from "../../widgets/ProgressBar/ProgressBar";
 import {
   useGetUserPositionQuery,
@@ -13,12 +12,8 @@ import {
 } from "../../../../context/service/mining.service";
 
 const StorePage = () => {
-  const dispatch = useDispatch();
   const { data: me = null } = useMeQuery();
   const { data: minig = null } = useMiningQuery();
-  const miningStore = useSelector((store) => store.mining);
-  const lang = me?.language_code === "en" ? "en" : "ru";
-  const { data: staticData = null } = useStaticQuery(lang);
   const [allRate, setAllRate] = useState(false);
   const { data: userPosition = null } = useGetUserPositionQuery();
   const [getTopMinersList, { data, isLoading }] = useLazyGetTopMinersQuery();
@@ -43,18 +38,21 @@ const StorePage = () => {
       );
   }, [minig?.power_balance, me]);
 
-  useEffect(() => {
-    if (allRate) {
-      getTopMinersList(partOfRate);
-      setPartOfRate((prev) => prev + 1);
-    }
-  }, [allRate]);
+  const fetchTopList = async (partOfRate) => {
+    const result = await getTopMinersList(partOfRate);
+    setPartOfRate((prev) => prev + 1);
+    setRateList((prev) => [...prev, ...result?.data?.list]);
+  };
 
   useEffect(() => {
-    if (data) {
-      setRateList((prev) => [...prev, ...data?.list]);
+    if (allRate) {
+      fetchTopList(partOfRate);
     }
-  }, [data]);
+    if (!allRate) {
+      setPartOfRate(0);
+      setRateList([]);
+    }
+  }, [allRate]);
 
   return (
     <div className="store profile">
@@ -206,15 +204,14 @@ const StorePage = () => {
 
               if (scrollFromBottom <= 0) {
                 if (data.hasNextPage) {
-                  getTopMinersList(partOfRate);
-                  setPartOfRate((prev) => prev + 1);
+                  fetchTopList(partOfRate);
                 }
               }
             }}
             style={{ marginBottom: "22vh", top: "8vh" }}
             className="profile_progress rate allRate"
           >
-            {!isLoading && rateList ? (
+            {!isLoading && rateList.length !== 0 ? (
               rateList.map((el, idx) => {
                 return (
                   <div
