@@ -23,10 +23,6 @@
   object-fit: cover;
 }
 
-.mining-main__back {
-  height: 165vw !important;
-}
-
 .mining-main__balance {
   position: absolute;
   right: 0;

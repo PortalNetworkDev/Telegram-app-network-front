@@ -2,25 +2,41 @@ import React from "react";
 
 import "./TransactionCard.css";
 
-const TransactionCard = () => {
+const TransactionCard = ({ isSend, nickname, amount, date }) => {
+  const dateObj = new Date(date);
+  const year = dateObj.getFullYear();
+  const month = dateObj.getMonth() + 1;
+  const day = dateObj.getDate();
+
+  const formattedDate = `${String(day).padStart(2, "0")}.${String(
+    month
+  ).padStart(2, "0")}.${year - 2000}`;
+
   return (
     <div className="power transaction-card">
       <div className="transaction-card__cont">
         <div className="transaction-card__img-cont">
           <img
+            style={{ transform: !isSend && "rotate(180deg)" }}
             className="transaction-card__img"
             alt="arrow"
             src="/icon/arrow-up.svg"
           />
         </div>
         <div className="transaction-card__status-cont">
-          <p className="transaction-card__mainText">Status</p>
-          <p className="transaction-card__subText">@user</p>
+          <p className="transaction-card__mainText">
+            {isSend ? "Отправлено" : "Получено"}
+          </p>
+          <p className="transaction-card__subText">{`@${nickname}`}</p>
         </div>
       </div>
       <div className="transaction-card__info-cont">
-        <p className="transaction-card__mainText">-4 400 кВт•Ч </p>
-        <p className="transaction-card__subText">06.09.24r</p>
+        <p className="transaction-card__mainText">
+          {isSend
+            ? `-${amount?.toLocaleString("ru")} кВт•Ч`
+            : `+${amount?.toLocaleString("ru")} кВт•Ч`}
+        </p>
+        <p className="transaction-card__subText">{formattedDate}</p>
       </div>
     </div>
   );

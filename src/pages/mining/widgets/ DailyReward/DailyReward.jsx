@@ -1,23 +1,31 @@
 import React, { useState } from "react";
 import "./DailyReward.css";
+import {
+  useGetDailyGiftsQuery,
+  useLazyClaimDailyGiftQuery,
+  useMiningQuery,
+} from "../../../../context/service/mining.service";
 
 const DailyReward = ({ btnFunc, setModalClose, bounding }) => {
   const [isClose, setIsClose] = useState(false);
-
+  const [claimGift] = useLazyClaimDailyGiftQuery();
+  const { data: mining = null, refetch: refetchMining } = useMiningQuery();
   const stopPropagation = (e) => {
     e.stopPropagation();
   };
-
   const handleClose = () => {
     setIsClose(true);
     setTimeout(() => setModalClose(), 500);
   };
-
-  const handleBtnClick = () => {
+  const handleBtnClick = async () => {
+    await claimGift();
+    await refetchMining();
     setIsClose(true);
-    setTimeout(() => btnFunc(), 500);
+    setTimeout(() => setModalClose(), 500);
   };
-  const days = [0, 0, 0, 0, 0, 0, 0];
+
+  const { data: gifts = null } = useGetDailyGiftsQuery();
+
   return (
     <div
       onClick={handleClose}
@@ -41,21 +49,21 @@ const DailyReward = ({ btnFunc, setModalClose, bounding }) => {
           <img src="/icon/cross.svg" alt="cross" />
         </button>
         <div className="modal__content rewardModal__content">
-          {days.map((_, idx) => (
+          {gifts?.gifts.map((el, idx) => (
             <div
-              key={idx}
+              key={el.id}
               className={`rewardModal__item gradientBorder ${
-                idx === 2 && "rewardModal__item_current"
+                el.isAbleToClaim && "rewardModal__item_current"
               }`}
             >
               <div
                 className={`rewardModal__itemHeader ${
-                  idx === 2 && "rewardModal__itemHeader_current"
+                  el.isAbleToClaim && "rewardModal__itemHeader_current"
                 }`}
               >
-                <p className="rewardModal__dayText">1 День</p>
+                <p className="rewardModal__dayText">{`${el.day} День`}</p>
               </div>
-              <p className="rewardModal__infoText">500 кВт•Ч</p>
+              <p className="rewardModal__infoText">{`${el.gift}  кВт•Ч`}</p>
             </div>
           ))}
           <button

@@ -1,31 +1,24 @@
-import React, { useCallback, useEffect, useState } from "react";
-
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./TransactionsPage.css";
-import {
-  useMeQuery,
-  useStaticQuery,
-} from "../../../../context/service/me.service";
+import { useMeQuery } from "../../../../context/service/me.service";
 import Modal from "../../widgets/Modal/Modal";
 import { useModal } from "../../helpers/useModal";
 import useBounding from "../../helpers/useBounding";
-import { useDispatch } from "react-redux";
-import { setPreviewAction } from "../../../../context/mining";
+
 import TextString from "../../ui/TextSrting/TextString";
-import { useMiningQuery } from "../../../../context/service/mining.service";
+import {
+  useLazyGetTransactionHistoryQuery,
+  useLazySendPowerByIdQuery,
+  useLazySendPowerQuery,
+} from "../../../../context/service/mining.service";
 import TransactionCard from "../../widgets/TransactionCard/TransactionCard";
 
 const TransactionsPage = () => {
-  const dispatch = useDispatch();
-  const { data: me = null } = useMeQuery();
-
-  const { data: mining = null, refetch: refetchMining } = useMiningQuery();
+  const { data: me = null, refetch: refetchMe } = useMeQuery();
   const lang = me?.language_code === "en" ? "en" : "ru";
-  const { data: staticData = null } = useStaticQuery(lang);
-
-  useEffect(() => {
-    dispatch(setPreviewAction(false));
-  }, [dispatch]);
-
+  const formRef = useRef(null);
+  const [powerBalance, setPowerBalance] = useState();
+  const { pageRef, pageBounding } = useBounding();
   const {
     isModalVisible,
     modalTitle,
@@ -38,25 +31,56 @@ const TransactionsPage = () => {
     handleCloseModal,
   } = useModal();
 
-  const powerBalance = mining?.power_balance;
-
-  const { pageRef, pageBounding } = useBounding();
-
-  //transactions
-  const transactions = [1, 2, 3];
-
-  //main page or all transactions
+  //transactions req
+  const [getTransactionHistory, { data }] = useLazyGetTransactionHistoryQuery();
+  const [sendPower] = useLazySendPowerQuery();
+  const [sendPowerById] = useLazySendPowerByIdQuery();
+  const [transactionsList, setTransactionsList] = useState([]);
+  const [partOfTransactions, setPartOfTransactions] = useState(1);
   const [allTransactions, setAllTransactions] = useState(false);
-  const listOfTransactions = {
-    october: [1, 2, 3, 4, 5],
-    septemder: [1, 2, 3, 4, 5],
-    december: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+  const listRef = useRef(null);
+
+  const fetchTransactions = async (partOfTransactions) => {
+    const result = await getTransactionHistory({ page: partOfTransactions });
+
+    if (allTransactions) {
+      setPartOfTransactions((prev) => prev + 1);
+      setTransactionsList((prev) => [...prev, ...result?.data?.items]);
+    } else {
+      setTransactionsList(result?.data?.items);
+    }
   };
+
+  useEffect(() => {
+    if (!allTransactions) {
+      fetchTransactions(1);
+      setPartOfTransactions(2);
+    }
+    if (allTransactions && listRef.current) {
+      listRef.current.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "instant",
+      });
+    }
+  }, [allTransactions]);
+
+  //effects
+  useEffect(() => {
+    setPowerBalance(me?.power_balance);
+  }, [me]);
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  }, []);
 
   //inputs
   const [id, setId] = useState("");
   const [qnt, setQnt] = useState("");
-  const [idPlaceholder, setIdPlaceholder] = useState("ID получателя");
+  const [idPlaceholder, setIdPlaceholder] = useState("ID или @name получателя");
   const [qntPlaceholder, setQntPlaceholder] = useState("Сумма кВт•Ч");
 
   function debounce(func, delay) {
@@ -70,9 +94,13 @@ const TransactionsPage = () => {
   const handleInput = useCallback(
     debounce((e) => {
       if (e.target.name === "id") {
-        setId(e.target.value);
+        e.target.value !== ""
+          ? setId(e.target.value)
+          : setIdPlaceholder("ID или @name получателя");
       } else {
-        setQnt(e.target.value);
+        e.target.value !== ""
+          ? setQnt(e.target.value)
+          : setQntPlaceholder("Сумма кВт•Ч");
       }
     }, 500),
     []
@@ -98,7 +126,6 @@ const TransactionsPage = () => {
 
   return (
     <div className="store transaction" ref={pageRef}>
-      <div className="store__back mining-main__back"></div>
       {!allTransactions ? (
         <div className="transactions__main">
           <h1 className="store__header">Отправить кВт•Ч</h1>
@@ -116,9 +143,14 @@ const TransactionsPage = () => {
                   big={(+powerBalance?.toFixed())?.toLocaleString("ru")}
                   bigFontSize={"32px"}
                 />
-                <div className="transaction__user-id">
+                <div
+                  onClick={() => {
+                    navigator.clipboard.writeText(me?.id);
+                  }}
+                  className="transaction__user-id"
+                >
                   {" "}
-                  <p>ID: 000000</p>{" "}
+                  <p>{`ID: ${me?.id}`}</p>{" "}
                   <img
                     style={{ marginLeft: 5 }}
                     alt="copy"
@@ -134,26 +166,33 @@ const TransactionsPage = () => {
             )}
           </div>
           <div className="transactions__inputs-container">
-            <input
-              name="id"
-              onChange={handleChange}
-              type="number"
-              placeholder={idPlaceholder}
-              className="power transactions__input"
-            />
-            <input
-              type="number"
-              onChange={handleChange}
-              placeholder={qntPlaceholder}
-              className="power transactions__input"
-            />
+            <form ref={formRef}>
+              <input
+                name="id"
+                onChange={(e) => {
+                  const regex = /^[a-zA-Z0-9]*$/;
+                  if (regex.test(e.target.value)) {
+                    handleChange(e);
+                  } else {
+                    e.target.value = id;
+                  }
+                }}
+                type="text"
+                placeholder={idPlaceholder}
+                className="power transactions__input"
+              />
+              <input
+                type="number"
+                onChange={handleChange}
+                placeholder={qntPlaceholder}
+                className="power transactions__input"
+              />
+            </form>
             <button
               onClick={() => {
                 if (id !== "" && qnt !== "") {
                   handleOpenAgreeModal();
                 } else {
-                  console.log(id, qnt);
-
                   setIdPlaceholder("Это поле обязательно к зополнению");
                   setQntPlaceholder("Это поле обязательно к зополнению");
                 }
@@ -171,14 +210,26 @@ const TransactionsPage = () => {
               История переводов
             </h2>
 
-            {transactions.length === 0 ? (
+            {transactionsList.length === 0 ? (
               <div className="transactions_isEmpty">
                 ВАША ИСТОРИЯ ПЕРЕВОДОВ ПУСТА
               </div>
             ) : (
               <div className="transactions__container">
-                {transactions.map((el, idx) => {
-                  return <TransactionCard key={idx} />;
+                {transactionsList.slice(0, 3).map((el) => {
+                  return (
+                    <TransactionCard
+                      isSend={el?.sender?.id === me?.id}
+                      nickname={
+                        el?.sender?.id === me?.id
+                          ? el?.recipient?.userName
+                          : el?.sender?.userName
+                      }
+                      amount={el?.powerAmount}
+                      date={el?.creationTime}
+                      key={el?.id}
+                    />
+                  );
                 })}
                 <button
                   onClick={() => setAllTransactions(true)}
@@ -206,20 +257,68 @@ const TransactionsPage = () => {
               <img src="/icon/cross.svg" alt="cross" />
             </button>
           </div>
-          <h1 className="store__header">История переводов</h1>
-          <div
-            style={{ top: "8vh", position: "relative", marginBottom: "20vh" }}
+          <h1
+            style={{ width: "100%", textAlign: "center" }}
+            className="store__header"
           >
-            {" "}
-            {Object.entries(listOfTransactions).map((el, idx) => {
+            История переводов
+          </h1>
+          <div
+            ref={listRef}
+            className="all-transactions-container"
+            onScroll={(e) => {
+              const target = e.target;
+              const scrollTop = target.scrollTop;
+              const scrollHeight = target.scrollHeight;
+              const clientHeight = target.clientHeight;
+              const scrollFromBottom = scrollHeight - scrollTop - clientHeight;
+
+              if (scrollFromBottom <= 0) {
+                if (data.isHasNextPage) {
+                  fetchTransactions(partOfTransactions);
+                }
+              }
+            }}
+            style={{ top: "8vh", position: "relative", marginBottom: "23vh" }}
+          >
+            {transactionsList.map((el, idx) => {
+              const currentMonth = new Date(
+                transactionsList[idx]?.creationTime
+              ).getMonth();
+
+              const prevMonth = new Date(
+                transactionsList[idx - 1]?.creationTime
+              ).getMonth();
+
               return (
                 <>
-                  <div key={idx} className="transactions__month">
-                    {el[0]}
-                  </div>
-                  {el[1].map((innderEl, i) => {
-                    return <TransactionCard key={i} />;
-                  })}
+                  {currentMonth && !prevMonth ? (
+                    <div key={el?.creationTime} className="transactions__month">
+                      {new Date(el?.creationTime).toLocaleString("default", {
+                        month: "long",
+                      })}
+                    </div>
+                  ) : currentMonth - prevMonth < 0 ? (
+                    <div key={el?.creationTime} className="transactions__month">
+                      {new Date(el?.creationTime).toLocaleString("default", {
+                        month: "long",
+                      })}
+                    </div>
+                  ) : (
+                    ""
+                  )}
+
+                  <TransactionCard
+                    isSend={el?.sender?.id === me?.id}
+                    nickname={
+                      el?.sender?.id === me?.id
+                        ? el?.recipient?.userName
+                        : el?.sender?.userName
+                    }
+                    amount={el?.powerAmount}
+                    date={el?.creationTime}
+                    key={el?.id}
+                  />
                 </>
               );
             })}
@@ -250,10 +349,13 @@ const TransactionsPage = () => {
             style={{
               width: `${pageBounding.width}px`,
               left: `${pageBounding.left}px`,
+              height: "30%",
             }}
           >
             <p className="modal__title">
-              Вы действительно хотите выбрать эту карточку?
+              {`Вы действительно хотите перевести ${qnt} кВт•Ч пользователю`}
+              <br />
+              {`${Number(id) ? `ID ${id}` : `@${id}`}`}
             </p>
             <div className="agree-modal__btn-container">
               <button
@@ -263,7 +365,41 @@ const TransactionsPage = () => {
                 Отмена
               </button>
               <button
-                onClick={handleCloseAgreeModal}
+                onClick={async () => {
+                  if (!Number(id)) {
+                    const result = await sendPower({
+                      recipient: id,
+                      amount: +qnt,
+                    });
+                    await fetchTransactions(1);
+                    setPartOfTransactions(2);
+                    handleCloseAgreeModal();
+                    if (result.isError) {
+                      handleOpenModal(["Ошибка", "", "", "ЗАКРЫТЬ"], () =>
+                        handleCloseModal()
+                      );
+                    } else {
+                      formRef.current.reset();
+                      refetchMe();
+                    }
+                  } else {
+                    const result = await sendPowerById({
+                      recipientId: +id,
+                      amount: +qnt,
+                    });
+                    await fetchTransactions(1);
+                    setPartOfTransactions(2);
+                    handleCloseAgreeModal();
+                    if (result.isError) {
+                      handleOpenModal(["Ошибка", "", "", "ЗАКРЫТЬ"], () =>
+                        handleCloseModal()
+                      );
+                    } else {
+                      formRef.current.reset();
+                      refetchMe();
+                    }
+                  }
+                }}
                 className="battyry__collect modal__acceptBtn agree-modal__btn"
               >
                 Выбрать

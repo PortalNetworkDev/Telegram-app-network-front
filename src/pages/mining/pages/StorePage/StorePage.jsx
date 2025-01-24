@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import "./StorePage.css";
 import {
@@ -10,9 +10,13 @@ import HelpBtn from "../../ui/HelpBtn/HelpBtn";
 import Modal from "../../widgets/Modal/Modal";
 import { useModal } from "../../helpers/useModal";
 import useBounding from "../../helpers/useBounding";
-import { useGetItemsQuery } from "../../../../context/service/mining.service";
+import {
+  useGetItemsQuery,
+  useLazyLotteryRollQuery,
+} from "../../../../context/service/mining.service";
 import { useDispatch, useSelector } from "react-redux";
-import { setPreviewAction } from "../../../../context/mining";
+import { updateData } from "../../../../context/mining";
+import GiftItem from "./widgets/ItemCard/GiftItem";
 
 const StorePage = () => {
   const dispatch = useDispatch();
@@ -30,6 +34,14 @@ const StorePage = () => {
   const [activeTab, setActiveTab] = useState(storeTab[0]);
   const [isAgreeModalVisible, setIsAgreeModalVisible] = useState(false);
 
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   // Запрос данных в зависимости от активной вкладки
   const { data: generatorItems } = useGetItemsQuery("generator", {
     skip: activeTab.name !== "Генератор",
@@ -38,9 +50,8 @@ const StorePage = () => {
     skip: activeTab.name !== "Батарея",
   });
 
-  useEffect(() => {
-    dispatch(setPreviewAction(false));
-  }, [dispatch]);
+  //Лотерея
+  const [lotteryRoll, lotteryRollResult] = useLazyLotteryRollQuery();
 
   const {
     isModalVisible,
@@ -58,36 +69,32 @@ const StorePage = () => {
 
   //функции для модалки подтверждения
   const [isClose, setIsClose] = useState(false);
+  const [pickCardIdx, setPickCardIdx] = useState(null);
 
   const handleCloseAgreeModal = () => {
     setIsClose(true);
     setTimeout(() => setIsAgreeModalVisible(false), 500);
   };
 
-  const handleOpenAgreeModal = () => {
+  const handleOpenAgreeModal = (idx) => {
     setIsClose(false);
+    setPickCardIdx(idx);
     setIsAgreeModalVisible(true);
   };
 
-  const gift = [
-    { own: null, pick: null, price: null },
-    { own: null, pick: null, price: null },
-    { own: null, pick: null, price: null },
-    { own: null, pick: null, price: null },
-    { own: null, pick: null, price: null },
-    { own: null, pick: null, price: null },
-    { own: null, pick: null, price: null },
-    { own: null, pick: null, price: null },
-    { own: null, pick: null, price: null },
-    { own: null, pick: null, price: null },
-    { own: null, pick: null, price: null },
-    { own: null, pick: null, price: null },
-  ];
+  const gift = useMemo(() => {
+    return new Array(15).fill(null).map(() => ({
+      own: null,
+      pick: null,
+      price: null,
+      imageUrl: (Math.random() * (4 - 1) + 1).toFixed(0),
+    }));
+  }, []);
 
   return (
     <div className="store" ref={pageRef}>
-      <div className="store__back"></div>
       <h1 className="store__header">МАГАЗИН</h1>
+
       <div className="store__tabContainer tab">
         {storeTab.map((el, idx) => {
           return (
@@ -172,17 +179,24 @@ const StorePage = () => {
           ) : (
             <div className="store-loading-div"></div>
           )
-        ) : gift ? (
+        ) : gift && !lotteryRollResult.data ? (
           gift.map((el, idx) => (
-            <ItemCard
-              img={el.imageUrl}
-              own={el.isPurchased}
-              pick={el.isSelected}
-              price={el.price}
-              tab={activeTab.key}
+            <GiftItem
+              preview={true}
               key={idx}
-              id={el.id}
+              id={idx}
               agree={handleOpenAgreeModal}
+              img={el.imageUrl}
+            />
+          ))
+        ) : gift && lotteryRollResult.data ? (
+          lotteryRollResult.data.lots.map((el, idx) => (
+            <GiftItem
+              type={el.type}
+              img={el.imageUrl}
+              value={el.value}
+              key={idx}
+              id={idx}
             />
           ))
         ) : (
@@ -216,7 +230,9 @@ const StorePage = () => {
             }}
           >
             <p className="modal__title">
-              Вы действительно хотите выбрать эту карточку?
+              {me?.power_balance > 1000
+                ? "Вы действительно хотите выбрать эту карточку?"
+                : "Недостаточно средств"}
             </p>
             <div className="agree-modal__btn-container">
               <button
@@ -225,12 +241,23 @@ const StorePage = () => {
               >
                 Отмена
               </button>
-              <button
-                onClick={handleCloseAgreeModal}
-                className="battyry__collect modal__acceptBtn agree-modal__btn"
-              >
-                Выбрать
-              </button>
+
+              {me?.power_balance > 1000 && (
+                <button
+                  onClick={async () => {
+                    await lotteryRoll(pickCardIdx);
+                    dispatch(
+                      updateData({
+                        power_balance: miningStore.power_balance - 1000,
+                      })
+                    );
+                    handleCloseAgreeModal();
+                  }}
+                  className="battyry__collect modal__acceptBtn agree-modal__btn"
+                >
+                  Выбрать
+                </button>
+              )}
             </div>
           </div>
         </div>

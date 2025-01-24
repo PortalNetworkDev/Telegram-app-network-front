@@ -10,7 +10,7 @@ import { useDispatch } from "react-redux";
 import { useMeQuery } from "../../../../../../context/service/me.service";
 import LazyLoad from "react-lazyload";
 
-const ItemCard = ({ img, own, pick, price, tab, agree, id }) => {
+const ItemCard = ({ img, own, pick, price, tab, id }) => {
   const baseUrl = process.env.REACT_APP_MINIAPPAPI;
 
   const dispatch = useDispatch();
@@ -25,12 +25,10 @@ const ItemCard = ({ img, own, pick, price, tab, agree, id }) => {
 
   return (
     <div
-      onClick={() => agree && agree()}
       style={{
-        aspectRatio:
-          tab === "generators" ? "40/55" : tab === "gift" ? "40/40" : " 40/38",
-        width: tab === "Розыгрыш" && "30%",
-        height: tab === "Батарея" && "25vh",
+        aspectRatio: tab === "generators" ? "40/55" : " 40/38",
+        width: tab.name === "Розыгрыш" && "32%",
+        height: tab.name === "Батарея" && "25vh",
       }}
       className={`item-card gradientBorder ${
         pick ? "item-card_pick" : own ? "item-card_own" : ""
@@ -44,40 +42,38 @@ const ItemCard = ({ img, own, pick, price, tab, agree, id }) => {
         />
       </LazyLoad>
 
-      {tab !== "gift" && (
-        <>
-          {" "}
-          <div className="item-card__price">
-            {!own && `${price?.toLocaleString("ru")} кВт•Ч`}
-          </div>
-          <button
-            onClick={async () => {
-              if (!own) {
-                await buySkin({
-                  skinId: id,
-                  skinType: tab === "generators" ? "generator" : "battery",
-                });
-                await refetchMining();
-              }
-              if (own && !pick) {
-                await selectSkin({
-                  skinId: id,
-                  skinType: tab === "generators" ? "generator" : "battery",
-                });
-                await refetchMining();
-                await refetchMe();
-              } else {
-                return;
-              }
-            }}
-            className={`item-card__btn ${
-              pick ? "item-card__btn_pick" : own ? "item-card__btn_own" : ""
-            }`}
-          >
-            {pick ? "ВЫБРАНО" : own ? "ВЫБРАТЬ" : "КУПИТЬ"}
-          </button>
-        </>
-      )}
+      <>
+        {" "}
+        <div className="item-card__price">
+          {!own && `${price?.toLocaleString("ru")} кВт•Ч`}
+        </div>
+        <button
+          onClick={async () => {
+            if (!own) {
+              await buySkin({
+                skinId: id,
+                skinType: tab === "generators" ? "generator" : "battery",
+              });
+              await refetchMining();
+            }
+            if (own && !pick) {
+              await selectSkin({
+                skinId: id,
+                skinType: tab === "generators" ? "generator" : "battery",
+              });
+              await refetchMining();
+              await refetchMe();
+            } else {
+              return;
+            }
+          }}
+          className={`item-card__btn ${
+            pick ? "item-card__btn_pick" : own ? "item-card__btn_own" : ""
+          }`}
+        >
+          {pick ? "ВЫБРАНО" : own ? "ВЫБРАТЬ" : "КУПИТЬ"}
+        </button>
+      </>
     </div>
   );
 };

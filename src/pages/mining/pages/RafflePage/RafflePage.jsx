@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./RafflePage.css";
 import useBounding from "../../helpers/useBounding";
-import { useDispatch } from "react-redux";
-import { setPreviewAction } from "../../../../context/mining";
+
 import Accordion from "../../widgets/Accordion/Accordion";
 
 const RafflePage = () => {
-  const dispatch = useDispatch();
-
   const [isAgreeModalVisible, setIsAgreeModalVisible] = useState(false);
 
   const { pageRef, pageBounding } = useBounding();
@@ -26,12 +23,15 @@ const RafflePage = () => {
   };
 
   useEffect(() => {
-    dispatch(setPreviewAction(false));
-  }, [dispatch]);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  }, []);
 
   return (
     <div className="store raffle" ref={pageRef}>
-      <div className="store__back mining-main__back"></div>
       <h1 className="store__header">РОЗЫГРЫШИ</h1>
 
       <div className="raffle__content">

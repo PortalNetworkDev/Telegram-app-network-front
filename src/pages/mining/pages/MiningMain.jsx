@@ -14,6 +14,14 @@ const MiningMain = () => {
     }, 1000);
   }, [dispatch]);
 
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   return (
     <>
       <PreviewPage display={preview ? "block" : "none"} />

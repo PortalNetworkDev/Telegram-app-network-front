@@ -66,8 +66,13 @@ const Battery = ({ onClick, upBtnAction }) => {
     };
 
     const imgElement = imgRef.current;
+
     if (imgElement) {
-      imgElement.addEventListener("load", handleImageLoad);
+      if (imgElement.complete === false) {
+        imgElement.addEventListener("load", handleImageLoad);
+      } else {
+        handleImageLoad();
+      }
     }
 
     return () => {

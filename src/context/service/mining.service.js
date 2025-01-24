@@ -74,6 +74,76 @@ export const miningService = apiSlice.injectEndpoints({
         { type: "Items", id: skinType },
       ],
     }),
+    recoveryGenerator: builder.query({
+      query: () => ({
+        url: "boosts/useDailyRecovery",
+        method: "GET",
+      }),
+    }),
+    recoveryBoostInfo: builder.query({
+      query: () => ({
+        url: "boosts/getRecoveryBoostInfo",
+        method: "GET",
+      }),
+    }),
+    getDailyGifts: builder.query({
+      query: () => ({
+        url: "dailyGifts/getDailyGifts",
+        method: "GET",
+      }),
+    }),
+    checkDailyGifts: builder.query({
+      query: () => ({
+        url: "dailyGifts/checkIsDailyGiftAvailable",
+        method: "GET",
+      }),
+    }),
+    lotteryRoll: builder.query({
+      query: (position) => ({
+        url: "skinsShop/lottery/roll ",
+        method: "POST",
+        body: { position },
+      }),
+    }),
+    claimDailyGift: builder.query({
+      query: () => ({
+        url: "dailyGifts/claimDailyGift",
+        method: "POST",
+      }),
+    }),
+    getTopMiners: builder.query({
+      query: (page) => ({
+        url: `topMinersList/getMinersList?page=${page}`,
+        method: "GET",
+      }),
+    }),
+    getUserPosition: builder.query({
+      query: (page) => ({
+        url: `topMinersList/getUserListPosition`,
+        method: "GET",
+      }),
+    }),
+    getTransactionHistory: builder.query({
+      query: ({ limit, page, timePeriod }) => ({
+        url: `transactions/history`,
+        method: "POST",
+        body: { limit, page, timePeriod },
+      }),
+    }),
+    sendPower: builder.query({
+      query: ({ recipient, amount }) => ({
+        url: `sendPower/send`,
+        method: "POST",
+        body: { recipient, amount },
+      }),
+    }),
+    sendPowerById: builder.query({
+      query: ({ recipientId, amount }) => ({
+        url: `sendPower/sendById`,
+        method: "POST",
+        body: { recipientId, amount },
+      }),
+    }),
   }),
 });
 
@@ -87,4 +157,15 @@ export const {
   useGetItemsQuery,
   useBuySkinMutation,
   useSelectSkinMutation,
+  useLazyRecoveryGeneratorQuery,
+  useRecoveryBoostInfoQuery,
+  useGetDailyGiftsQuery,
+  useCheckDailyGiftsQuery,
+  useLazyLotteryRollQuery,
+  useLazyClaimDailyGiftQuery,
+  useLazyGetTopMinersQuery,
+  useGetUserPositionQuery,
+  useLazyGetTransactionHistoryQuery,
+  useLazySendPowerQuery,
+  useLazySendPowerByIdQuery,
 } = miningService;

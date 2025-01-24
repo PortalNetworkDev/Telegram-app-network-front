@@ -1,3 +1,7 @@
+.transactions__main {
+  margin-bottom: 35%;
+}
+
 .transaction__balance {
   position: absolute;
   top: 8vh;
@@ -11,6 +15,11 @@
   position: absolute;
   top: 5vh;
   color: rgba(255, 255, 255, 0.64);
+  transition: transform 0.3s;
+}
+
+.transaction__user-id:active {
+  transform: scale(0.9);
 }
 
 .transactions__inputs-container {
@@ -57,6 +66,7 @@
 
 .all-transactions__btn {
   background: transparent;
+  z-index: 1;
 }
 
 .all-transactions__btn::before {
@@ -86,4 +96,10 @@
   font-size: 20;
   font-weight: 500;
   text-transform: uppercase;
+}
+
+.all-transactions-container {
+  height: 78vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
