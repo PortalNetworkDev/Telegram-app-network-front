@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./ProfilePage.css";
-import {
-  useMeQuery,
-  useStaticQuery,
-} from "../../../../context/service/me.service";
+import { useMeQuery } from "../../../../context/service/me.service";
 import ProgressBar from "../../widgets/ProgressBar/ProgressBar";
 import {
   useGetUserPositionQuery,
@@ -38,15 +35,31 @@ const StorePage = () => {
       );
   }, [minig?.power_balance, me]);
 
+  let isFetching = useRef(false);
+
   const fetchTopList = async (partOfRate) => {
-    const result = await getTopMinersList(partOfRate);
-    setPartOfRate((prev) => prev + 1);
-    setRateList((prev) => [...prev, ...result?.data?.list]);
+    if (isFetching.current) return;
+    isFetching.current = true;
+    try {
+      const result = await getTopMinersList(partOfRate);
+
+      setRateList((prev) => [...prev, ...result?.data?.list]);
+      setPartOfRate((prev) => prev + 1);
+    } catch (error) {
+      console.error("Ошибка загрузки данных:", error);
+    } finally {
+      isFetching.current = false;
+    }
   };
 
   useEffect(() => {
     if (allRate) {
       fetchTopList(partOfRate);
+      window.scrollTo({
+        top: -500,
+        left: 0,
+        behavior: "instant",
+      });
     }
     if (!allRate) {
       setPartOfRate(0);
