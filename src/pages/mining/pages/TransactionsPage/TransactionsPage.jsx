@@ -38,16 +38,25 @@ const TransactionsPage = () => {
   const [transactionsList, setTransactionsList] = useState([]);
   const [partOfTransactions, setPartOfTransactions] = useState(1);
   const [allTransactions, setAllTransactions] = useState(false);
-  const listRef = useRef(null);
+  let isFetching = useRef(false);
 
   const fetchTransactions = async (partOfTransactions) => {
-    const result = await getTransactionHistory({ page: partOfTransactions });
+    if (isFetching.current) return;
+    isFetching.current = true;
 
-    if (allTransactions) {
-      setPartOfTransactions((prev) => prev + 1);
-      setTransactionsList((prev) => [...prev, ...result?.data?.items]);
-    } else {
-      setTransactionsList(result?.data?.items);
+    try {
+      const result = await getTransactionHistory({ page: partOfTransactions });
+
+      if (allTransactions) {
+        setPartOfTransactions((prev) => prev + 1);
+        setTransactionsList((prev) => [...prev, ...result?.data?.items]);
+      } else {
+        setTransactionsList(result?.data?.items);
+      }
+    } catch (error) {
+      console.error("Ошибка загрузки данных:", error);
+    } finally {
+      isFetching.current = false;
     }
   };
 
@@ -56,9 +65,9 @@ const TransactionsPage = () => {
       fetchTransactions(1);
       setPartOfTransactions(2);
     }
-    if (allTransactions && listRef.current) {
-      listRef.current.scrollTo({
-        top: 0,
+    if (allTransactions) {
+      window.scrollTo({
+        top: -500,
         left: 0,
         behavior: "instant",
       });
@@ -69,6 +78,7 @@ const TransactionsPage = () => {
   useEffect(() => {
     setPowerBalance(me?.power_balance);
   }, [me]);
+
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -264,7 +274,6 @@ const TransactionsPage = () => {
             История переводов
           </h1>
           <div
-            ref={listRef}
             className="all-transactions-container"
             onScroll={(e) => {
               const target = e.target;
