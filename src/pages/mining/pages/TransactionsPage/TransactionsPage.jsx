@@ -32,10 +32,38 @@ const TransactionsPage = () => {
   } = useModal();
 
   //transactions req
-  const [getTransactionHistory, { historyData, isHistoryLoading }] =
-    useLazyGetTransactionHistoryQuery();
+  const [getTransactionHistory, { data }] = useLazyGetTransactionHistoryQuery();
   const [sendPower] = useLazySendPowerQuery();
   const [sendPowerById] = useLazySendPowerByIdQuery();
+  const [transactionsList, setTransactionsList] = useState([]);
+  const [partOfTransactions, setPartOfTransactions] = useState(1);
+  const [allTransactions, setAllTransactions] = useState(false);
+  const listRef = useRef(null);
+
+  const fetchTransactions = async (partOfTransactions) => {
+    const result = await getTransactionHistory({ page: partOfTransactions });
+
+    if (allTransactions) {
+      setPartOfTransactions((prev) => prev + 1);
+      setTransactionsList((prev) => [...prev, ...result?.data?.items]);
+    } else {
+      setTransactionsList(result?.data?.items);
+    }
+  };
+
+  useEffect(() => {
+    if (!allTransactions) {
+      fetchTransactions(1);
+      setPartOfTransactions(2);
+    }
+    if (allTransactions && listRef.current) {
+      listRef.current.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "instant",
+      });
+    }
+  }, [allTransactions]);
 
   //effects
   useEffect(() => {
@@ -48,24 +76,6 @@ const TransactionsPage = () => {
       behavior: "smooth",
     });
   }, []);
-
-  //transactions
-  useEffect(() => {
-    getTransactionHistory({
-      limit: 1,
-      page: 1,
-      timePeriod: { from: 1, to: 2 },
-    });
-  }, []);
-  const transactions = [1, 2, 3];
-
-  //main page or all transactions
-  const [allTransactions, setAllTransactions] = useState(false);
-  const listOfTransactions = {
-    october: [1, 2, 3, 4, 5],
-    septemder: [1, 2, 3, 4, 5],
-    december: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-  };
 
   //inputs
   const [id, setId] = useState("");
@@ -200,14 +210,26 @@ const TransactionsPage = () => {
               История переводов
             </h2>
 
-            {transactions.length === 0 ? (
+            {transactionsList.length === 0 ? (
               <div className="transactions_isEmpty">
                 ВАША ИСТОРИЯ ПЕРЕВОДОВ ПУСТА
               </div>
             ) : (
               <div className="transactions__container">
-                {transactions.map((el, idx) => {
-                  return <TransactionCard key={idx} />;
+                {transactionsList.slice(0, 3).map((el) => {
+                  return (
+                    <TransactionCard
+                      isSend={el?.sender?.id === me?.id}
+                      nickname={
+                        el?.sender?.id === me?.id
+                          ? el?.recipient?.userName
+                          : el?.sender?.userName
+                      }
+                      amount={el?.powerAmount}
+                      date={el?.creationTime}
+                      key={el?.id}
+                    />
+                  );
                 })}
                 <button
                   onClick={() => setAllTransactions(true)}
@@ -242,18 +264,61 @@ const TransactionsPage = () => {
             История переводов
           </h1>
           <div
+            ref={listRef}
+            className="all-transactions-container"
+            onScroll={(e) => {
+              const target = e.target;
+              const scrollTop = target.scrollTop;
+              const scrollHeight = target.scrollHeight;
+              const clientHeight = target.clientHeight;
+              const scrollFromBottom = scrollHeight - scrollTop - clientHeight;
+
+              if (scrollFromBottom <= 0) {
+                if (data.isHasNextPage) {
+                  fetchTransactions(partOfTransactions);
+                }
+              }
+            }}
             style={{ top: "8vh", position: "relative", marginBottom: "23vh" }}
           >
-            {" "}
-            {Object.entries(listOfTransactions).map((el, idx) => {
+            {transactionsList.map((el, idx) => {
+              const currentMonth = new Date(
+                transactionsList[idx]?.creationTime
+              ).getMonth();
+
+              const prevMonth = new Date(
+                transactionsList[idx - 1]?.creationTime
+              ).getMonth();
+
               return (
                 <>
-                  <div key={idx} className="transactions__month">
-                    {el[0]}
-                  </div>
-                  {el[1].map((innderEl, i) => {
-                    return <TransactionCard key={i} />;
-                  })}
+                  {currentMonth && !prevMonth ? (
+                    <div key={el?.creationTime} className="transactions__month">
+                      {new Date(el?.creationTime).toLocaleString("default", {
+                        month: "long",
+                      })}
+                    </div>
+                  ) : currentMonth - prevMonth < 0 ? (
+                    <div key={el?.creationTime} className="transactions__month">
+                      {new Date(el?.creationTime).toLocaleString("default", {
+                        month: "long",
+                      })}
+                    </div>
+                  ) : (
+                    ""
+                  )}
+
+                  <TransactionCard
+                    isSend={el?.sender?.id === me?.id}
+                    nickname={
+                      el?.sender?.id === me?.id
+                        ? el?.recipient?.userName
+                        : el?.sender?.userName
+                    }
+                    amount={el?.powerAmount}
+                    date={el?.creationTime}
+                    key={el?.id}
+                  />
                 </>
               );
             })}
@@ -284,10 +349,13 @@ const TransactionsPage = () => {
             style={{
               width: `${pageBounding.width}px`,
               left: `${pageBounding.left}px`,
+              height: "30%",
             }}
           >
             <p className="modal__title">
-              Вы действительно хотите выбрать эту карточку?
+              {`Вы действительно хотите перевести ${qnt} кВт•Ч пользователю`}
+              <br />
+              {`${Number(id) ? `ID ${id}` : `@${id}`}`}
             </p>
             <div className="agree-modal__btn-container">
               <button
@@ -303,6 +371,8 @@ const TransactionsPage = () => {
                       recipient: id,
                       amount: +qnt,
                     });
+                    await fetchTransactions(1);
+                    setPartOfTransactions(2);
                     handleCloseAgreeModal();
                     if (result.isError) {
                       handleOpenModal(["Ошибка", "", "", "ЗАКРЫТЬ"], () =>
@@ -317,6 +387,8 @@ const TransactionsPage = () => {
                       recipientId: +id,
                       amount: +qnt,
                     });
+                    await fetchTransactions(1);
+                    setPartOfTransactions(2);
                     handleCloseAgreeModal();
                     if (result.isError) {
                       handleOpenModal(["Ошибка", "", "", "ЗАКРЫТЬ"], () =>

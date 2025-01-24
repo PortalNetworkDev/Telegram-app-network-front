@@ -97,3 +97,9 @@
   font-weight: 500;
   text-transform: uppercase;
 }
+
+.all-transactions-container {
+  height: 78vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
