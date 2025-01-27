@@ -45,7 +45,7 @@ const ItemCard = ({ img, own, pick, price, tab, id }) => {
       <>
         {" "}
         <div className="item-card__price">
-          {!own && `${price?.toLocaleString("ru")} кВт•Ч`}
+          {!own && `${price?.toLocaleString("ru")} `}
         </div>
         <button
           onClick={async () => {

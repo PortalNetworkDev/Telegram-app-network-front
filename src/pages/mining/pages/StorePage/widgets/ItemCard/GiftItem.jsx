@@ -3,7 +3,15 @@ import "./ItemCard.css";
 
 import LazyLoad from "react-lazyload";
 
-const GiftItemCard = ({ img, value, agree, id, type, preview = false }) => {
+const GiftItemCard = ({
+  img,
+  value,
+  agree,
+  id,
+  type,
+  isReward,
+  preview = false,
+}) => {
   const baseUrl = process.env.REACT_APP_MINIAPPAPI;
 
   return (
@@ -12,9 +20,11 @@ const GiftItemCard = ({ img, value, agree, id, type, preview = false }) => {
       style={{
         aspectRatio: "40/40",
         width: "32%",
+        background:
+          isReward &&
+          "linear-gradient(0deg, rgb(0, 193, 255, 45%), rgb(100, 252, 215, 45%))",
       }}
-      className={`item-card gradientBorder 
-      }`}
+      className={"item-card gradientBorder"}
     >
       <LazyLoad style={{ width: "100%", height: "100%" }}>
         {preview ? (
@@ -39,7 +49,9 @@ const GiftItemCard = ({ img, value, agree, id, type, preview = false }) => {
               ? "НИЧЕГО"
               : type === "nft"
               ? "NFT"
-              : `${value} кВт•Ч`}
+              : type === "poe"
+              ? `${value} POE`
+              : `${value} Вт•Ч`}
           </div>
         )}
       </>

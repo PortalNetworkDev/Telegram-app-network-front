@@ -33,6 +33,7 @@ const StorePage = () => {
 
   const [activeTab, setActiveTab] = useState(storeTab[0]);
   const [isAgreeModalVisible, setIsAgreeModalVisible] = useState(false);
+  const [isRepeatModalVisible, setIsRepeatlVisible] = useState(false);
 
   useEffect(() => {
     window.scrollTo({
@@ -52,6 +53,12 @@ const StorePage = () => {
 
   //Лотерея
   const [lotteryRoll, lotteryRollResult] = useLazyLotteryRollQuery();
+
+  useEffect(() => {
+    if (lotteryRollResult.data) {
+      handleOpenRepeatModal();
+    }
+  }, lotteryRollResult.data);
 
   const {
     isModalVisible,
@@ -82,6 +89,17 @@ const StorePage = () => {
     setIsAgreeModalVisible(true);
   };
 
+  const handleCloseRepeatModal = () => {
+    setIsClose(true);
+    setTimeout(() => setIsRepeatlVisible(false), 500);
+  };
+
+  const handleOpenRepeatModal = (idx) => {
+    setTimeout(() => setIsClose(false), 700);
+    setPickCardIdx(idx);
+    setTimeout(() => setIsRepeatlVisible(true), 700);
+  };
+
   const gift = useMemo(() => {
     return new Array(15).fill(null).map(() => ({
       own: null,
@@ -89,7 +107,7 @@ const StorePage = () => {
       price: null,
       imageUrl: (Math.random() * (4 - 1) + 1).toFixed(0),
     }));
-  }, []);
+  }, [lotteryRollResult.data]);
 
   return (
     <div className="store" ref={pageRef}>
@@ -122,17 +140,17 @@ const StorePage = () => {
         {me &&
           staticData &&
           miningStore.power_balance &&
-          `${`${staticData?.your_balance}:    ${miningStore?.power_balance}    кВт•Ч`}`}
+          `${`${staticData?.your_balance}:    ${miningStore?.power_balance}    Вт•Ч`}`}
       </div>
 
       {activeTab.name === "Розыгрыш" && (
         <div className="giftInfo">
-          <p className="giftInfo__text">1 карточка - 1000 кВт•Ч</p>
+          <p className="giftInfo__text">1 карточка - 1000 Вт•Ч</p>
           <HelpBtn
             onClick={() => {
               handleOpenModal(
                 [
-                  "Вы можете испытать свою удачу и выиграть POE, кВт•Ч, NFT и многое другое",
+                  "Вы можете испытать свою удачу и выиграть POE, Вт•Ч, NFT и многое другое",
                   "Призы обновляются каждый день",
                   "",
                   "",
@@ -197,6 +215,7 @@ const StorePage = () => {
               value={el.value}
               key={idx}
               id={idx}
+              isReward={el.isReward}
             />
           ))
         ) : (
@@ -258,6 +277,62 @@ const StorePage = () => {
                   Выбрать
                 </button>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isRepeatModalVisible && (
+        <div
+          className={`overlay ${isClose ? "overlayClose" : ""}`}
+          onClick={handleCloseRepeatModal}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="agree-modal"
+            style={{
+              width: `${pageBounding.width}px`,
+              left: `${pageBounding.left}px`,
+            }}
+          >
+            <p className="modal__title">
+              {lotteryRollResult.data?.lots.find((el) => el.isReward).type ===
+              "lose"
+                ? "Вы ничего не выиграли"
+                : lotteryRollResult.data?.lots.find((el) => el.isReward)
+                    .type === "nft"
+                ? "Вы выиграли NFT"
+                : lotteryRollResult.data?.lots.find((el) => el.isReward)
+                    .type === "power"
+                ? `Вы выиграли ${
+                    lotteryRollResult.data?.lots.find((el) => el.isReward).value
+                  } Вт•Ч`
+                : lotteryRollResult.data?.lots.find((el) => el.isReward)
+                    .type === "poe"
+                ? `Вы выиграли ${
+                    lotteryRollResult.data?.lots.find((el) => el.isReward).value
+                  } POE`
+                : ""}
+              <br />
+              Повторить розыгыш?
+            </p>
+            <div className="agree-modal__btn-container">
+              <button
+                onClick={handleCloseRepeatModal}
+                className="battyry__collect modal__acceptBtn agree-modal__btn"
+              >
+                Отмена
+              </button>
+
+              <button
+                onClick={() => {
+                  lotteryRollResult.data = undefined;
+                  handleCloseRepeatModal();
+                }}
+                className="battyry__collect modal__acceptBtn agree-modal__btn"
+              >
+                Повторить
+              </button>
             </div>
           </div>
         </div>

@@ -63,7 +63,7 @@ const DailyReward = ({ btnFunc, setModalClose, bounding }) => {
               >
                 <p className="rewardModal__dayText">{`${el.day} День`}</p>
               </div>
-              <p className="rewardModal__infoText">{`${el.gift}  кВт•Ч`}</p>
+              <p className="rewardModal__infoText">{`${el.gift}  Вт•Ч`}</p>
             </div>
           ))}
           <button

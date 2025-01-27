@@ -13,7 +13,7 @@ const Navigation = ({ style }) => {
     { title: "Майнить энергию", route: "" },
     { title: "Магазин", route: "store" },
     { title: "Розыгрыш призов", route: "raffle" },
-    { title: "Отправить кВт•Ч", route: "transactions" },
+    { title: "Отправить Вт•Ч", route: "transactions" },
     { title: "Задания", route: "tasks" },
   ];
 

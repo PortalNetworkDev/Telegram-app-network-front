@@ -36,19 +36,20 @@ const StorePage = () => {
   }, [minig?.power_balance, me]);
 
   let isFetching = useRef(false);
+  let fetchTime = useRef(new Date().getTime());
 
   const fetchTopList = async (partOfRate) => {
     if (isFetching.current) return;
     isFetching.current = true;
     try {
       const result = await getTopMinersList(partOfRate);
-
       setRateList((prev) => [...prev, ...result?.data?.list]);
       setPartOfRate((prev) => prev + 1);
     } catch (error) {
       console.error("Ошибка загрузки данных:", error);
     } finally {
       isFetching.current = false;
+      fetchTime.current = new Date().getTime();
     }
   };
 
@@ -108,7 +109,7 @@ const StorePage = () => {
               <p className="profile__powerBeforeNextLevel">
                 {`${(
                   me?.nextLevelPowerBalance - me?.power_balance
-                ).toLocaleString("ru")} кВт•Ч до следующего уровня`}
+                ).toLocaleString("ru")} Вт•Ч до следующего уровня`}
               </p>
             ) : (
               <div
@@ -143,7 +144,7 @@ const StorePage = () => {
                     className="transaction-card__info-cont"
                   >
                     <p className="rate__power">
-                      {me?.power_balance.toLocaleString("ru")} кВт•Ч
+                      {me?.power_balance.toLocaleString("ru")} Вт•Ч
                     </p>
                   </div>
                 </div>
@@ -179,7 +180,7 @@ const StorePage = () => {
               <div className="ref__container">
                 <h3 className="ref__title">Это ваша персональная ссылка</h3>
                 <p className="ref__info">
-                  Отправьте её друзьям, и вы оба получите по 1 000 кВт•Ч на
+                  Отправьте её друзьям, и вы оба получите по 1 000 Вт•Ч на
                   баланс.{" "}
                 </p>
                 <div className="ref__link">
@@ -215,7 +216,9 @@ const StorePage = () => {
               const clientHeight = target.clientHeight;
               const scrollFromBottom = scrollHeight - scrollTop - clientHeight;
 
-              if (scrollFromBottom <= 0) {
+              if (scrollFromBottom < 300) {
+                if (new Date().getTime() - fetchTime.current < 500) return;
+
                 if (data.hasNextPage) {
                   fetchTopList(partOfRate);
                 }
@@ -260,7 +263,7 @@ const StorePage = () => {
                     <div className="transaction-card__info-cont">
                       {me ? (
                         <p className="rate__power">
-                          {el?.powerBalance.toLocaleString("ru")} кВт•Ч
+                          {el?.powerBalance.toLocaleString("ru")} Вт•Ч
                         </p>
                       ) : (
                         <div
