@@ -39,13 +39,16 @@ const TransactionsPage = () => {
   const [partOfTransactions, setPartOfTransactions] = useState(1);
   const [allTransactions, setAllTransactions] = useState(false);
   let isFetching = useRef(false);
+  let fetchTime = useRef(new Date().getTime());
 
   const fetchTransactions = async (partOfTransactions) => {
     if (isFetching.current) return;
     isFetching.current = true;
 
     try {
-      const result = await getTransactionHistory({ page: partOfTransactions });
+      const result = await getTransactionHistory({
+        page: partOfTransactions,
+      });
 
       if (allTransactions) {
         setPartOfTransactions((prev) => prev + 1);
@@ -57,6 +60,7 @@ const TransactionsPage = () => {
       console.error("Ошибка загрузки данных:", error);
     } finally {
       isFetching.current = false;
+      fetchTime.current = new Date().getTime();
     }
   };
 
@@ -90,8 +94,10 @@ const TransactionsPage = () => {
   //inputs
   const [id, setId] = useState("");
   const [qnt, setQnt] = useState("");
-  const [idPlaceholder, setIdPlaceholder] = useState("ID или @name получателя");
-  const [qntPlaceholder, setQntPlaceholder] = useState("Сумма кВт•Ч");
+  const [idPlaceholder, setIdPlaceholder] = useState(
+    "ID или username получателя"
+  );
+  const [qntPlaceholder, setQntPlaceholder] = useState("Сумма Вт•Ч");
 
   function debounce(func, delay) {
     let timeout;
@@ -110,7 +116,7 @@ const TransactionsPage = () => {
       } else {
         e.target.value !== ""
           ? setQnt(e.target.value)
-          : setQntPlaceholder("Сумма кВт•Ч");
+          : setQntPlaceholder("Сумма Вт•Ч");
       }
     }, 500),
     []
@@ -138,7 +144,7 @@ const TransactionsPage = () => {
     <div className="store transaction" ref={pageRef}>
       {!allTransactions ? (
         <div className="transactions__main">
-          <h1 className="store__header">Отправить кВт•Ч</h1>
+          <h1 className="store__header">Отправить Вт•Ч</h1>
 
           <div className="battery-power transaction__balance">
             {powerBalance ? (
@@ -282,8 +288,9 @@ const TransactionsPage = () => {
               const clientHeight = target.clientHeight;
               const scrollFromBottom = scrollHeight - scrollTop - clientHeight;
 
-              if (scrollFromBottom <= 0) {
+              if (scrollFromBottom < 300) {
                 if (data.isHasNextPage) {
+                  if (new Date().getTime() - fetchTime.current < 500) return;
                   fetchTransactions(partOfTransactions);
                 }
               }
@@ -362,7 +369,7 @@ const TransactionsPage = () => {
             }}
           >
             <p className="modal__title">
-              {`Вы действительно хотите перевести ${qnt} кВт•Ч пользователю`}
+              {`Вы действительно хотите перевести ${qnt} Вт•Ч пользователю`}
               <br />
               {`${Number(id) ? `ID ${id}` : `@${id}`}`}
             </p>
@@ -384,8 +391,9 @@ const TransactionsPage = () => {
                     setPartOfTransactions(2);
                     handleCloseAgreeModal();
                     if (result.isError) {
-                      handleOpenModal(["Ошибка", "", "", "ЗАКРЫТЬ"], () =>
-                        handleCloseModal()
+                      handleOpenModal(
+                        ["Ошибка", result.error.data.message, "", "ЗАКРЫТЬ"],
+                        () => handleCloseModal()
                       );
                     } else {
                       formRef.current.reset();
@@ -400,8 +408,9 @@ const TransactionsPage = () => {
                     setPartOfTransactions(2);
                     handleCloseAgreeModal();
                     if (result.isError) {
-                      handleOpenModal(["Ошибка", "", "", "ЗАКРЫТЬ"], () =>
-                        handleCloseModal()
+                      handleOpenModal(
+                        ["Ошибка", result.error.data.message, "", "ЗАКРЫТЬ"],
+                        () => handleCloseModal()
                       );
                     } else {
                       formRef.current.reset();
@@ -411,7 +420,7 @@ const TransactionsPage = () => {
                 }}
                 className="battyry__collect modal__acceptBtn agree-modal__btn"
               >
-                Выбрать
+                Отправить
               </button>
             </div>
           </div>

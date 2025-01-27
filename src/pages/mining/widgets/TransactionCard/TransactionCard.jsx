@@ -33,8 +33,8 @@ const TransactionCard = ({ isSend, nickname, amount, date }) => {
       <div className="transaction-card__info-cont">
         <p className="transaction-card__mainText">
           {isSend
-            ? `-${amount?.toLocaleString("ru")} кВт•Ч`
-            : `+${amount?.toLocaleString("ru")} кВт•Ч`}
+            ? `-${amount?.toLocaleString("ru")} Вт•Ч`
+            : `+${amount?.toLocaleString("ru")} Вт•Ч`}
         </p>
         <p className="transaction-card__subText">{formattedDate}</p>
       </div>

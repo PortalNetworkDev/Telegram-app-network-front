@@ -30,7 +30,7 @@ const Accordion = ({ raffle, handleOpenAgreeModal }) => {
                       <li>Третье условие</li>
                     </ol>
                     <p className="raffle-card__price">
-                      Стоимость участия: 4 400 кВт•Ч
+                      Стоимость участия: 4 400 Вт•Ч
                     </p>
 
                     <button

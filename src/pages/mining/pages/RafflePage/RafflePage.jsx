@@ -33,8 +33,14 @@ const RafflePage = () => {
   return (
     <div className="store raffle" ref={pageRef}>
       <h1 className="store__header">РОЗЫГРЫШИ</h1>
+      <h2
+        className="store__header"
+        style={{ width: "100%", top: "40vh", textAlign: "center" }}
+      >
+        Страница в разработке
+      </h2>
 
-      <div className="raffle__content">
+      {/* <div className="raffle__content">
         <Accordion
           raffle={[{ type: 1 }]}
           handleOpenAgreeModal={handleOpenAgreeModal}
@@ -75,7 +81,7 @@ const RafflePage = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
