@@ -127,6 +127,11 @@
   align-items: center;
   border-radius: 5px;
   margin-bottom: 21px;
+  transition: transform 0.3s;
+}
+
+.ref__link:active {
+  transform: scale(0.95);
 }
 
 .star-container {

@@ -1,10 +1,12 @@
 import React from "react";
 import "./ProgressBar.css";
+import { useMeQuery } from "../../../../context/service/me.service";
 
 const ProgressBar = ({ size = 100, strokeWidth = 10, progress }) => {
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (progress / 100) * circumference;
+  const { data: me = null } = useMeQuery();
 
   return (
     <div className="progressbar-container">
@@ -44,7 +46,15 @@ const ProgressBar = ({ size = 100, strokeWidth = 10, progress }) => {
           }}
         />
       </svg>
-      <div className="progressbar__avatar">avatar</div>
+      {me?.userAvatarUrl ? (
+        <img
+          className="progressbar__avatar"
+          src={`${me?.userAvatarUrl}`}
+          alt="avatar"
+        />
+      ) : (
+        <div className="progressbar__avatar"> avatar </div>
+      )}
     </div>
   );
 };
