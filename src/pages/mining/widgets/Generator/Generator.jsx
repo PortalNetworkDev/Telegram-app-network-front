@@ -181,15 +181,19 @@ const Generator = ({ onClick, upBtnAction, handleOpenModal }) => {
           }}
           className="geterator__rotateContainer"
         >
-          <div className="loader-container">
-            <img
-              className={`loader ${
-                isRotating ? "loader__animation-start" : "loader__animation-end"
-              }`}
-              src="./gif/loader.gif"
-              alt="loader"
-            />
-          </div>
+          {me?.isGeneratorSkinWithLightInCenter && (
+            <div className="loader-container">
+              <img
+                className={`loader ${
+                  isRotating
+                    ? "loader__animation-start"
+                    : "loader__animation-end"
+                }`}
+                src="./gif/loader.gif"
+                alt="loader"
+              />
+            </div>
+          )}
 
           <div
             style={{ opacity: balance && limit && 1 - balance / limit }}

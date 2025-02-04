@@ -183,8 +183,15 @@ const StorePage = () => {
                   Отправьте её друзьям, и вы оба получите по 1 000 Вт•Ч на
                   баланс.{" "}
                 </p>
-                <div className="ref__link">
-                  https://portalenergy.tech/
+                <div
+                  onClick={() => {
+                    navigator.clipboard.writeText(
+                      `https://telegram.me/share/url?url=${process.env.REACT_APP_MINIAPPURL}?startapp=r-${me?.id}`
+                    );
+                  }}
+                  className="ref__link"
+                >
+                  {`https://telegram.me/share/`}
                   <img
                     style={{ marginLeft: 45 }}
                     alt="copy"
@@ -231,7 +238,11 @@ const StorePage = () => {
               rateList.map((el, idx) => {
                 return (
                   <div
-                    style={{ marginBottom: 15 }}
+                    style={{
+                      marginBottom: 15,
+                      background:
+                        el.userId === me.id && "rgba(0, 193, 255, 0.62)",
+                    }}
                     key={idx}
                     className="power transaction-card allRateCard"
                   >
