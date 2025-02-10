@@ -185,8 +185,9 @@ const StorePage = () => {
                 </p>
                 <div
                   onClick={() => {
-                    navigator.clipboard.writeText(
-                      `https://telegram.me/share/url?url=${process.env.REACT_APP_MINIAPPURL}?startapp=r-${me?.id}`
+                    window.open(
+                      `https://telegram.me/share/url?url=${process.env.REACT_APP_MINIAPPURL}?startapp=r-${me?.id} Познакомься с проектом Portal Network`,
+                      "_blank"
                     );
                   }}
                   className="ref__link"

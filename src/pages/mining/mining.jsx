@@ -20,12 +20,6 @@ export const Mining = () => {
     window.Telegram?.WebApp.setBackgroundColor("#0d0b0e");
   }, []);
 
-
-  //NOTE: delete after check
-  useEffect(() => {
-    console.log(window.Telegram?.WebApp.initDataUnsafe.user, "USER DATA");
-  }, []);
-
   //Говорим, что открыта страница майнинга
   useEffect(() => {
     dispatch(setMiningAction(true));

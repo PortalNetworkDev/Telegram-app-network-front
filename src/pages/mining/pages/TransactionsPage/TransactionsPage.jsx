@@ -161,7 +161,11 @@ const TransactionsPage = () => {
                 />
                 <div
                   onClick={() => {
-                    navigator.clipboard.writeText(me?.id);
+                        window.open(
+                      `https://telegram.me/share/url?url=${me?.id} Мой ID для перевода`,
+                      "_blank"
+                    );
+
                   }}
                   className="transaction__user-id"
                 >

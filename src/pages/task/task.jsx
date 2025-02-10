@@ -194,11 +194,19 @@ export const Task = () => {
             if (window.Telegram.WebApp.setEmojiStatus) {
               window.Telegram.WebApp.setEmojiStatus(
                 "5247176376045294117",
-                (success) => {
+                (success, error) => {
                   if (success) {
-                    console.log("Эмодзи статус был успешно установлен!");
+                    console.log(
+                      "Эмодзи статус был успешно установлен!",
+                      `success: ${success}`,
+                      `error: ${error}`
+                    );
                   } else {
-                    console.log("Не удалось установить эмодзи статус");
+                    console.log(
+                      "Не удалось установить эмодзи статус",
+                      `success: ${success}`,
+                      `error: ${error}`
+                    );
                   }
                 }
               );

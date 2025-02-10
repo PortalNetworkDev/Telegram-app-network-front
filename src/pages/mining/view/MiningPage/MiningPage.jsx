@@ -13,6 +13,7 @@ import {
   useMiningQuery,
   useLazyBatteryUpQuery,
   useCheckDailyGiftsQuery,
+  useLazyGetNotificationsQuery,
 } from "../../../../context/service/mining.service";
 import { useGetPOERateQuery } from "../../../../context/service/geckoApi.service";
 import { useModal } from "../../helpers/useModal";
@@ -71,6 +72,49 @@ export const MiningPage = ({ opacity }) => {
   useEffect(() => {
     if (avaibleDailyGift && avaibleDailyGift.isAbleToClaim) {
       setReward(true);
+    }
+  }, [avaibleDailyGift]);
+
+  //notifications
+  const [getNotifications, { notificationsData }] =
+    useLazyGetNotificationsQuery();
+
+  const notificationsFunc = async () => {
+    const response = await getNotifications();
+    if (Object.keys(response.data?.notification).length === 0) {
+      return;
+    } else if (Object.keys(response.data?.notification).includes("type")) {
+      const type = response.data?.notification.type;
+      handleOpenModal(
+        [
+          type === "transaction"
+            ? `Вы получили ${response.data?.notification.powerAmount} Вт•Ч от пользователя @${response.data?.notification.sender.username}`
+            : type === "referral"
+            ? `Вы получили ${response.data?.notification.powerAmount} Вт•Ч за вход в приложение по ссылке-приглашению`
+            : `Вы получили ${response.data?.notification.powerAmount} Вт•Ч за приглашение пользователя @${response.data?.notification.refUserName}`,
+          type === "referral" &&
+            `Вас пригласил пользователь @${response.data?.notification.inviterUserName}`,
+          ``,
+          "ПОНЯТНО",
+        ],
+        handleCloseModal
+      );
+    } else {
+      handleOpenModal(
+        [
+          "У вас новые поступления, проверьте их в истории переводов",
+          "",
+          "",
+          "ПОНЯТНО",
+        ],
+        handleCloseModal
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (avaibleDailyGift?.isAbleToClaim === false) {
+      notificationsFunc();
     }
   }, [avaibleDailyGift]);
 
