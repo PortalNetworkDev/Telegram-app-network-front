@@ -27,7 +27,7 @@ const TransactionCard = ({ isSend, nickname, amount, date }) => {
           <p className="transaction-card__mainText">
             {isSend ? "Отправлено" : "Получено"}
           </p>
-          <p className="transaction-card__subText">{`@${nickname}`}</p>
+          <p className="transaction-card__subText">{`${nickname}`}</p>
         </div>
       </div>
       <div className="transaction-card__info-cont">

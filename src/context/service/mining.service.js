@@ -144,6 +144,11 @@ export const miningService = apiSlice.injectEndpoints({
         body: { recipientId, amount },
       }),
     }),
+    getNotifications: builder.query({
+      query: () => ({
+        url: "notifications/getNotificationsInfo",
+      }),
+    }),
   }),
 });
 
@@ -168,4 +173,5 @@ export const {
   useLazyGetTransactionHistoryQuery,
   useLazySendPowerQuery,
   useLazySendPowerByIdQuery,
+  useLazyGetNotificationsQuery,
 } = miningService;
