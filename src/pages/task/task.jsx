@@ -1,7 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./task.css";
 import { useNavigate } from "react-router-dom";
-import { useGetMyStateQuery } from "../../context/service/task.service";
+import {
+  useGetMyStateQuery,
+  useRewardForEmojiMutation,
+} from "../../context/service/task.service";
 import { usePostTaskSelfConfirmMutation } from "../../context/service/task.service";
 import { useMeQuery, useStaticQuery } from "../../context/service/me.service";
 import { FaCheck } from "react-icons/fa";
@@ -28,6 +31,7 @@ export const Task = () => {
   const lang = me?.language_code === "en" ? "en" : "ru";
   const { data: staticData = null } = useStaticQuery(lang);
   const [postTaskSelfConfirm] = usePostTaskSelfConfirmMutation();
+  const [rewardForEmoji] = useRewardForEmojiMutation();
   const userFriendlyAddress = useTonAddress();
   const access = userFriendlyAddress || null;
   const [wallet, setWallet] = useState(false);
@@ -59,6 +63,25 @@ export const Task = () => {
   const clickType = async (task) => {
     // checkSubscribe, selfConfirm, connectToTon, checkJetton, referal, checkLiquidity;
     let link;
+
+    if (task?.id === 10) {
+      if (!task?.isActive) return null;
+
+      if (window.Telegram.WebApp.setEmojiStatus) {
+        window.Telegram.WebApp.setEmojiStatus(
+          "5247176376045294117",
+          (success) => {
+            if (success) {
+              rewardForEmoji();
+            } else {
+              console.error("Не удалось установить эмодзи статус");
+            }
+          }
+        );
+      } else {
+        console.warn("setEmojiStatus is not supported in this environment");
+      }
+    }
 
     if (task?.type === "checkSubscribe") {
       link = task?.description.replace("@", "");
@@ -188,38 +211,6 @@ export const Task = () => {
             )}
           </h2>
         </div>
-
-        <button
-          onClick={() => {
-            if (window.Telegram.WebApp.setEmojiStatus) {
-              window.Telegram.WebApp.setEmojiStatus(
-                "5247176376045294117",
-                { duration: 60 },
-                (success, error) => {
-                  if (success) {
-                    console.log(
-                      "Эмодзи статус был успешно установлен!",
-                      `success: ${success}`,
-                      `error: ${error}`
-                    );
-                  } else {
-                    console.log(
-                      "Не удалось установить эмодзи статус",
-                      `success: ${success}`,
-                      `error: ${error}`
-                    );
-                  }
-                }
-              );
-            } else {
-              console.warn(
-                "setEmojiStatus is not supported in this environment"
-              );
-            }
-          }}
-        >
-          Тест кнопки установки статуса
-        </button>
 
         {data?.map((item) => {
           return (
