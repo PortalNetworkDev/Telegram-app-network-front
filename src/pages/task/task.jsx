@@ -70,6 +70,7 @@ export const Task = () => {
       if (window.Telegram.WebApp.setEmojiStatus) {
         window.Telegram.WebApp.setEmojiStatus(
           "5247176376045294117",
+          {},
           (success) => {
             if (success) {
               rewardForEmoji();
@@ -183,6 +184,7 @@ export const Task = () => {
         )}
 
         <div
+          style={{ margin: 0 }}
           className={`wallet_info ${
             colorScheme === "light" ? "" : "wallet_info_dark"
           }`}
@@ -265,7 +267,7 @@ export const Task = () => {
                         </div>
                         <h1>{task?.label}</h1>
                         <span className={task?.is_complite ? " lock" : ""}>
-                          {task?.reward} {staticData?.token_symbol}{" "}
+                          {task?.reward} {task?.id !== 10 ? staticData?.token_symbol : 'Вт•Ч'}{" "}
                           {task?.type === "referal" ? peopleText : ""}
                         </span>
                       </div>
