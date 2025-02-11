@@ -57,6 +57,12 @@ export const taskService = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["update"],
     }),
+    rewardForEmoji: builder.mutation({
+      query: () => ({
+        url: "tasks/rewardForEmoji",
+        method: "POST",
+      }),
+    }),
   }),
 });
 
@@ -67,4 +73,5 @@ export const {
   useGetUserTaskByTaskIdQuery,
   useGetUserTaskQuery,
   useSendReferalMutation,
+  useRewardForEmojiMutation,
 } = taskService;

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./DailyReward.css";
 import {
+  useCheckDailyGiftsQuery,
   useGetDailyGiftsQuery,
   useLazyClaimDailyGiftQuery,
   useMiningQuery,
@@ -9,6 +10,8 @@ import {
 const DailyReward = ({ btnFunc, setModalClose, bounding }) => {
   const [isClose, setIsClose] = useState(false);
   const [claimGift] = useLazyClaimDailyGiftQuery();
+  const { data: avaibleDailyGift = null, refetch: refetchDailyReward } =
+    useCheckDailyGiftsQuery();
   const { data: mining = null, refetch: refetchMining } = useMiningQuery();
   const stopPropagation = (e) => {
     e.stopPropagation();
@@ -19,6 +22,7 @@ const DailyReward = ({ btnFunc, setModalClose, bounding }) => {
   };
   const handleBtnClick = async () => {
     await claimGift();
+    await refetchDailyReward();
     await refetchMining();
     setIsClose(true);
     setTimeout(() => setModalClose(), 500);
