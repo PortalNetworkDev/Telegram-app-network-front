@@ -45,6 +45,8 @@
   align-items: flex-end;
   justify-content: space-around;
   width: fit-content;
+  min-width: 50%;
+  height: 37px;
 }
 
 .battery-power__lightning {

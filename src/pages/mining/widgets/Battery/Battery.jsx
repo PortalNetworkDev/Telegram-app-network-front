@@ -15,6 +15,7 @@ import { setClaimingAction } from "../../../../context/mining";
 import { useClaim } from "../../helpers/useClaim";
 
 const Battery = ({ onClick, upBtnAction }) => {
+  const baseUrl = process.env.REACT_APP_MINIAPPAPI;
   const { data: me = null } = useMeQuery();
   const lang = me?.language_code === "en" ? "en" : "ru";
   const { data: mining = null } = useMiningQuery();
@@ -45,24 +46,40 @@ const Battery = ({ onClick, upBtnAction }) => {
   }, []);
 
   useEffect(() => {
-    if (!isImgLoading) {
+    const handleImageLoad = () => {
       const rect = imgRef.current?.getBoundingClientRect();
 
-      const newDivisions = [];
-      const divisionHeight = rect?.height / 3.5;
-      const divisionWidth = rect?.width / 140;
-
-      for (let i = 0; i < 31; i++) {
-        newDivisions.push({
-          top: (rect?.height * 12) / 30.5,
-          left: rect?.width / 6.4 + i * 3.12 * divisionWidth,
-          width: divisionWidth,
-          height: divisionHeight,
-        });
+      if (rect) {
+        const newDivisions = [];
+        const divisionHeight = rect.height / 3.5;
+        const divisionWidth = rect.width / 140;
+        for (let i = 0; i < 31; i++) {
+          newDivisions.push({
+            top: (rect.height * 12) / 30.5,
+            left: rect.width / 6.4 + i * 3.12 * divisionWidth,
+            width: divisionWidth,
+            height: divisionHeight,
+          });
+        }
+        setDivisions(newDivisions);
       }
+    };
 
-      setDivisions(newDivisions);
+    const imgElement = imgRef.current;
+
+    if (imgElement) {
+      if (imgElement.complete === false) {
+        imgElement.addEventListener("load", handleImageLoad);
+      } else {
+        handleImageLoad();
+      }
     }
+
+    return () => {
+      if (imgElement) {
+        imgElement.removeEventListener("load", handleImageLoad);
+      }
+    };
   }, [isImgLoading]);
 
   useEffect(() => {
@@ -97,16 +114,25 @@ const Battery = ({ onClick, upBtnAction }) => {
   return (
     <>
       <div className="battery-power">
-        <img
-          className="battery-power__lightning lightning-with-back"
-          src="./images/lightningWithBackground.png"
-          alt="lightning"
-        />
-        <TextString
-          secondSmall={lang === "ru" ? "Вт•Ч" : "W•h"}
-          big={(+powerBalance?.toFixed())?.toLocaleString("ru")}
-          bigFontSize={"32px"}
-        />
+        {me ? (
+          <>
+            <img
+              className="battery-power__lightning lightning-with-back"
+              src="./images/lightningWithBackground.png"
+              alt="lightning"
+            />
+            <TextString
+              secondSmall={lang === "ru" ? "Вт•Ч" : "W•h"}
+              big={(+powerBalance?.toFixed())?.toLocaleString("ru")}
+              bigFontSize={"32px"}
+            />
+          </>
+        ) : (
+          <div
+            style={{ height: "100%", borderRadius: "10px" }}
+            className="store-loading-div"
+          ></div>
+        )}
       </div>
       <div className="battery">
         <div className="battery__level level">
@@ -126,7 +152,8 @@ const Battery = ({ onClick, upBtnAction }) => {
             <img
               ref={imgRef}
               className="battery__img"
-              src="./images/battery.png"
+              // src="./images/battery.png"
+              src={`${baseUrl}/static/skins/batteries/full/${me?.currentBatterySkinUrl}`}
               alt="battery"
             />
             {divisions.map((division, index) => {

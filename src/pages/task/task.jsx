@@ -1,7 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./task.css";
 import { useNavigate } from "react-router-dom";
-import { useGetMyStateQuery } from "../../context/service/task.service";
+import {
+  useGetMyStateQuery,
+  useRewardForEmojiMutation,
+} from "../../context/service/task.service";
 import { usePostTaskSelfConfirmMutation } from "../../context/service/task.service";
 import { useMeQuery, useStaticQuery } from "../../context/service/me.service";
 import { FaCheck } from "react-icons/fa";
@@ -28,6 +31,7 @@ export const Task = () => {
   const lang = me?.language_code === "en" ? "en" : "ru";
   const { data: staticData = null } = useStaticQuery(lang);
   const [postTaskSelfConfirm] = usePostTaskSelfConfirmMutation();
+  const [rewardForEmoji] = useRewardForEmojiMutation();
   const userFriendlyAddress = useTonAddress();
   const access = userFriendlyAddress || null;
   const [wallet, setWallet] = useState(false);
@@ -59,6 +63,26 @@ export const Task = () => {
   const clickType = async (task) => {
     // checkSubscribe, selfConfirm, connectToTon, checkJetton, referal, checkLiquidity;
     let link;
+
+    if (task?.id === 10) {
+      if (!task?.isActive) return null;
+
+      if (window.Telegram.WebApp.setEmojiStatus) {
+        window.Telegram.WebApp.setEmojiStatus(
+          "5247176376045294117",
+          {},
+          (success) => {
+            if (success) {
+              rewardForEmoji();
+            } else {
+              console.error("Не удалось установить эмодзи статус");
+            }
+          }
+        );
+      } else {
+        console.warn("setEmojiStatus is not supported in this environment");
+      }
+    }
 
     if (task?.type === "checkSubscribe") {
       link = task?.description.replace("@", "");
@@ -160,6 +184,7 @@ export const Task = () => {
         )}
 
         <div
+          style={{ margin: 0 }}
           className={`wallet_info ${
             colorScheme === "light" ? "" : "wallet_info_dark"
           }`}
@@ -242,7 +267,7 @@ export const Task = () => {
                         </div>
                         <h1>{task?.label}</h1>
                         <span className={task?.is_complite ? " lock" : ""}>
-                          {task?.reward} {staticData?.token_symbol}{" "}
+                          {task?.reward} {task?.id !== 10 ? staticData?.token_symbol : 'Вт•Ч'}{" "}
                           {task?.type === "referal" ? peopleText : ""}
                         </span>
                       </div>

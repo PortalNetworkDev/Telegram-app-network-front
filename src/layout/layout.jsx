@@ -32,14 +32,40 @@ export const Layout = memo(() => {
       }
     };
 
-    handleThemeChange();
-
-    tg?.onEvent("themeChanged", handleThemeChange);
+    tg?.onEvent("themeChanged", () => handleThemeChange);
 
     return () => {
-      tg?.offEvent("themeChanged", handleThemeChange);
+      tg?.offEvent("themeChanged", () => handleThemeChange);
     };
   }, [dispatch]);
+
+  // Запрещаем поворот экрана
+  useEffect(() => {
+    if (window.Telegram.WebApp.lockOrientation) {
+      window.Telegram.WebApp.lockOrientation();
+    } else {
+      console.warn("lockOrientation is not supported in this environment");
+    }
+  }, []);
+
+  //Пробный запрос установки эмодзи
+  // useEffect(() => {
+  //   if (window.Telegram.WebApp.setEmojiStatus) {
+  //     window.Telegram.WebApp.setEmojiStatus(
+  //       "5247176376045294117",
+  //       { duration: 3600 },
+  //       (success) => {
+  //         if (success) {
+  //           console.log("Эмодзи статус был успешно установлен!");
+  //         } else {
+  //           console.log("Не удалось установить эмодзи статус");
+  //         }
+  //       }
+  //     );
+  //   } else {
+  //     console.warn("setEmojiStatus is not supported in this environment");
+  //   }
+  // }, []);
 
   return (
     <main className="layout">

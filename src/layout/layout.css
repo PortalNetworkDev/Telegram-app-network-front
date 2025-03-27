@@ -20,5 +20,9 @@
 }
 
 .layout__content_mining {
-  background: #042029;
+  background: #0e0b0e;
+  overflow: hidden;
+  background-image: url(/public/images/mining-main.png);
+  background-repeat: no-repeat;
+  background-size:100%;
 }

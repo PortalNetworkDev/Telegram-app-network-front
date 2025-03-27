@@ -1,0 +1,126 @@
+.store-loading-div {
+  width: 100%;
+  background: linear-gradient(270deg, #0b2849, #09464d, #0b2849);
+  background-size: 600% 600%;
+  animation: gradient 3s ease infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  border-radius: 10px;
+}
+
+.store__header {
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+  position: absolute;
+  left: 50%;
+  top: 25px;
+  transform: translate(-50%);
+}
+
+.store__tabContainer {
+  margin-top: 80px;
+  margin-bottom: 20px;
+  width: auto;
+  overflow-x: auto;
+  display: flex;
+  gap: 10px;
+}
+
+.store__tabContainer::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tab__btn {
+  position: relative;
+  border: 0;
+  border-radius: 20px;
+  font-size: 16px;
+  background: none;
+  width: 196px;
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.tab__btn_active {
+  background: linear-gradient(
+    0deg,
+    rgb(0, 193, 255, 45%),
+    rgb(100, 252, 215, 45%)
+  );
+}
+
+.tab__btn::before {
+  border-radius: 20px;
+  border: 1px solid transparent;
+  background: linear-gradient(0deg, #00c1ff, #64fcd7) border-box;
+}
+
+.tab__btnText {
+  background: linear-gradient(0deg, #00c1ff, #64fcd7);
+  -webkit-background-clip: text; /* Обрезаем фон по форме текста (WebKit) */
+  -webkit-text-fill-color: transparent; /* Прозрачный цвет текста (WebKit) */
+  background-clip: text; /* Обрезаем фон по форме текста (для других браузеров) */
+}
+
+.store__balance {
+  width: calc(100% + 20px);
+  transform: translate(-10px, 0);
+  display: flex;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 18px;
+  font-weight: 500;
+  border-top: 1px solid #64fcd7;
+  border-bottom: 1px solid #00c1ff;
+  padding: 11px 0;
+  margin-bottom: 20px;
+}
+
+.store__balance > span {
+  padding: 0 5px 0 5px;
+}
+
+.giftInfo {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.giftInfo__text {
+  margin-right: 10px;
+  margin-bottom: -3px;
+}
+
+.agree-modal {
+  background: #1f202f;
+  height: 25%;
+  position: fixed;
+  top: 50%;
+  transform: translate(0, -50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  color: white;
+}
+
+.agree-modal__btn-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 2rem;
+}
+
+.agree-modal__btn {
+  width: 40%;
+  position: relative;
+}

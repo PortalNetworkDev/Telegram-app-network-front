@@ -12,14 +12,11 @@ import {
 } from "../../../../context/service/mining.service";
 import { useRotate } from "../../helpers/useRotate";
 import { usePoints } from "../../helpers/usePoints";
+import { Link } from "react-router-dom";
+import LazyLoad from "react-lazyload";
 
-const Generator = ({
-  onClick,
-  upBtnAction,
-  setGeneratorLoading,
-  multitabUp,
-  handleOpenModal,
-}) => {
+const Generator = ({ onClick, upBtnAction, handleOpenModal }) => {
+  const baseUrl = process.env.REACT_APP_MINIAPPAPI;
   const dispatch = useDispatch();
   const miningStore = useSelector((store) => store.mining);
   const [genReward] = useLazyGenRewardQuery();
@@ -127,11 +124,10 @@ const Generator = ({
   //Определение размеров генератора
   const genBounding = useRef(null);
   useEffect(() => {
-    !isImgLoading && setGeneratorLoading(false);
     if (!isImgLoading && genRef.current) {
       genBounding.current = genRef.current.getBoundingClientRect();
     }
-  }, [isImgLoading, setGeneratorLoading]);
+  }, [isImgLoading]);
 
   return (
     <>
@@ -185,28 +181,39 @@ const Generator = ({
           }}
           className="geterator__rotateContainer"
         >
+          {me?.isGeneratorSkinWithLightInCenter && (
+            <div className="loader-container">
+              <img
+                className={`loader ${
+                  isRotating
+                    ? "loader__animation-start"
+                    : "loader__animation-end"
+                }`}
+                src="./gif/loader.gif"
+                alt="loader"
+              />
+            </div>
+          )}
+
           <div
-            style={{
-              top: `${genBounding.current?.height / 2}px`,
-              left: `${genBounding.current?.width / 2}px`,
-              transform: "translate(-51%, -50%)",
-            }}
-            className="loader-container"
+            style={{ opacity: balance && limit && 1 - balance / limit }}
+            // className={
+            //   isRotating
+            //     ? "overheating-wrapper overheating__visible"
+            //     : "overheating-wrapper overheating__hidden"
+            // }
+            className="overheating-wrapper"
           >
-            <img
-              className={`loader ${
-                isRotating ? "loader__animation-start" : "loader__animation-end"
-              }`}
-              src="./gif/loader.gif"
-              alt="loader"
-            />
+            <div className="overheating" />
           </div>
-          <img
-            ref={genRef}
-            className="geterator__img"
-            src="./images/generatorFromRotate.png"
-            alt="generator"
-          />
+          <LazyLoad>
+            <img
+              ref={genRef}
+              className="geterator__img"
+              src={`${baseUrl}/static/skins/generators/full/${me?.currentGeneratorSkinUrl}`}
+              alt="generator"
+            />
+          </LazyLoad>
         </div>
         <div className="generator__power level__info">
           <div className="battery__level-info level__info">
@@ -222,7 +229,20 @@ const Generator = ({
               bigTextMargin={"0px 5px 0px 10px"}
             />
           </div>
-          <UpBtn onClick={multitabUp} multitab={miningStore.multitab} />
+          <Link
+            style={{ pointerEvents: miningStore.isRotate && "none" }}
+            to={"/mining/boost"}
+            className="boostBtn"
+          >
+            <>
+              BOOST
+              <img
+                style={{ marginLeft: 7 }}
+                src="/icon/rocket.svg"
+                alt="rocket"
+              />
+            </>
+          </Link>
         </div>
       </div>
     </>

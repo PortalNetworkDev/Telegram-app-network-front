@@ -1,0 +1,105 @@
+.transactions__main {
+  margin-bottom: 35%;
+}
+
+.transaction__balance {
+  position: absolute;
+  top: 8vh;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.transaction__user-id {
+  display: flex;
+  font-weight: 300;
+  position: absolute;
+  top: 5vh;
+  color: rgba(255, 255, 255, 0.64);
+  transition: transform 0.3s;
+}
+
+.transaction__user-id:active {
+  transform: scale(0.9);
+}
+
+.transactions__inputs-container {
+  margin-top: 18vh;
+}
+
+.transactions__input {
+  margin: 0 0 20px 0;
+  height: 6vh;
+  color: rgba(255, 255, 255, 1);
+  font-weight: 400;
+  font-size: 16px;
+  padding-left: 20px;
+}
+
+.transactions__input::placeholder {
+  color: rgba(255, 255, 255, 0.64);
+}
+
+.transactions__header {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  top: 50;
+}
+
+.transactions__container {
+  position: relative;
+  margin-top: 40px;
+}
+
+.transactions_isEmpty {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 22px;
+  font-weight: 700;
+  width: 50vw;
+  text-align: center;
+  line-height: 30px;
+  position: absolute;
+  top: 55vh;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.all-transactions__btn {
+  background: transparent;
+  z-index: 1;
+}
+
+.all-transactions__btn::before {
+  background: linear-gradient(
+    to top,
+    rgba(100, 252, 215, 1),
+    rgba(0, 193, 255, 1)
+  );
+}
+
+.all-transactions__text {
+  background: linear-gradient(
+    to top,
+    rgba(100, 252, 215, 1),
+    rgba(0, 193, 255, 1)
+  );
+  -webkit-background-clip: text; /* Обрезаем фон по тексту */
+  -webkit-text-fill-color: transparent; /* Прозрачный текст */
+  text-align: center;
+}
+
+.transactions__month {
+  margin-left: 6px;
+  margin-bottom: 14px;
+  position: relative;
+  color: rgba(255, 255, 255, 1);
+  font-size: 20;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.all-transactions-container {
+  height: 78vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}

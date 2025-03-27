@@ -1,0 +1,57 @@
+.miningNavigation {
+  position: fixed;
+  width: 100%;
+  bottom: 0px;
+  left: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+
+.miningNavigation__list {
+  display: flex;
+  align-items: center;
+  background-color: #1f202f;
+  height: 50px;
+  padding: 0 5px 0 5px;
+  background: linear-gradient(#1f202f, #1f202f 0) padding-box,
+    linear-gradient(to top, #423e3e, rgb(23, 30, 36)) border-box;
+  border: 1px solid transparent;
+  border-radius: 0px;
+}
+
+.miningNavigation__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25%;
+  list-style-type: none;
+  color: #abb3b6;
+  font-size: 12px;
+  line-height: 14px;
+  font-weight: 400;
+  text-align: center;
+  height: 30px;
+  border-left: 1px solid #423e3e;
+  border-right: 1px solid #423e3e;
+}
+
+.miningNavigation__item:first-of-type {
+  border-left: none;
+}
+
+.miningNavigation__item:last-of-type {
+  border-right: none;
+}
+
+.miningNavigation__link_active {
+  color: #64fcd7;
+}
+
+.miningNavigation__provileBtn {
+  border-radius: 0px !important;
+  margin: 3px 0 0 0 !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+}

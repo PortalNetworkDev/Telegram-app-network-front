@@ -1,0 +1,20 @@
+.progressbar-container {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin-bottom: 15px;
+}
+
+.progressbar__avatar {
+  width: 65%;
+  aspect-ratio: 1/1;
+  background-color: rgba(255, 255, 255, 0.64);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

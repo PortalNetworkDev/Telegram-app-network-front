@@ -132,7 +132,7 @@ export const Home = () => {
             ></div>
           )}
           <div className="poe-power">
-            <div className="battery-power">
+            <div style={{ height: "auto" }} className="battery-power">
               {me ? (
                 <>
                   <img
@@ -220,14 +220,18 @@ export const Home = () => {
             <Link className="mining__link" to="/mining">
               <div className="mining__container">
                 <div className="mining__title-container">
-                  <img className="gamepad" src={"/icon/gamepad.svg"} alt="mining-icon" />
-                  <span className="mining__title">{staticData?.MiningTitle}</span>
+                  <img
+                    className="gamepad"
+                    src={"/icon/gamepad.svg"}
+                    alt="mining-icon"
+                  />
+                  <span className="mining__title">
+                    {staticData?.MiningTitle}
+                  </span>
                 </div>
                 <MdOutlineArrowForwardIos />
               </div>
-              <span className="mining__info">
-                {staticData?.MiningDisc}
-              </span>
+              <span className="mining__info">{staticData?.MiningDisc}</span>
             </Link>
           </li>
 

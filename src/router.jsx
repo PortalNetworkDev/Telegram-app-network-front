@@ -9,6 +9,12 @@ import { About } from "./pages/about/about";
 import { Confirm } from "./pages/confirm/confirm";
 import { Unauthorized } from "./pages/unauthorized/unauthorized";
 import { Mining } from "./pages/mining/mining";
+import MiningMain from "./pages/mining/pages/MiningMain";
+import StorePage from "./pages/mining/pages/StorePage/StorePage";
+import { BoostPage } from "./pages/mining/pages/BoostPage/BoostPage";
+import RafflePage from "./pages/mining/pages/RafflePage/RafflePage";
+import TransactionsPage from "./pages/mining/pages/TransactionsPage/TransactionsPage";
+import ProfilePage from "./pages/mining/pages/ProfilePage/ProfilePage";
 
 export const Router = memo(() => {
   return (
@@ -18,7 +24,14 @@ export const Router = memo(() => {
         <Route path="task" element={<Task />} />
         <Route path="charging" element={<Charging />} />
         <Route path="about" element={<About />} />
-        <Route path="mining" element={<Mining />} />
+        <Route path="mining" element={<Mining />}>
+          <Route index element={<MiningMain />} />
+          <Route path="store" element={<StorePage />} />
+          <Route path="raffle" element={<RafflePage />} />
+          <Route path="transactions" element={<TransactionsPage />} />
+          <Route path="profile" element={<ProfilePage />} />
+          <Route path="boost" element={<BoostPage />} />
+        </Route>
         <Route path="confirm/:id" element={<Confirm />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
